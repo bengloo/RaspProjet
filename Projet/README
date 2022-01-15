@@ -1,0 +1,7 @@
+V1:temple run en solo 
+    fait dans le dossier temple_run_acii-main
+V2:
+-un client Maitre ouvre une partie de jeux il obtiend un id de partie pour la partager 
+-d'autre client peuvent rejoindre la pertie avec l'id il sont mis en attente;
+-le client Maitre visualise les client joiniant la partie , à tout moment il peux valider , on accepte plus de nouveaux joueur dans la partie.
+-le client maitre genere un nouveaux procesus ou thread qui auras le role de server c'est dire qu'il auras pour role de generer  
