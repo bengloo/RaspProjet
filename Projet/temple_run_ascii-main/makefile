@@ -20,11 +20,11 @@ debug:all
 #inclusion des headers
 $(MAINSOURCE): $(HEADERFIC)
 #compilation des library
-%.o: %.c
+%.o: %.c 
 	$(c) -c $< -o $@ $(op) $(DEBUG)
 
 # suppression des fichiers temporaires
-clean:
+clean: all
 	rm -rf *.o
  
 # suppression de tous les fichiers, sauf les sources,

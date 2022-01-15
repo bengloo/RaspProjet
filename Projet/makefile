@@ -31,7 +31,7 @@ $(MAINSOURCE2): $(HEADERFIC)
 	$(c) -c $< -o $@ $(op) $(DEBUG)
 
 # suppression des fichiers temporaires
-clean:
+clean: all
 	rm -rf *.o
  
 # suppression de tous les fichiers, sauf les sources,
