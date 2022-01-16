@@ -1,11 +1,11 @@
 //TCP
-    //creer socketecoute();
-    //accepterConnexion();
-    //établirConexion();
-    //ecrireMsgTCP();
-    //lireMsgTCP();
+    void creerSocketEcoute();
+    void accepterConnexion();
+    void etablirConexion();
+    void ecrireMsgTCP();
+    void lireMsgTCP();
 //UDP
-    //crerSocketUDP();
-    //creerSocketUDPAdr();
-    //ecrireMsgUDP();
-    //lireMsgUDP();
+    void crerSocketUDP();
+    void creerSocketUDPAdr();
+    void ecrireMsgUDP();
+    void lireMsgUDP();
