@@ -16,7 +16,7 @@
         short<->networkOrder
 */
 
-#define FMT_REQ "%3hd:%hd:%[^n]"
+
 
 void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);

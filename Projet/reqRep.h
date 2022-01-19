@@ -1,5 +1,5 @@
 #define MAX_BUFF 10
-#define FMT_REQ "%3d:%d:%[^n]"
+#define FMT_REQ "%3hd:%hd:%[^n]"
 //typedef buffer_t char[MAX_BUFF];
 typedef char* buffer_t;
 typedef struct req
