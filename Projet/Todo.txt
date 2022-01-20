@@ -1,0 +1,9 @@
+-Finir Session.c et .h 
+-Regarder pour faire les shémas avec les petites cases qui se répondent entre
+, comme toujours avec kathab (avec les deux traits clients, serveurs)
+-
+-
+-
+-
+-
+-
