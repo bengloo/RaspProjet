@@ -14,8 +14,19 @@
     #define CLTSRV_H
     #include "cltSrv.h"
 #endif
+
+#ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
 {
     /* code */
     return 0;
 }
+#endif
+
+#ifdef SERVER
+int main(/*int argc, char const *argv[]*/)
+{
+    /* code */
+    return 0;
+}
+#endif

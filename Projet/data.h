@@ -26,12 +26,12 @@ typedef enum{
     STOPPED = 2,
     FAILED = 3,
     WAITTINGADVERSE = 4
-} statPatie_t;
+} statutPatie_t;
 
 typedef struct 
 {
   int id;
-  statPatie_t statut;
+  statutPatie_t statut;
   adresse_t addrMaitre;
   adresse_t addrAdverse;
   int scoreMaitre;
