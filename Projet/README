@@ -5,3 +5,5 @@ make server #pour generer l'executable serverEnregistrement
 make clean #pour enlever les .o
 make proper #pour enlever les executable
 make zip #genere un zip avec les .c .h et readme
+
+#test des modification alexandre 
