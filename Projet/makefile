@@ -43,7 +43,10 @@ clean:
  
 # suppression de tous les fichiers, sauf les sources,
 # en vue d'une reconstruction complète
-mrproper: clean
+proper: clean
 	rm -rf $(EXEC)
+	rm -rf $(EXEC2)
 
+zip: proper
+	zip ProjetLE3MW_ENGLOO_MORCQ_LUX_MARQUILLY.zip *.c *.h makefile README*
 

@@ -15,6 +15,29 @@
         htons();
         short<->networkOrder
 */
+typedef struct 
+{
+    char* ip;
+    int port;
+}adresse_t;
+
+typedef enum{
+    RUNNING = 1,
+    STOPPED = 2,
+    FAILED = 3,
+    WAITTINGADVERSE = 4
+} statPatie_t;
+
+typedef struct 
+{
+  int id;
+  statPatie_t statut;
+  adresse_t addrMaitre;
+  adresse_t addrAdverse;
+  int scoreMaitre;
+  int scoreAdverse;
+
+} statPatie_t;
 
 
 
