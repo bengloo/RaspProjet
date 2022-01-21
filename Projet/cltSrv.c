@@ -19,12 +19,30 @@
 int main(/*int argc, char const *argv[]*/)
 {
     //TODO
-        //saisir pseudo
-        //menu
-          //1)lister les parte 
-          //2)crer une partie
-          //3)QUITER 
+        char myPseudo[255]
+        int choix=4;
+        printf("Veuillé saisr votre pseudo pour vous conecter:");
+        scanf("%s",myPseudo);
+        while (choix!=3)
+        { 
+            printf("Menu:\n1)Lister les parties en cours\n2)Creer une partie\n3)Quiter");
+            scanf("%d",choix);
+            switch (choix)
+            {
+            case 1:
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                break;
+            
+            default:
 
+                break;
+            }
+        }
         //SI liste
             //recupererliste  des partie (pseudo adresse)-> liste parties
             //aficher la liste des partie
