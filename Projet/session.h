@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/in.h> 
+#include <arpa/inet.h> 
 
 #define PORT_SVC 5000 
 #define CHECK(sts,msg) if ((sts) == -1) {perror(msg);exit(-1);} 
