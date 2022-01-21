@@ -18,7 +18,8 @@
 #ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
 {
-    /* code */
+    //TODO
+    
     return 0;
 }
 #endif

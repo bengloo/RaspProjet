@@ -23,6 +23,7 @@
         }
     }
 #endif
+#define CLIENT
 #ifdef CLIENT
     //-fct generation des requétes
     void createPartyReq(){};
@@ -37,10 +38,13 @@
     void waitParties(){};
     void afficherPartie(){};
     void initPartie(){};
+    void getStart(){};
     void partieMaitre(){};
     void partieInvite(){};
     void updateStatutPlayerMaitre(){};
     void updateStatutPlayerInvite(){};
+    void stream(){};
+    void afficherStream(){};
     //1 fct de selection traitement selon requete
     void lireReqClient(req_t req){
         switch (req.idReq)
@@ -49,23 +53,32 @@
             waitParties();
             break;
         case 2 :
-            afficherPartie();
+            afficherParties();
             break;
         case 3 :
             initPartie();
             break;
         case 4 :
-            partieMaitre();
+            getStart();
             break;
         case 5 :
-            partieInvite();
+            partieMaitre();
             break;
         case 6 :
-            updateStatutPlayerMaitre();
+            partieAdverse();
             break;
         case 7 :
+            updateStatutPlayerMaitre();
+            break;
+        case 8 :
             updateStatutPlayerInvite();
-            break;     
+            break;
+        case 9 :
+            stream();
+            break; 
+        case 10 :
+            afficherStream();
+            break;      
         default:
             break;
         }
