@@ -1,7 +1,7 @@
   
 #include "session.h"
 //TCP
-    void creerSocketEcoute(int Long){
+    int creerSocketEcoute(int Long){
 
         int sock;
         struct sockaddr_in serv;
@@ -61,7 +61,7 @@
 
 
 //UDP
-    void creerSocketUDP(int Long){
+    int creerSocketUDP(char *addrdest,int port){
         int sock;
         struct sockaddr_in serv;
         
@@ -70,15 +70,15 @@
         
         // Préparation de l’adressage du service
         serv.sin_family = PF_INET;
-        serv.sin_port = htons(PORT_SVC);
-        serv.sin_addr.s_addr = INADDR_ANY;
+        serv.sin_port = htons(port);
+        serv.sin_addr.s_addr = addrdest;
         memset(&serv.sin_zero, 0, 8);
         
         return sock;
     };
 
 
-    void creerSocketUDPAdr(int Long){
+    int creerSocketUDPAdr(){
         int sock;
         struct sockaddr_in serv;
         

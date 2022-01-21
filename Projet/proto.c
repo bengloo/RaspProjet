@@ -23,7 +23,6 @@
         }
     }
 #endif
-#define CLIENT
 #ifdef CLIENT
     //-fct generation des requétes
     void createPartyReq(){};
@@ -36,11 +35,11 @@
     void updateStatutPlayerRep(){};
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     void waitParties(){};
-    void afficherPartie(){};
+    void afficherParties(){};
     void initPartie(){};
     void getStart(){};
     void partieMaitre(){};
-    void partieInvite(){};
+    void partieAdverse(){};
     void updateStatutPlayerMaitre(){};
     void updateStatutPlayerInvite(){};
     void stream(){};

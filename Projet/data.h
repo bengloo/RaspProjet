@@ -5,7 +5,8 @@
 #ifndef STDIO_H
     #define STDIO_H
     #include <stdio.h> 
-#endif   
+#endif 
+#include "graphisme.h"  
 //C6-representation data:
 /*
     ->choisir un codage asci/EBCID/...

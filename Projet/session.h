@@ -10,16 +10,15 @@
 #define PORT_SVC 5000 
 #define CHECK(sts,msg) if ((sts) == -1) {perror(msg);exit(-1);} 
 #define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
-#define MAX_BUFF 1024
-
-    //TCP
-    void creerSocketEcoute(int Long);
+#define MAX_BUFF 1024 
+//TCP->stream
+    int creerSocketEcoute(int Long);
     void accepterConnexion(struct sockaddr_in clt, int sock);
     void etablirConexion(struct sockaddr_in clt, int sock);
     void ecrireMsgTCP(int sock);
     void lireMsgTCP(int sock);
-//UDP
-    void creerSocketUDP(int Long);
-    void creerSocketUDPAdr(int Long);
+//UDP->datagrame
+    int creerSocketUDP(char *addrdest,int port);
+    int creerSocketUDPAdr();
     void ecrireMsgUDP(struct sockaddr_in clt, int sock);
     void lireMsgUDP(struct sockaddr_in clt, int sock);

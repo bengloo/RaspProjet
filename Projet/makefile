@@ -7,10 +7,11 @@
 #////////recette par defaut//////////
 c=gcc #type de compilation
 op=-Wall -Wextra #opertion et retoure de la compilation
-EXEC=client #nom de l'executable final
-EXEC2=serverEnregistrement #nom de l'executable final2
+EXECCLIENT=client #nom de l'executable final
+EXECSERVER=serverEnregistrement #nom de l'executable final2
 MAINSOURCE=cltSrv.o#fichier source de l'executable
-LIBFIC= session.o data.o proto.o#nom des library en .o
+LIBFICCLIENT= session.o data.o proto.o graphisme.o#nom des library en .o
+LIBFICSERV= session.o data.o proto.o#nom des library en .o
 HEADERFIC=cltSrv.h#nom des header
 
 #création de l'executable
@@ -19,16 +20,17 @@ all:client
 
 #activer mode client server défini 
 client:CLTSERV= -D'CLIENT'
-client:EXEC= client
-client:clean comp 
+client:clean comp1 
 
 server:CLTSERV= -D'SERVER'
-server:EXEC= serverEnregistrement
-server:clean comp 
+server:clean comp2 
 
 
-comp: $(MAINSOURCE) $(LIBFIC)
-	$(c) $(MAINSOURCE) $(LIBFIC) -o $(EXEC)
+comp1: $(MAINSOURCE) $(LIBFICCLIENT)
+	$(c) $(MAINSOURCE) $(LIBFICCLIENT) -o $(EXECCLIENT) -lX11 -lm 
+
+comp2: $(MAINSOURCE) $(LIBFICSERV)
+	$(c) $(MAINSOURCE) $(LIBFICSERV) -o $(EXECSERVER)
 
 #inclusion des headers
 $(MAINSOURCE): $(HEADERFIC)
@@ -44,8 +46,8 @@ clean:
 # suppression de tous les fichiers, sauf les sources,
 # en vue d'une reconstruction complète
 proper: clean
-	rm -rf $(EXEC)
-	rm -rf $(EXEC2)
+	rm -rf $(EXECCLIENT)
+	rm -rf $(EXECSERVER)
 
 zip: proper
 	zip ProjetLE3MW_ENGLOO_MORCQ_LUX_MARQUILLY.zip *.c *.h makefile README*
