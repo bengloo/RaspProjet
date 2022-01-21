@@ -19,6 +19,23 @@
 int main(/*int argc, char const *argv[]*/)
 {
     //TODO
+        //saisir pseudo
+        //menu
+          //1)lister les parte 
+          //2)crer une partie
+          //3)QUITER 
+
+        //SI liste
+            //recupererliste  des partie (pseudo adresse)-> liste parties
+            //aficher la liste des partie
+            //choisire une partie via un indice dans la liste ou
+                //0)REVENIR au menu principal
+                //-1)Refresh
+            //si >0    
+                //MENUE
+                    //1)STREAM
+                    //2)JOUER
+        //SI CREER
     
     return 0;
 }
