@@ -61,10 +61,8 @@
 
 
 //UDP
-    int creerSocketUDP(char *addrdest,int port){
+    int creerSocketUDP(in_addr_t addrdest,int port,struct sockaddr_in serv){
         int sock;
-        struct sockaddr_in serv;
-        
         // Création de la socket de réception des requêtes
         CHECK(sock=socket(PF_INET, SOCK_DGRAM, 0), "Can't create");
         
@@ -98,11 +96,11 @@
     };
 
 
-    void ecrireMsgUDP(struct sockaddr_in clt, int sock){
+    void ecrireMsgUDP(struct sockaddr_in clt, int sock,char *msg){
 
         // Ecriture du message
-	printf("Envoi du message [%s]\n", MSG);
-	CHECK(sendto(sock, MSG, strlen(MSG)+1, 0, (struct sockaddr *)&clt, sizeof clt), "Can't send");
+	printf("Envoi du message [%s]\n", msg);
+	CHECK(sendto(sock, msg, strlen(msg)+1, 0, (struct sockaddr *)&clt, sizeof clt), "Can't send");
 
     };
 

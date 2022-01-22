@@ -1,4 +1,5 @@
 #include "proto.h"
+#include <string.h>
 
 #ifdef SERVER
     //-fct generation des requétes
@@ -25,7 +26,14 @@
 #endif
 #ifdef CLIENT
     //-fct generation des requétes
-    void createPartyReq(){};
+    void createPartyReq(){
+        req_t req;
+        buffer_t buff;
+        req.idReq=1;
+        req.msgReq="";
+        //reqTOstr(&req,buff);
+        req.lgreq=strlen(buff);
+    };
     void getPartiesReq(){};
     void oinPartieReq(){};
     void joinPartieRep(){};

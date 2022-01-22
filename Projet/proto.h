@@ -1,8 +1,9 @@
 #ifndef REQREP_H
     #define REQREP_H
     #include "reqRep.h"
-#endif  
-
+#endif
+#define ADDRSERVERENR "127.0.0.1"
+#define PORT_SVC 5000 
 
 #ifdef SERVER
     //-fct generation des requétes

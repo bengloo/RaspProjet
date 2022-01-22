@@ -6,7 +6,7 @@
 
 #////////recette par defaut//////////
 c=gcc #type de compilation
-op=-Wall -Wextra #opertion et retoure de la compilation
+op=#-Wall -Wextra #opertion et retoure de la compilation
 EXECCLIENT=client #nom de l'executable final
 EXECSERVER=serverEnregistrement #nom de l'executable final2
 MAINSOURCE=cltSrv.o#fichier source de l'executable

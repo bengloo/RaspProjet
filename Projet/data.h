@@ -2,11 +2,9 @@
     #define REQREP_H
     #include "reqRep.h"
 #endif
-#ifndef STDIO_H
-    #define STDIO_H
-    #include <stdio.h> 
-#endif 
-#include "graphisme.h"  
+#include <stdio.h> 
+#include <netinet/in.h>
+#include <arpa/inet.h> 
 //C6-representation data:
 /*
     ->choisir un codage asci/EBCID/...
@@ -18,7 +16,7 @@
 */
 typedef struct 
 {
-    char* ip;
+    in_addr_t ip;
     int port;
 }adresse_t;
 
