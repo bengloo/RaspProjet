@@ -61,16 +61,16 @@
 
 
 //UDP
-    int creerSocketUDP(in_addr_t addrdest,int port,struct sockaddr_in serv){
+    int creerSocketUDP(in_addr_t addrdest,int port,struct sockaddr_in *serv){
         int sock;
         // Création de la socket de réception des requêtes
         CHECK(sock=socket(PF_INET, SOCK_DGRAM, 0), "Can't create");
         
         // Préparation de l’adressage du service
-        serv.sin_family = PF_INET;
-        serv.sin_port = htons(port);
-        serv.sin_addr.s_addr = addrdest;
-        memset(&serv.sin_zero, 0, 8);
+        serv->sin_family = PF_INET;
+        serv->sin_port = htons(port);
+        serv->sin_addr.s_addr = addrdest;
+        memset(&(serv->sin_zero), 0, 8);
         
         return sock;
     };

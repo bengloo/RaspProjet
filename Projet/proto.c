@@ -24,18 +24,16 @@
         }
     }
 #endif
+//#define CLIENT
 #ifdef CLIENT
     //-fct generation des requétes
-    void createPartyReq(){
-        req_t req;
-        buffer_t buff;
-        req.idReq=1;
-        req.msgReq="";
-        //reqTOstr(&req,buff);
-        req.lgreq=strlen(buff);
+    void createPartyReq(req_t *req){
+        req->idReq=1;
+        req->msgReq="";
+        req->lgreq=1;
     };
     void getPartiesReq(){};
-    void oinPartieReq(){};
+    void joinPartieReq(){};
     void joinPartieRep(){};
     void startReq(){};
     void startRep(){};

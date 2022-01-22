@@ -5,15 +5,14 @@
 #include "graphisme.h"
 #include <unistd.h>
 #include <netdb.h>
-#define CLIENT
+#include <stdlib.h>
+//#define CLIENT
 #ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
 {
     //TODO
         char myPseudo[255];
-        char monip[256];
-        //char s[256]=system("ifconfig |grep broadcast |cut -d" " -f10");
-        /*
+        //system("ifconfig |grep broadcast |cut -d' ' -f10");
         int choix=4;
         draw_ascii(empty_picture(' '));
         printf("Veuillé saisr votre pseudo pour vous conecter:\n");
@@ -38,7 +37,7 @@ int main(/*int argc, char const *argv[]*/)
 
                 break;
             }
-        }*/
+        }
         //SI liste
             //recupererliste  des partie (pseudo adresse)-> liste parties
             //aficher la liste des partie
@@ -55,13 +54,13 @@ int main(/*int argc, char const *argv[]*/)
 }
 
 void clientMaitre(){
-    /*createPartyReq();
     struct sockaddr_in serv;
-    int sock =creerSocketUDP((in_addr_t)ADDRSERVERENR,PORT_SVC,serv);
-    req_t req= createPartyReq();
+    int sock =creerSocketUDP((in_addr_t)ADDRSERVERENR,PORT_SVC,&serv);
+    req_t req;
+    createPartyReq(&req);
     buffer_t buff;
     reqTOstr(&req,buff);
-    ecrireMsgUDP(serv, sock,buff);*/
+    ecrireMsgUDP(serv, sock,buff);
     //void lireMsgUDP(struct sockaddr_in clt, int sock);
 };
 void clientAdverse(){

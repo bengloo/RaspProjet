@@ -17,7 +17,7 @@
 #endif
 #ifdef CLIENT
     //-fct generation des requétes
-    void createPartyReq();
+    void createPartyReq(req_t *req);
     void getPartiesReq();
     void joinPartieReq();
     void joinPartieRep();
