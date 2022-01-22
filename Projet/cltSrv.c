@@ -5,32 +5,14 @@
 #include "graphisme.h"
 #include <unistd.h>
 #include <netdb.h>
-//#define CLIENT
+#define CLIENT
 #ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
 {
     //TODO
         char myPseudo[255];
         char monip[256];
-        char s[256];
-     
-        if (!gethostname(s, sizeof s))
-        {
-            printf ("Machine: %s\n", s);
-            {
-                struct hostent *host= gethostbyname(s);
-                
-                if (host  != NULL)
-                {
-                    struct in_addr **adr;
-                    
-                    for (adr = (struct in_addr **)host->h_addr_list; *adr; adr++)
-                    {
-                        printf("IP : %s\n", inet_ntoa(**adr));
-                    }
-                }
-            }
-        } 
+        //char s[256]=system("ifconfig |grep broadcast |cut -d" " -f10");
         /*
         int choix=4;
         draw_ascii(empty_picture(' '));
