@@ -22,6 +22,7 @@ int main(/*int argc, char const *argv[]*/)
         draw_ascii(empty_picture(' '));
         printf("veuillez saisir votre pseudo pour vous connecter:\n");
         scanf("%s",myPseudo);
+        
         while (choix!=3)
         { 
             draw_ascii(empty_picture(' '));
