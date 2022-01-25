@@ -32,6 +32,8 @@
 *.dylib
 
 # Executables
+client
+serverEnregistrement
 *.exe
 *.out
 *.app
