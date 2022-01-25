@@ -76,21 +76,20 @@
     };
 
 
-    int creerSocketUDPAdr(){
+    int creerSocketUDPAdr(in_addr_t addrdest,int port,struct sockaddr_in *serv){
         int sock;
-        struct sockaddr_in serv;
         
         // Création de la socket de réception des requêtes
         CHECK(sock=socket(PF_INET, SOCK_DGRAM, 0), "Can't create");
         
         // Préparation de l’adressage du service
-        serv.sin_family = PF_INET;
-        serv.sin_port = htons(PORT_SVC);
-        serv.sin_addr.s_addr = INADDR_ANY;
-        memset(&serv.sin_zero, 0, 8);
-        
+        serv->sin_family = PF_INET;
+        serv->sin_port = htons(port);
+        serv->sin_addr.s_addr = addrdest;
+        memset(&(serv->sin_zero), 0, 8);
+        printf("serveur en écoute  en :%i,%c,%s\n",port,addrdest,"127.0.0.1");
         // Association de l’adressage préparé avec la socket créée
-        CHECK(bind(sock, (struct sockaddr *) &serv, sizeof serv) , "Can't bind");
+        CHECK(bind(sock, (struct sockaddr *) serv, sizeof *serv) , "Can't bind");
         
         return sock;
     };
@@ -105,7 +104,7 @@
     };
 
 
-    void lireMsgUDP(struct sockaddr_in clt, int sock){
+    rep_t lireMsgUDP(struct sockaddr_in clt, int sock){
 
         char reponse[MAX_BUFF]; 
 

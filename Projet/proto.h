@@ -1,19 +1,21 @@
+#include <stdio.h>
+#include <string.h>
 #ifndef REQREP_H
     #define REQREP_H
     #include "reqRep.h"
 #endif
 #define ADDRSERVERENR "127.0.0.1"
 #define PORT_SVC 5000 
-
+//#define SERVER
 #ifdef SERVER
     //-fct generation des requétes
-    void createPartieRep();
-    void getPartiesRep();
+    void createPartieRep(short lg,buffer_t buff);
+    void getPartiesRep(short lg,buffer_t buff);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
-    void newpartieServ();
-    void getparties();
+    void newpartieServ(short lg,buffer_t buff);
+    void getparties(short lg,buffer_t buff);
     //1 fct de selection traitement selon requete
-    void lireReqServ(req_t req);
+    void lireReqServ(rep_t rep);
 #endif
 #ifdef CLIENT
     //-fct generation des requétes

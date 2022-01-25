@@ -6,6 +6,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h> 
+#ifndef REQREP_H
+    #define REQREP_H
+    #include "reqRep.h"
+#endif
 
 #define PORT_SVC 5000 
 #define CHECK(sts,msg) if ((sts) == -1) {perror(msg);exit(-1);} 
@@ -21,4 +25,4 @@
     int creerSocketUDP(in_addr_t addrdest,int port,struct sockaddr_in * serv);
     int creerSocketUDPAdr();
     void ecrireMsgUDP(struct sockaddr_in clt, int sock,char *msg);
-    void lireMsgUDP(struct sockaddr_in clt, int sock);
+    rep_t lireMsgUDP(struct sockaddr_in clt, int sock);
