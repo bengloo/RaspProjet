@@ -13,3 +13,4 @@ void repTOstr(rep_t *rep,buffer_t buff){
 void strTOrep(rep_t *rep,buffer_t buff){
     sscanf(buff,FMT_REQ,&rep->idRep,&rep->lgrep,rep->msgRep);
 }
+

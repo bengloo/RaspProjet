@@ -2,7 +2,7 @@
 #include "data.h"
 #include "proto.h"
 #include "cltSrv.h"
-#include <graphics.h>
+#include "graphisme.h"
 #include <unistd.h>
 #include <netdb.h>
 #include <stdlib.h>
