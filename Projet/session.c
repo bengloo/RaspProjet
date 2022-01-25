@@ -61,7 +61,7 @@
 
 
 //UDP
-    int creerSocketUDP(in_addr_t addrdest,int port,struct sockaddr_in *serv){
+    int creerSocketUDP(char* addrdest,int port,struct sockaddr_in *serv){
         int sock;
         // Création de la socket de réception des requêtes
         CHECK(sock=socket(PF_INET, SOCK_DGRAM, 0), "Can't create");
@@ -69,14 +69,14 @@
         // Préparation de l’adressage du service
         serv->sin_family = PF_INET;
         serv->sin_port = htons(port);
-        serv->sin_addr.s_addr = addrdest;
+        serv->sin_addr.s_addr = inet_addr(addrdest);
         memset(&(serv->sin_zero), 0, 8);
-        
+        printf("Client installé avec l'addr %s:%d\n",inet_ntoa(serv->sin_addr),ntohs(serv->sin_port));
         return sock;
     };
 
 
-    int creerSocketUDPAdr(char * addrdest,int port,struct sockaddr_in *serv){
+    int creerSocketUDPAdr(struct sockaddr_in *serv){
         int sock;
         
         // Création de la socket de réception des requêtes
@@ -84,7 +84,7 @@
         
         // Préparation de l’adressage du service
         serv->sin_family = PF_INET;
-        serv->sin_port = htons(port);
+        serv->sin_port = htons(PORT_SVC);
         serv->sin_addr.s_addr = INADDR_ANY;
         memset(&(serv->sin_zero), 0, 8);
         printf("Server installé avec l'addr %s:%d\n",inet_ntoa(serv->sin_addr),ntohs(serv->sin_port));
@@ -97,11 +97,13 @@
 
 
     void ecrireMsgUDP(struct sockaddr_in clt, int sock,char *msg){
-
+    struct sockaddr_in moi;
+    int LenMoi=sizeof(moi);
         // Ecriture du message
 	printf("Envoi du message [%s]\n", msg);
 	CHECK(sendto(sock, msg, strlen(msg)+1, 0, (struct sockaddr *)&clt, sizeof clt), "Can't send");
-
+    CHECK(getsockname(sock,(struct sockaddr*)&moi,&LenMoi),"--getsockname()--");
+    printf("j'ai envoyé le message \"%s\" à %s:%d, via %s :%d\n",MSG,inet_ntoa(clt.sin_addr),ntohs(clt.sin_port),inet_ntoa(moi.sin_addr),ntohs(moi.sin_port));
     };
 
 
@@ -112,9 +114,11 @@
         socklen_t cltLen = sizeof(clt);
             
         // Réception d’un message
-        CHECK(recvfrom(sock, reponse, sizeof(reponse), 0,
-        (struct sockaddr *)&clt, &cltLen) , "Can't receive");
-        
+        CHECK(recvfrom(sock, reponse, sizeof(reponse), 0,(struct sockaddr *)&clt, &cltLen) , "Can't receive");
+        printf("Message reçu [%s] de [%s]\n",reponse,inet_ntoa(clt.sin_addr)); 
+        rep_t rep;
+        //rep.idRep=strTOrep(reponse);
+        return rep;
     };
 
 

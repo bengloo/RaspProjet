@@ -25,7 +25,7 @@ int main(/*int argc, char const *argv[]*/)
         
         while (choix!=3)
         { 
-            draw_ascii(empty_picture(' '));
+            //draw_ascii(empty_picture(' '));
             printf("Menu:\n1)Lister les parties en cours\n2)Creer une partie\n3)Quitter\n");
             scanf("%d",&choix);
             switch (choix)
@@ -120,13 +120,15 @@ int main(/*int argc, char const *argv[]*/)
 
 void clientMaitre(){
     //envois creation party dgram
+    printf("debut client maitre\n");
     struct sockaddr_in serv;
-    int sock =creerSocketUDP((in_addr_t)ADDRSERVERENR,PORT_SVC,&serv);
+    int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
     req_t req;
     createPartyReq(&req);
     buffer_t buff;
     reqTOstr(&req,buff);
     ecrireMsgUDP(serv, sock,buff);
+    printf("fin client maitre\n");
     //void lireMsgUDP(struct sockaddr_in clt, int sock);
 };
 
@@ -143,7 +145,7 @@ int main(/*int argc, char const *argv[]*/)
 {
     //socket d'ecoute
     struct sockaddr_in serv;
-    int sock =creerSocketUDPAdr(ADDRSERVERENR,PORT_SVC,&serv);
+    int sock =creerSocketUDPAdr(&serv);
     while (1)
     {
         rep_t rep = lireMsgUDP(serv,sock);
