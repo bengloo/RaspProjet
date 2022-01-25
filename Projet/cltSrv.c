@@ -54,6 +54,7 @@ int main(/*int argc, char const *argv[]*/)
 }
 
 void clientMaitre(){
+    //envois creation party dgram
     struct sockaddr_in serv;
     int sock =creerSocketUDP((in_addr_t)ADDRSERVERENR,PORT_SVC,&serv);
     req_t req;
@@ -64,13 +65,15 @@ void clientMaitre(){
     //void lireMsgUDP(struct sockaddr_in clt, int sock);
 };
 void clientAdverse(){
-
+    //envois creation getpartie dgram
 };
 #endif
 
 #ifdef SERVER
 int main(/*int argc, char const *argv[]*/)
 {
+    //socket d'ecoute
+    ->recois->thread(buff,traitement))
     /* code */
     return 0;
 }
