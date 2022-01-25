@@ -12,7 +12,8 @@ int main(/*int argc, char const *argv[]*/)
 {
     //TODO
         char myPseudo[255];
-       // system("/home/hugo/Bureau/Projet/MidlewareProjetLe3/Projet/scriptZoom.sh");
+        //system("/home/hugo/Bureau/Projet/MidlewareProjetLe3/Projet/scriptZoom.sh -m");
+        //system("/home/hugo/Bureau/Projet/MidlewareProjetLe3/Projet/scriptZoom.sh -p");
         int choix=4;
 
         // est ce qu'on fait une fonction pour la récupération d'ip ? 
