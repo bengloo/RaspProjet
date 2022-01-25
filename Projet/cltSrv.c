@@ -12,17 +12,18 @@ int main(/*int argc, char const *argv[]*/)
 {
     //TODO
         char myPseudo[255];
-        //system("ifconfig |grep broadcast |cut -d' ' -f10");
+       // system("/home/hugo/Bureau/Projet/MidlewareProjetLe3/Projet/scriptZoom.sh");
         int choix=4;
 
         // est ce qu'on fait une fonction pour la récupération d'ip ? 
         //char ip[30]=recupererIp(); 
 
-
+     
         draw_ascii(empty_picture(' '));
         printf("veuillez saisir votre pseudo pour vous connecter:\n");
         scanf("%s",myPseudo);
-        
+        choix=1;
+
         while (choix!=3)
         { 
             draw_ascii(empty_picture(' '));
