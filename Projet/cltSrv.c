@@ -66,7 +66,7 @@ int main(/*int argc, char const *argv[]*/)
             printf("Choisissez une partie dans la liste ou tapez 0 pour revenir au menu principal ou bien -1 pour Refresh \n");
             scanf("%d",&idPartie); // choix déjà initialisé avant 
 
-            if(idPartie<0) {
+            if(idPartie<=0) {
                 switch (idPartie)
                 {
                 case -1:
@@ -128,6 +128,8 @@ void clientMaitre(){
     ecrireMsgUDP(serv, sock,buff);
     //void lireMsgUDP(struct sockaddr_in clt, int sock);
 };
+
+
 void clientAdverse(){
 
 };
