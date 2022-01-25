@@ -16,7 +16,7 @@ int main(/*int argc, char const *argv[]*/)
         int choix=4;
 
         // est ce qu'on fait une fonction pour la récupération d'ip ? 
-        char ip[30]=recupererIp(); 
+        //char ip[30]=recupererIp(); 
 
 
         draw_ascii(empty_picture(' '));
@@ -55,8 +55,8 @@ int main(/*int argc, char const *argv[]*/)
                     //1)STREAM
                     //2)JOUER
         //SI CREER
-
-        if(/*Liste*/) {  
+        /*
+        if() {  
             // Récupération des parties (requete d'id 2) afin de les afficher   
             getPartiesReq(2,ip,myPseudo);
             //afficherParties();
@@ -109,16 +109,17 @@ int main(/*int argc, char const *argv[]*/)
             }
         }
 
-        if(/*creer*/) {
+        if() {
             // demander les paramètres de jeu 
-            createPartieReq(1, ip, /*param*/);
+            createPartieReq(1, ip, );
         }
-            
+        */   
     
     return 0;
 }
 
 void clientMaitre(){
+    //envois creation party dgram
     struct sockaddr_in serv;
     int sock =creerSocketUDP((in_addr_t)ADDRSERVERENR,PORT_SVC,&serv);
     req_t req;
@@ -129,13 +130,15 @@ void clientMaitre(){
     //void lireMsgUDP(struct sockaddr_in clt, int sock);
 };
 void clientAdverse(){
-
+    //envois creation getpartie dgram
 };
 #endif
 
 #ifdef SERVER
 int main(/*int argc, char const *argv[]*/)
 {
+    //socket d'ecoute
+    ->recois->thread(buff,traitement))
     /* code */
     return 0;
 }
