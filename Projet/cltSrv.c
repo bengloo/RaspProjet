@@ -144,7 +144,7 @@ int main(/*int argc, char const *argv[]*/)
 {
     //socket d'ecoute
     struct sockaddr_in serv;
-    int sock =creerSocketUDPAdr((in_addr_t)ADDRSERVERENR,PORT_SVC,&serv);
+    int sock =creerSocketUDPAdr(ADDRSERVERENR,PORT_SVC,&serv);
     while (1)
     {
         rep_t rep = lireMsgUDP(serv,sock);
