@@ -131,15 +131,22 @@ void clientMaitre(){
 };
 void clientAdverse(){
     //envois creation getpartie dgram
+    
+    
 };
 #endif
-
+//#define SERVER
 #ifdef SERVER
 int main(/*int argc, char const *argv[]*/)
 {
     //socket d'ecoute
-    ->recois->thread(buff,traitement))
-    /* code */
+    struct sockaddr_in serv;
+    int sock =creerSocketUDPAdr((in_addr_t)ADDRSERVERENR,PORT_SVC,&serv);
+    while (1)
+    {
+        rep_t rep = lireMsgUDP(serv,sock);
+        lireReqServ(rep);
+    }
     return 0;
 }
 #endif
