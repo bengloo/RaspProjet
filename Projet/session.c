@@ -76,7 +76,7 @@
     };
 
 
-    int creerSocketUDPAdr(in_addr_t addrdest,int port,struct sockaddr_in *serv){
+    int creerSocketUDPAdr(char * addrdest,int port,struct sockaddr_in *serv){
         int sock;
         
         // Création de la socket de réception des requêtes
@@ -85,9 +85,10 @@
         // Préparation de l’adressage du service
         serv->sin_family = PF_INET;
         serv->sin_port = htons(port);
-        serv->sin_addr.s_addr = addrdest;
+        serv->sin_addr.s_addr = INADDR_ANY;
         memset(&(serv->sin_zero), 0, 8);
-        printf("serveur en écoute  en :%i,%c,%s\n",port,addrdest,"127.0.0.1");
+        printf("Server installé avec l'addr %s:%d\n",inet_ntoa(serv->sin_addr),ntohs(serv->sin_port));
+        //printf("serveur en écoute  en :%i,%s,%s\n",port,serv->sin_addr.s_addr ,"127.0.0.1");
         // Association de l’adressage préparé avec la socket créée
         CHECK(bind(sock, (struct sockaddr *) serv, sizeof *serv) , "Can't bind");
         

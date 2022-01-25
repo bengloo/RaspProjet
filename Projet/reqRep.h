@@ -1,3 +1,4 @@
+#define ADDRSERVERENR "127.0.0.1"
 #define FMT_REQ "%3hd:%hd:%[^n]"
 //typedef buffer_t char[MAX_BUFF];
 typedef char* buffer_t;

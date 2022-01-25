@@ -4,7 +4,6 @@
     #define REQREP_H
     #include "reqRep.h"
 #endif
-#define ADDRSERVERENR "127.0.0.1"
 #define PORT_SVC 5000 
 //#define SERVER
 #ifdef SERVER
