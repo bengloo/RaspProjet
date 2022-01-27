@@ -68,7 +68,10 @@ void clientMaitre(){
 
 void clientAdverse(){
     //envois creation getpartie dgram
-    
+
+
+
+
     //SI liste
             //recupererliste  des partie (pseudo adresse)-> liste parties
             //aficher la liste des partie
@@ -80,64 +83,74 @@ void clientAdverse(){
                     //1)STREAM
                     //2)JOUER
         //SI CREER
-        /*
-        if() {  
-            // Récupération des parties (requete d'id 2) afin de les afficher   
-            getPartiesReq(2,ip,myPseudo);
-            //afficherParties();
 
-            int idPartie, streamOuJoueur;
 
-            printf("Choisissez une partie dans la liste ou tapez 0 pour revenir au menu principal ou bien -1 pour Refresh \n");
-            scanf("%d",&idPartie); // choix déjà initialisé avant 
 
-            if(idPartie<=0) {
-                switch (idPartie)
-                {
-                case -1:
-                    // Refresh
+
+    /*
+    printf("debut client adverse\n");
+    struct sockaddr_in serv;
+    int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
+    req_t req;
+
+
+    // Récupération des parties (requete d'id 2) afin de les afficher   
+    getPartiesReq(2,ip,myPseudo);
+    //afficherParties();
+
+    int idPartie, streamOuJoueur;
+
+    printf("Choisissez une partie dans la liste ou tapez 0 pour revenir au menu principal ou bien -1 pour Refresh \n");
+    scanf("%d",&idPartie); // choix déjà initialisé avant 
+
+    if(idPartie<=0) {
+        switch (idPartie)
+        {
+            case -1:
+                // Refresh
                     
-                    break;
-                case 0:
-                    // revenir au menu 
-                    break;
+                break;
+            case 0:
+                // revenir au menu 
                 
-                default:
+                break;
+                
+            default:
 
-                    break;
-                }
-            }
+                break;
+        }
+    }
 
-            else {
+    else {
 
-                printf("Menu : \n 1) pour regarder la partie n° %d \n 2) pour jouer dans la partie n° %d \n", idPartie, idPartie);
-                scanf("%d",&idstreamOuJoueur);  
-                switch (idstreamOuJoueur)
-                {
-                case 1:
-                    // Stream, requete d'id 9 
-                    streamReq(9,ip); 
+        printf("Menu : \n 1) pour regarder la partie n° %d \n 2) pour jouer dans la partie n° %d \n", idPartie, idPartie);
+        scanf("%d",&idstreamOuJoueur);  
+        switch (idstreamOuJoueur)
+        {
+            case 1:
+                // Stream, requete d'id 9 
+                streamReq(9,ip); 
                     
-                    break;
-                case 2:
-                    // Joueur, requête d'id 3 
-                    joinPartieReq(3, ip, idPartie);
-                    //getStart();
-                    break;
+                break;
+            case 2:
+                // Joueur, requête d'id 3 
+                joinPartieReq(3, ip, idPartie);
+                //getStart();
+                break;
                 
-                default:
+            default:
 
-                    break;
-                }
-
-
-            }
+                break;
         }
 
-        if() {
-            // demander les paramètres de jeu 
-            createPartieReq(1, ip, );
-        }
+
+    }
+        
+    buffer_t buff;
+    reqTOstr(&req,buff);
+    ecrireMsgUDP(serv, sock,buff);
+    printf("fin client adverse\n");
+
         */   
     
 };
