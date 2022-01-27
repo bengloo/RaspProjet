@@ -12,8 +12,8 @@ int main(/*int argc, char const *argv[]*/)
 {
     //TODO
         char myPseudo[255];
-        //system("/home/hugo/Bureau/Projet/MidlewareProjetLe3/Projet/scriptZoom.sh -m");
-        //system("/home/hugo/Bureau/Projet/MidlewareProjetLe3/Projet/scriptZoom.sh -p");
+        //system("./scriptZoom.sh -m");
+        //system("./scriptZoom.sh -p");
         int choix=4;
 
         // est ce qu'on fait une fonction pour la récupération d'ip ? 
@@ -46,7 +46,30 @@ int main(/*int argc, char const *argv[]*/)
                 break;
             }
         }
-        //SI liste
+        
+    
+    return 0;
+}
+
+void clientMaitre(){
+    //envois creation party dgram
+    printf("debut client maitre\n");
+    struct sockaddr_in serv;
+    int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
+    req_t req;
+    createPartyReq(&req);
+    buffer_t buff;
+    reqTOstr(&req,buff);
+    ecrireMsgUDP(serv, sock,buff);
+    printf("fin client maitre\n");
+    //void lireMsgUDP(struct sockaddr_in clt, int sock);
+};
+
+
+void clientAdverse(){
+    //envois creation getpartie dgram
+    
+    //SI liste
             //recupererliste  des partie (pseudo adresse)-> liste parties
             //aficher la liste des partie
             //choisire une partie via un indice dans la liste ou
@@ -116,28 +139,6 @@ int main(/*int argc, char const *argv[]*/)
             createPartieReq(1, ip, );
         }
         */   
-    
-    return 0;
-}
-
-void clientMaitre(){
-    //envois creation party dgram
-    printf("debut client maitre\n");
-    struct sockaddr_in serv;
-    int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
-    req_t req;
-    createPartyReq(&req);
-    buffer_t buff;
-    reqTOstr(&req,buff);
-    ecrireMsgUDP(serv, sock,buff);
-    printf("fin client maitre\n");
-    //void lireMsgUDP(struct sockaddr_in clt, int sock);
-};
-
-
-void clientAdverse(){
-    //envois creation getpartie dgram
-    
     
 };
 #endif
