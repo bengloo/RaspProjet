@@ -26,7 +26,7 @@ int main(/*int argc, char const *argv[]*/)
             switch (choix)
             {
             case 1:
-                clientAdverse();
+                clientAdverse(myPseudo);
                 break;
             case 2:
                 clientMaitre(myPseudo);
@@ -59,7 +59,7 @@ void clientMaitre(char * myPseudo){
 };
 
 
-void clientAdverse(){
+void clientAdverse(char* myPseudo){
     //envois creation getpartie dgram
 
 

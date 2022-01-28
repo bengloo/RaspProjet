@@ -12,7 +12,9 @@
     -étre sur écoute tcp
     ....
 -fonction clientadverse 
-    -implementé getpartiesreq... en udp
+    -implementé getpartiesreq/rep... en udp
     -menu 
     -implementé join partie TCP 
     ...
+-fonction permettant de recuperer une ip non aloué 
+    -à utilisé pour le client actuellment on ne peux avoir que un client unique en 127.0.0.1 

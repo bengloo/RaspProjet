@@ -14,4 +14,4 @@
 #define NBMAXCLIENT 100
 
 void clientMaitre(char *myPseudo);
-void clientAdverse();
+void clientAdverse(char* myPseudo);
