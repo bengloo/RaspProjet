@@ -1,26 +1,33 @@
-#include "proto.h"
-//#define SERVER
+#include "proto.h" 
+#define SERVER
 #ifdef SERVER
     //-fct generation des requétes
-    void createPartieRep(short lg,buffer_t buff){};
-    void getPartiesRep(short lg,buffer_t buff){};
-    //-à chaque req ,on associera &fct de traitement qui genere une réponse
-    void newpartieServ(short lg,buffer_t buff){
-        printf("newpartieserv:<%s>\n",buff);
+    void createPartieRep(rep_t *rep,char * ch){
 
     };
-    void getparties(short lg,buffer_t buff){
+    void getPartiesRep(rep_t *rep,char * ch){
+
+    };
+    //-à chaque req ,on associera &fct de traitement qui genere une réponse
+    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
+        rep_t rep;
+        createPartieRep(&rep,"1");/*TODO ajouté le client à la liste client du server d'enregistrement renvoyé 0 en cas d'echec (>max client ...) sinonn 1*/
+        buffer_t buffrep;
+        repTOstr(&rep,buffrep);
+        ecrireMsgUDP(*clt, sock,buffrep); 
+    };
+    void getparties(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
          printf("getpaties<%s>\n",buff);
     };
     //1 fct de selection traitement selon requete
-    void lireReqServ(rep_t rep){
-        switch (rep.idRep)
+    void lireReqServ(req_t req,struct sockaddr_in *clt,int sock){
+        switch (req.idReq)
         {
         case 1 :
-            newpartieServ(rep.lgrep,rep.msgRep);
+            newpartieServ(req.lgreq,req.msgReq,clt,sock);
             break;
         case 2 :
-            getparties(rep.lgrep,rep.msgRep);
+            getparties(req.lgreq,req.msgReq,clt,sock);
             break;
 
         default:
@@ -31,10 +38,12 @@
 //#define CLIENT
 #ifdef CLIENT
     //-fct generation des requétes
-    void createPartyReq(req_t *req){
+    void createPartyReq(req_t *req,char *Nom){
         req->idReq=1;
-        req->msgReq="";
-        req->lgreq=1;
+        printf("test1\n");
+        strcpy(req->msgReq,Nom);
+        printf("test2\n");
+        req->lgreq=strlen(Nom);
     };
     void getPartiesReq(){};
     void joinPartieReq(){};

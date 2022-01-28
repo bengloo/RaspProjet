@@ -1,24 +1,35 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#ifndef SESSIONH
+    #include "session.h"
+    #define  SESSIONH
+#endif
+#ifndef DATAH
+    #include "data.h"
+    #define DATAH
+#endif
 #ifndef REQREP_H
     #define REQREP_H
     #include "reqRep.h"
 #endif
 #define PORT_SVC 5000 
-//#define SERVER
+#define SERVER
 #ifdef SERVER
     //-fct generation des requétes
-    void createPartieRep(short lg,buffer_t buff);
-    void getPartiesRep(short lg,buffer_t buff);
+    void createPartieRep(rep_t *rep,char * ch);
+    void getPartiesRep(rep_t *rep,char * ch);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
-    void newpartieServ(short lg,buffer_t buff);
-    void getparties(short lg,buffer_t buff);
+    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
+    void getparties(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
     //1 fct de selection traitement selon requete
-    void lireReqServ(rep_t rep);
+    void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
 #endif
 #ifdef CLIENT
     //-fct generation des requétes
-    void createPartyReq(req_t *req);
+    void createPartyReq(req_t *req,char * Nom);
     void getPartiesReq();
     void joinPartieReq();
     void joinPartieRep();

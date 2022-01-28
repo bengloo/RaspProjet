@@ -1,7 +1,10 @@
 #define ADDRSERVERENR "127.0.0.1"
 #define FMT_REQ "%3hd:%hd:%[^n]"
-//typedef buffer_t char[MAX_BUFF];
-typedef char* buffer_t;
+#define MAX_BUFF 1024
+#define OK 1;
+#define NOP 0;
+typedef char buffer_t[MAX_BUFF];
+//typedef char* buffer_t;
 typedef struct 
 {
     short idReq;//0 à 999

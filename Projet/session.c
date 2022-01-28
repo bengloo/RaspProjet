@@ -103,22 +103,22 @@
 	printf("Envoi du message [%s]\n", msg);
 	CHECK(sendto(sock, msg, strlen(msg)+1, 0, (struct sockaddr *)&clt, sizeof clt), "Can't send");
     CHECK(getsockname(sock,(struct sockaddr*)&moi,&LenMoi),"--getsockname()--");
-    printf("j'ai envoyé le message \"%s\" à %s:%d, via %s :%d\n",MSG,inet_ntoa(clt.sin_addr),ntohs(clt.sin_port),inet_ntoa(moi.sin_addr),ntohs(moi.sin_port));
+    printf("j'ai envoyé le message \"%s\" à %s:%d, via %s :%d\n",msg,inet_ntoa(clt.sin_addr),ntohs(clt.sin_port),inet_ntoa(moi.sin_addr),ntohs(moi.sin_port));
     };
 
 
-    rep_t lireMsgUDP(struct sockaddr_in clt, int sock){
+    req_t lireMsgUDP(int sock,struct sockaddr_in *clt){
 
         char reponse[MAX_BUFF]; 
 
         socklen_t cltLen = sizeof(clt);
             
         // Réception d’un message
-        CHECK(recvfrom(sock, reponse, sizeof(reponse), 0,(struct sockaddr *)&clt, &cltLen) , "Can't receive");
-        printf("Message reçu [%s] de [%s]\n",reponse,inet_ntoa(clt.sin_addr)); 
-        rep_t rep;
+        CHECK(recvfrom(sock, reponse, sizeof(reponse), 0,(struct sockaddr *)clt, &cltLen) , "Can't receive");
+        printf("Message reçu [%s] de [%s]\n",reponse,inet_ntoa(clt->sin_addr)); 
+        req_t req;
         //rep.idRep=strTOrep(reponse);
-        return rep;
+        return req;
     };
 
 

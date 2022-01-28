@@ -1,11 +1,4 @@
-#include "session.h"
-#include "data.h"
-#include "proto.h"
 #include "cltSrv.h"
-#include "graphisme.h"
-#include <unistd.h>
-#include <netdb.h>
-#include <stdlib.h>
 //#define CLIENT
 #ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
@@ -36,7 +29,7 @@ int main(/*int argc, char const *argv[]*/)
                 clientAdverse();
                 break;
             case 2:
-                clientMaitre();
+                clientMaitre(myPseudo);
                 break;
             case 3:
                 break;
@@ -51,13 +44,13 @@ int main(/*int argc, char const *argv[]*/)
     return 0;
 }
 
-void clientMaitre(){
+void clientMaitre(char * myPseudo){
     //envois creation party dgram
     printf("debut client maitre\n");
     struct sockaddr_in serv;
     int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
     req_t req;
-    createPartyReq(&req);
+    createPartyReq(&req,myPseudo);
     buffer_t buff;
     reqTOstr(&req,buff);
     ecrireMsgUDP(serv, sock,buff);
@@ -155,18 +148,22 @@ void clientAdverse(){
     
 };
 #endif
-//#define SERVER
+#define SERVER
 #ifdef SERVER
-int main(/*int argc, char const *argv[]*/)
-{
-    //socket d'ecoute
-    struct sockaddr_in serv;
-    int sock =creerSocketUDPAdr(&serv);
-    while (1)
+    int main(/*int argc, char const *argv[]*/)
     {
-        rep_t rep = lireMsgUDP(serv,sock);
-        lireReqServ(rep);
+        adresse_t clients[NBMAXCLIENT];
+
+        //socket d'ecoute
+        struct sockaddr_in serv;
+        int sock =creerSocketUDPAdr(&serv);
+        //client emeteur
+        struct sockaddr_in clt;
+        while (1)
+        {
+            req_t req = lireMsgUDP(sock,&clt);
+            lireReqServ(req,&clt,sock);
+        }
+        return 0;
     }
-    return 0;
-}
 #endif

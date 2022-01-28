@@ -25,4 +25,4 @@
     int creerSocketUDP(char* addrdest,int port,struct sockaddr_in * serv);
     int creerSocketUDPAdr(struct sockaddr_in *serv);
     void ecrireMsgUDP(struct sockaddr_in clt, int sock,char *msg);
-    rep_t lireMsgUDP(struct sockaddr_in clt, int sock);
+    req_t lireMsgUDP(int sock,struct sockaddr_in *clt);
