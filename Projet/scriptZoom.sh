@@ -28,7 +28,7 @@ function zoomAvant() {
 	xdotool key control+0x0030
 }
 
-while getopts "mp" opt; do 
+while getopts "mp" opt; do >
 	case $opt in 
 	m)
 		zoomArriere
