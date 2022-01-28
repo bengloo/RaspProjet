@@ -11,7 +11,7 @@
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
         rep_t rep;
-        createPartieRep(&rep,"1");/*TODO ajouté le client à la liste client du server d'enregistrement renvoyé 0 en cas d'echec (>max client ...) sinonn 1*/
+        createPartieRep(&rep,"1");/*TODO ajouté le client à la liste client du server d'enregistrement renvoyé en réponse 0 en cas d'echec (>max client ...) sinonn 1*/
         buffer_t buffrep;
         repTOstr(&rep,buffrep);
         ecrireMsgUDP(*clt, sock,buffrep); 

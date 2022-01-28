@@ -1,9 +1,18 @@
--Finir Session.c et .h 
--Regarder pour faire les shémas avec les petites cases qui se répondent entre
-, comme toujours avec kathab (avec les deux traits clients, serveurs)
--
--
--
--
--
--
+-Finir Session.c et .h coté Stram tcp 
+-dans Proto.c ligne 14 createPartieRep(&rep,"1");
+    ajouté le client à la liste client du server d'enregistrement renvoyé en réponse  0 en cas d'echec (>max client ...) sinonn 1*/
+-dans cltsrv.c ligne 165 lireReqServ(req,&clt,sock);
+    imbriqué cette fonction dans un thread pour liberé l'écoute
+    les parametre req et clt dois étre passé en parametre du thread et réafecté en double à l'interieir de celui ci 
+-caste des data (voir avec lorelenne et hugo)
+    genere les data de partie (parcours) et faire les fonction de converssion en chaine de caratere et vis versa
+    genere les data de parties (tableau du server d'enregistrement) et faire les fonction de converssion en chaine de caratere et vis versa
+-crere une fonction permettant de recuperer un timestemp fiable et lui ajouté n seconde. 
+- fonction du server de partie executé par un thread par le joueur maitre
+    -étre sur écoute tcp
+    ....
+-fonction clientadverse 
+    -implementé getpartiesreq... en udp
+    -menu 
+    -implementé join partie TCP 
+    ...
