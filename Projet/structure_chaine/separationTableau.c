@@ -23,11 +23,11 @@ typedef enum{
     STOPPED = 2,
     FAILED = 3,
     WAITTINGADVERSE = 4
-} statutPatie_t;
+} statutPartie_t;
 
 typedef struct {
   int id;
-  statutPatie_t statut;
+  statutPartie_t statut;
   adresse_t addrMaitre;
   adresse_t addrAdverse;
   int scoreMaitre;
@@ -96,7 +96,7 @@ int main()
 void initstatPartie(statPatie_t * tableau) 
 {
     struct sockaddr_in serv, serv2;
-    statutPatie_t statut;
+    statutPartie_t statut;
     adresse_t addrM, addrA;
 
     /* creation de données de socket à copier */ 
