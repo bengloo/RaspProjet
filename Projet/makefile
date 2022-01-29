@@ -16,7 +16,7 @@ HEADERFIC=cltSrv.h#nom des header
 
 #création de l'executable
 all:client 
-	rm -rf *.o
+	rm -f *.o
 
 #activer mode client server défini 
 client:CLTSERV= -D'CLIENT'
@@ -40,15 +40,15 @@ $(MAINSOURCE): $(HEADERFIC)
 	$(c) -c $< -o $@ $(op) $(CLTSERV)
 
 # suppression des fichiers temporaires
-clean: 
-	rm -rf *.o
+cleanlib: 
+	rm -f *.o
  
 # suppression de tous les fichiers, sauf les sources,
 # en vue d'une reconstruction complète
-proper: clean
-	rm -rf $(EXECCLIENT)
-	rm -rf $(EXECSERVER)
+clean: cleanlib
+	rm -f $(EXECCLIENT)
+	rm -f $(EXECSERVER)
 
-zip: proper
+zip: clean
 	zip ProjetLE3MW_ENGLOO_MORCQ_LUX_MARQUILLY.zip *.c *.h makefile README*
 

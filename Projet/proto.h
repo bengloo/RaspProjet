@@ -16,7 +16,7 @@
     #include "reqRep.h"
 #endif
 #define PORT_SVC 5000 
-#define SERVER
+//#define SERVER
 #ifdef SERVER
     //-fct generation des requétes
     void createPartieRep(rep_t *rep,char * ch);

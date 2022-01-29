@@ -148,12 +148,11 @@ void clientAdverse(char* myPseudo){
     
 };
 #endif
-#define SERVER
+// #define SERVER
 #ifdef SERVER
     int main(/*int argc, char const *argv[]*/)
     {
         adresse_t clients[NBMAXCLIENT];
-
         //socket d'ecoute
         struct sockaddr_in serv;
         int sock =creerSocketUDPAdr(&serv);
