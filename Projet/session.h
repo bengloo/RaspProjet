@@ -1,3 +1,6 @@
+#ifndef SESSIONH
+#define SESSIONH
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,3 +29,5 @@
     int creerSocketUDPAdr(struct sockaddr_in *serv);
     void ecrireMsgUDP(struct sockaddr_in clt, int sock,char *msg);
     req_t lireMsgUDP(int sock,struct sockaddr_in *clt);
+
+#endif
