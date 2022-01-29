@@ -4,7 +4,7 @@
 -dans cltsrv.c ligne 165 lireReqServ(req,&clt,sock);
     imbriqué cette fonction dans un thread pour liberé l'écoute
     les parametre req et clt dois étre passé en parametre du thread et réafecté en double à l'interieir de celui ci 
--caste des data (voir avec lorelenne et hugo)
+-caste des data (voir avec laurelene et hugo)
     genere les data de partie (parcours) et faire les fonction de converssion en chaine de caratere et vis versa
     genere les data de parties (tableau du server d'enregistrement) et faire les fonction de converssion en chaine de caratere et vis versa
 -crere une fonction permettant de recuperer un timestemp fiable et lui ajouté n seconde. 
