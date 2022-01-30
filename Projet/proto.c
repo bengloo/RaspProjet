@@ -14,16 +14,9 @@ void getPartiesRep(rep_t *rep, char *ch){
 };
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 //    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
-void newpartieServ(int sock)
+void newpartieServ(req_t *req)
 {
-    DEBUG_S1("Serveur : New thread pour socket <%i>\n", sock);
-
-    buffer_t msgLu;
-    // On attend les inputs du Client Maitre
-    lireMsgTCP(sock, msgLu, sizeof(buffer_t));
-    DEBUG_S2("Serveur : socket <%i> msg recu <%s>\n", sock, msgLu);
-
-
+    
     /*rep_t rep;
         createPartieRep(&rep,"1");//TODO ajouté le client à la liste client du server d'enregistrement renvoyé en réponse 0 en cas d'echec (>max client ...) sinonn 
     buffer_t buffrep;
@@ -41,19 +34,36 @@ void getparties(short lg, buffer_t buff, struct sockaddr_in *clt, int sock)
 //void lireReqServ(req_t req, struct sockaddr_in *clt, int sock)
 void lireReqServ(int *sock)
 {
-    int choix=1;
-    switch (choix)
-    {
-    case 1:
-        newpartieServ(*sock);
-        break;
-    case 2:
-        //getparties(req.lgreq, req.msgReq, clt, sock);
-        break;
+    DEBUG_S1("Serveur : New thread pour socket <%i>\n", *sock);
 
-    default:
-        break;
+    buffer_t msgLu;
+    req_t req;
+    int lenLu=1;
+    // On attend les inputs du Client Maitre
+
+    while (lenLu > 0)
+    {
+        lenLu=lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
+        DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
+        strTOreq(&req,msgLu);
+        DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
+
+        switch (req.idReq)
+        {
+        case 1:
+            newpartieServ(&req);
+            break;
+        case 2:
+            //getparties(req.lgreq, req.msgReq, clt, sock);
+            break;
+
+        default:
+            break;
+        }
     }
+
+    // Le Client a fermé on cloture la socket client
+    fermerSocket(*sock);
 }
 
 /* ------------------------------------------------------------------------ */
@@ -61,35 +71,34 @@ void lireReqServ(int *sock)
 /* ------------------------------------------------------------------------ */
 
 //-fct generation des requétes
-void createPartyReq(int sock,char * pseudo)
+void createPartyReq(int sock, char *pseudo)
 {
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
     char *IPbuffer;
     struct hostent *host_entry;
     int hostname;
-    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer)))!=-1, "Erreur gethostname");
-    CHECK_T((host_entry = gethostbyname(hostbuffer))!=NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr*)
-                           host_entry->h_addr_list[0]));
-  
+    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
+    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
+    IPbuffer = inet_ntoa(*((struct in_addr *)
+                               host_entry->h_addr_list[0]));
+
     // On prepare la requete pour le serveur
     req_t req;
-    req.idReq=CREERPARTIE;
+    req.idReq = CREERPARTIE;
     adresse_t monAdr;
     strcpy(monAdr.ip, IPbuffer);
     strcpy(monAdr.pseudo, pseudo);
-    monAdr.port=PORT_CLIENTMAITRE;
-    adresseTOstr(&monAdr,req.msgReq);
-    req.lgreq=strlen(req.msgReq);
+    monAdr.port = PORT_CLIENTMAITRE;
+    adresseTOstr(&monAdr, req.msgReq);
+    req.lgreq = strlen(req.msgReq);
 
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
-    reqTOstr(&req,reqTxt);
+    reqTOstr(&req, reqTxt);
 
     ecrireMsgTCP(sock, reqTxt);
 }
-
 
 void getPartiesReq(){};
 void joinPartieReq(){};

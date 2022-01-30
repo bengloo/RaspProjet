@@ -20,7 +20,7 @@
     void getPartiesRep(rep_t *rep,char * ch);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     //void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
-    void newpartieServ(int sock);
+    void newpartieServ(req_t *req);
     void getparties(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
     //1 fct de selection traitement selon requete
     //void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
