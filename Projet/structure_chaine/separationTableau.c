@@ -6,9 +6,10 @@
 
 // dans data.h 
 
+#define MAX_LEN 255
+
 #define ADDR_MAITRE "127.0.0.0"
 #define ADDR_ADVERSE "127.0.0.1"
-
 
 #define PORT_MAITRE 5000
 #define PORT_ADVERSE 5001
@@ -16,6 +17,7 @@
 typedef struct {
     char ip[10];
     int port;
+    char pseudo[MAX_LEN];
 }adresse_t;
 
 typedef enum{
@@ -54,9 +56,11 @@ int main()
 
     printf("\n l'adresse ip maitre est : %s\n",tableau.addrMaitre.ip);
     printf("\n le port du maitre est %d\n", tableau.addrMaitre.port);
+    printf("\n le pseudo du maitre est %s\n", tableau.addrMaitre.pseudo);
 
     printf("\n l'adresse ip adverse est : %s\n",tableau.addrAdverse.ip);
     printf("\n le port de l'adverse est %d\n", tableau.addrAdverse.port);
+    printf("\n le pseudo de l'adverse est %s\n", tableau.addrMaitre.pseudo);
 
 
     printf("\n le score du maitre est : %d \n", tableau.scoreMaitre);
@@ -68,7 +72,7 @@ int main()
     strutToString(&tableau, ch);
     
     // affichage de la chaine creer a partir de la structure
-    // id;statut;ipMaitre;portMaitre;ipAdverse;portAdverse;scoreMaitre;scoreAdverse
+    // id;statut;ipMaitre;portMaitre;pseudoMaitre;ipAdverse;portAdverse;pseudoAdverse;scoreMaitre;scoreAdverse
     printf("\n la chaine créée à partir de la structure : %s \n", ch);
 
     stringToStruct(&tableau2, ch);
@@ -81,9 +85,11 @@ int main()
 
     printf("\n l'adresse ip maitre est : %s \n", tableau2.addrMaitre.ip);
     printf("\n le port du maitre est : %d \n", tableau2.addrMaitre.port);
+    printf("\n le pseudo du maitre est %s\n", tableau.addrMaitre.pseudo);
 
     printf("\n l'adresse ip adverse est : %s \n", tableau2.addrAdverse.ip);
     printf("\n le port de l'adverse est : %d \n", tableau2.addrAdverse.port);
+    printf("\n le pseudo de l'adverse est %s\n", tableau.addrMaitre.pseudo);
 
     printf("\n le score du maitre est : %d \n", tableau2.scoreMaitre);
     printf("\n le score du maitre est : %d \n", tableau2.scoreAdverse);
@@ -120,8 +126,10 @@ void initstatPartie(statPatie_t * tableau)
     tableau->statut=1;
     strcpy(tableau->addrMaitre.ip,addrM.ip);
     tableau->addrMaitre.port=addrM.port;
+    strcpy(tableau->addrMaitre.pseudo,"pseudoMaitre");
     strcpy(tableau->addrAdverse.ip,addrA.ip);
     tableau->addrAdverse.port=addrA.port;
+    strcpy(tableau->addrAdverse.pseudo,"pseudoAdverse");
     tableau->scoreMaitre=100;
     tableau->scoreAdverse=101;
 
@@ -154,13 +162,21 @@ void strutToString(statPatie_t * tableau, char ch[300])
     strcat(ch,aux);
     strcat(ch,";");
 
+    // ajout du pseudo du maitre
+    strcat(ch,tableau->addrMaitre.pseudo);
+    strcat(ch,";");
+
     // ajout adresse ip adverse
     strcat(ch,tableau->addrAdverse.ip);
     strcat(ch,";");
 
-    // ajout du port du adverse
+    // ajout du port de l'adverse
     sprintf(aux,"%d", tableau->addrAdverse.port);
     strcat(ch,aux);
+    strcat(ch,";");
+
+    // ajout du pseudo de l'adverse
+    strcat(ch,tableau->addrAdverse.pseudo);
     strcat(ch,";");
 
     // ajout du score du maitre
@@ -235,8 +251,14 @@ void stringToStruct(statPatie_t * tableau2, char ch[300])
     tableau2->addrMaitre.port=value;
 
     
+    // le pseudo du maitre 
+    for(i=0; ch[pos]!=';';i++, pos++) {
+        aux[i]=ch[pos];
+    }
+    aux[i]='\0';
+    pos++;
 
-    
+    strcpy(tableau2->addrMaitre.pseudo,aux);
     
     // l'ip adverse
     for(i=0; ch[pos]!=';';i++, pos++) {
@@ -257,6 +279,15 @@ void stringToStruct(statPatie_t * tableau2, char ch[300])
     
     value = strtol(aux,&str,10);
     tableau2->addrAdverse.port=value;
+
+    // le pseudo de l'adverse
+    for(i=0; ch[pos]!=';';i++, pos++) {
+        aux[i]=ch[pos];
+    }
+    aux[i]='\0';
+    pos++;
+
+    strcpy(tableau2->addrAdverse.pseudo,aux);
 
     
 
