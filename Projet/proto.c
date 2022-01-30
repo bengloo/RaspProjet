@@ -9,6 +9,7 @@
 
 //-fct generation des requétes
 void createPartieRep(rep_t *rep, char *ch){
+    
 
 };
 void getPartiesRep(rep_t *rep, char *ch){
@@ -42,6 +43,7 @@ void newpartieServ(req_t *req)
 
     nbPartie++;
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
+    //createPartieRep();//TODO on envois la rep pour validé la creation de partie
 }
 
 void afficherPartie(void)
@@ -75,6 +77,9 @@ void afficherPartie(void)
 void getparties(short lg, buffer_t buff, struct sockaddr_in *clt, int sock)
 {
     DEBUG_S1("getpaties<%s>\n", buff);
+    char ch[300];
+    strutToString(listePartie, ch);
+    //getPartiesRep(,ch);on renvois la liste des parties 
 };
 
 //1 fct de selection traitement selon requete
