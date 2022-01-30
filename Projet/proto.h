@@ -15,6 +15,9 @@
 /*      FONCTION SERVEUR                                                     */
 /* ------------------------------------------------------------------------ */
   
+    // Initialisation
+    void initstatPartie(void);
+
     //-fct generation des requétes
     void createPartieRep(rep_t *rep,char * ch);
     void getPartiesRep(rep_t *rep,char * ch);
@@ -25,6 +28,7 @@
     //1 fct de selection traitement selon requete
     //void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
     void lireReqServ(int *sock);
+    void afficherPartie(void);
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION CLIENT                                                     */

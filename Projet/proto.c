@@ -1,5 +1,7 @@
 #include <netdb.h>
 #include "proto.h"
+#include "cltSrv.h"
+#include "basic_func.h"
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR                                                     */
@@ -16,13 +18,58 @@ void getPartiesRep(rep_t *rep, char *ch){
 //    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
 void newpartieServ(req_t *req)
 {
-    
-    /*rep_t rep;
-        createPartieRep(&rep,"1");//TODO ajouté le client à la liste client du server d'enregistrement renvoyé en réponse 0 en cas d'echec (>max client ...) sinonn 
-    buffer_t buffrep;
-    repTOstr(&rep, buffrep);
-    ecrireMsgUDP(*clt, sock, buffrep);
-    */
+    adresse_t clientMaitre;
+
+    DEBUG_S("Nouvelle partie avant strTOadresse");
+    strTOadresse(&clientMaitre, req->msgReq);
+
+    DEBUG_S("Nouvelle partie avant mutex");
+    CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
+
+    statPartie_t *nouvellePartie = &listePartie[nbPartie];
+    nouvellePartie->id = nbPartie;
+    nouvellePartie->statut = WAITTINGADVERSE;
+    strcpy(nouvellePartie->addrMaitre.ip, clientMaitre.ip);
+    nouvellePartie->addrMaitre.port = clientMaitre.port;
+    strcpy(nouvellePartie->addrMaitre.pseudo, clientMaitre.pseudo);
+    nouvellePartie->addrAdverse.ip[0] = '\0';
+    nouvellePartie->addrAdverse.port = 0;
+    nouvellePartie->addrAdverse.pseudo[0] = '\0';
+    nouvellePartie->scoreMaitre = 0;
+    nouvellePartie->scoreAdverse = 0;
+
+    DEBUG_S2("Nouvelle partie pour clientMaitre ip <%s> pseudo <%s>\n", nouvellePartie->addrMaitre.ip, nouvellePartie->addrMaitre.pseudo);
+
+    nbPartie++;
+    CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
+}
+
+void afficherPartie(void)
+{
+    int i = 0;
+    statPartie_t *partie;
+
+    CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
+
+    printf("Liste parties disponibles:\n");
+    for (i = 0; i < nbPartie; i++)
+    {
+        partie = &listePartie[i];
+
+        printf("%3d:%s:%15s:%5d:%20s:%15s:%5d:%20s:%5d:%5d\n",
+               partie->id,
+               statutPartieTxt[partie->statut],
+               partie->addrMaitre.ip,
+               partie->addrMaitre.port,
+               partie->addrMaitre.pseudo,
+               partie->addrAdverse.ip,
+               partie->addrAdverse.port,
+               partie->addrAdverse.pseudo,
+               partie->scoreMaitre,
+               partie->scoreAdverse);
+    }
+    CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
+
 }
 
 void getparties(short lg, buffer_t buff, struct sockaddr_in *clt, int sock)
@@ -38,32 +85,42 @@ void lireReqServ(int *sock)
 
     buffer_t msgLu;
     req_t req;
-    int lenLu=1;
+    int lenLu = 1;
     // On attend les inputs du Client Maitre
 
     while (lenLu > 0)
     {
-        lenLu=lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
+        lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
         DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
-        strTOreq(&req,msgLu);
+        strTOreq(&req, msgLu);
         DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
 
         switch (req.idReq)
         {
         case 1:
+            DEBUG_S("Case CreerPartie");
             newpartieServ(&req);
+            afficherPartie();
             break;
         case 2:
+            DEBUG_S("Case GetPartie");
             //getparties(req.lgreq, req.msgReq, clt, sock);
             break;
 
         default:
+            DEBUG_S("Case Default");
             break;
         }
     }
 
     // Le Client a fermé on cloture la socket client
     fermerSocket(*sock);
+}
+
+// initialisation de la structure statPatie_t
+void initstatPartie(void)
+{
+    nbPartie = 0;
 }
 
 /* ------------------------------------------------------------------------ */

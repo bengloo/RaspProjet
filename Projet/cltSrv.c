@@ -2,6 +2,21 @@
 #include "cltSrv.h"
 
 
+statPartie_t listePartie[NBMAXCLIENT];  // Liste des parties en cours
+unsigned nbPartie=0; // nb de partie en cours
+
+sem_t mutex;
+
+#ifdef CLIENT
+int sock=0; // Numero Socket client 
+#endif
+
+#ifdef SERVER
+int socketEcoute = 0; // Numero Socket serveur
+int continuer=1;
+#endif
+
+
 //#define CLIENT
 #ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
@@ -145,6 +160,7 @@ void clientAdverse(char *myPseudo){
 #endif
 //define SERVER
 #ifdef SERVER
+
 int main(/*int argc, char const *argv[]*/)
 {
     int socketClient = 0;
@@ -163,6 +179,14 @@ int main(/*int argc, char const *argv[]*/)
     // On se met en ecoute sur le port Serveur
     socketEcoute = creerSocketEcoute(PORT_SERVER);
     DEBUG_S1("Serveur socket <%d> en ecoute\n", socketEcoute);
+
+    // Initialisatio des parties
+    initstatPartie();
+
+    // On prepar le mutex
+    CHECK_T(sem_init(&mutex,0,1)==0,"erreur initialisation mutex");
+    CHECK_T(sem_post(&mutex)==0,"erreur post mutex");
+
 
     while (1)
     {
@@ -214,6 +238,7 @@ void terminerProcess(void)
 #ifdef SERVER
     DEBUG_S1("Serveur fermeture socket <%d>\n", socketEcoute);
     fermerSocket(socketEcoute); // Numero Socket serveur
+    CHECK_T(sem_destroy(&mutex)==0,"erreur destroy mutex");
     exit(0);
 #endif
 

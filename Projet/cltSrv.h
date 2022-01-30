@@ -19,14 +19,17 @@ void deroute(int numSig); // exemple de fonction qui sera appelee en cas de sign
 void terminerProcess(void);
 
 #ifdef CLIENT
-int sock=0; // Numero Socket client 
+extern int sock; // Numero Socket client 
 #endif
 
 #ifdef SERVER
-int socketEcoute = 0; // Numero Socket serveur
-int continuer=1;
+extern int socketEcoute; // Numero Socket serveur
+extern int continuer;
 #endif
 
+extern statPartie_t listePartie[NBMAXCLIENT];  // Liste des parties en cours
+extern unsigned nbPartie; // nb de partie en cours
 
+extern sem_t mutex;
 
 #endif 

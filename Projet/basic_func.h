@@ -69,8 +69,8 @@
 #define CHECK_T(sts,msg) if (!(sts)) { fprintf(stderr,"%s\n",msg); exit(-1); }
 #define CHECK(sts,msg) if ((sts) == -1) {perror(msg);exit(-1);} 
 #ifdef DEBUG
-    #define DEBUG_I(i) printf("DEBUG_I:%d\n",i);
-    #define DEBUG_S(s) printf("DEBUG_S:%s\n",s);
+    #define DEBUG_I(i) printf("%d\n",i);
+    #define DEBUG_S(s) printf("%s\n",s);
     #define DEBUG_S1(s,p1) printf(s,p1);
     #define DEBUG_S2(s,p1,p2) printf(s,p1,p2);
     #define DEBUG_S3(s,p1,p2,p3) printf(s,p1,p2,p3);
