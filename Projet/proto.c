@@ -1,5 +1,4 @@
 #include "proto.h" 
-#define SERVER
 #ifdef SERVER
     //-fct generation des requétes
     void createPartieRep(rep_t *rep,char * ch){

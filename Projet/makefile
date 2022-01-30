@@ -6,7 +6,7 @@
 
 #////////recette par defaut//////////
 c=gcc #type de compilation
-op=#-Wall -Wextra #opertion et retoure de la compilation
+op=-Wall -Wextra #opertion et retoure de la compilation
 EXECCLIENT=client #nom de l'executable final
 EXECSERVER=serverEnregistrement #nom de l'executable final2
 MAINSOURCE=cltSrv.o#fichier source de l'executable
@@ -14,16 +14,22 @@ LIBFICCLIENT= session.o data.o proto.o graphisme.o#nom des library en .o
 LIBFICSERV= session.o data.o proto.o#nom des library en .o
 HEADERFIC=cltSrv.h#nom des header
 
+debug: op += -DDEBUG
+debug : all
 #création de l'executable
-all:client 
-	rm -f *.o
+all:cleanlib
+all:client
+all:cleanlib
+all:server
+	
+
 
 #activer mode client server défini 
 client:CLTSERV= -D'CLIENT'
-client:clean comp1 
+client:cleanlib comp1 
 
 server:CLTSERV= -D'SERVER'
-server:clean comp2 
+server:cleanlib comp2 
 
 
 comp1: $(MAINSOURCE) $(LIBFICCLIENT)

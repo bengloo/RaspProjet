@@ -1,5 +1,5 @@
-#ifndef SESSIONH
-#define SESSIONH
+#ifndef __SESSION_H__
+#define __SESSION_H__
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -9,13 +9,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h> 
-#ifndef REQREP_H
-    #define REQREP_H
-    #include "reqRep.h"
-#endif
+#include "reqRep.h"
+#include "basic_func.h"
 
 #define PORT_SVC 5000 
-#define CHECK(sts,msg) if ((sts) == -1) {perror(msg);exit(-1);} 
 #define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
 #define MAX_BUFF 1024 
 //TCP->stream

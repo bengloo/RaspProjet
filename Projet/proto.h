@@ -1,20 +1,17 @@
+#ifndef __PROTO_H__
+    #define __PROTO_H__
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#ifndef SESSIONH
-    #include "session.h"
-    #define  SESSIONH
-#endif
-#ifndef DATAH
-    #include "data.h"
-    #define DATAH
-#endif
-#ifndef REQREP_H
-    #define REQREP_H
-    #include "reqRep.h"
-#endif
+#include "session.h"
+#include "data.h"
+#include "reqRep.h"
+#include "basic_func.h"
+
+
+    
 #define PORT_SVC 5000 
 //#define SERVER
 #ifdef SERVER
@@ -51,4 +48,6 @@
     //1 fct de selection traitement selon requete
     void lireReqClient(req_t req);
 #endif
+#endif
+
 

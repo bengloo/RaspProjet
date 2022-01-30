@@ -1,10 +1,10 @@
-#ifndef REQREP_H
-    #define REQREP_H
-    #include "reqRep.h"
-#endif
+#ifndef __DATA_H__
+#define __DATA_H__
 #include <stdio.h> 
 #include <netinet/in.h>
 #include <arpa/inet.h> 
+#include "reqRep.h"
+#include "basic_func.h"
 //C6-representation data:
 /*
     ->choisir un codage asci/EBCID/...
@@ -45,3 +45,5 @@ void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);
 void repTOstr(rep_t *req,buffer_t buff);
 void strTOrep(rep_t *req,buffer_t buff);
+
+#endif

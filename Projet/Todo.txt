@@ -20,7 +20,5 @@
     -à utilisé pour le client actuellment on ne peux avoir que un client unique en 127.0.0.1 
 
 -mettre au propre le code : a faire alexandre 
-remettre dans le bon ordre les ifndef et ndef 
-attention a la fonction creesocketudp 
+attention a la fonction creesocketudp code dupliquer avec la même addr
 modifier makefile pour avoir les debugs1, debugd2, ...
- structPatie_t en  structPartie_t

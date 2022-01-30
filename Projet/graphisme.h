@@ -1,10 +1,13 @@
+#ifndef __GRAPHISME_H__
+#define __GRAPHISME_H__
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <X11/Xlib.h>
-#include "X11/keysym.h"
 #include <time.h>
 #include <unistd.h>
+#include "X11/keysym.h"
+#include "basic_func.h"
 
 
 #define X_PIX 500
@@ -48,3 +51,4 @@ void draw_ascii(char **picture);
 char **empty_picture(char empty_char);
 
 float random_float();
+#endif

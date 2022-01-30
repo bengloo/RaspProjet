@@ -1,6 +1,10 @@
 {
     "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
-        "socket.h": "c"
+        "socket.h": "c",
+        "graphisme.h": "c",
+        "unistd.h": "c",
+        "proto.h": "c",
+        "data.h": "c"
     }
 }
