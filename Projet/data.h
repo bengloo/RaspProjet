@@ -18,7 +18,7 @@ typedef struct
 {
     in_addr_t ip;
     int port;
-    char * pseudo;
+    char pseudo[MAX_LEN];
 }adresse_t;
 
 typedef enum{

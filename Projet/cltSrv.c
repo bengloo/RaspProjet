@@ -1,84 +1,79 @@
+#include <pthread.h>
 #include "cltSrv.h"
+
+
 //#define CLIENT
 #ifdef CLIENT
 int main(/*int argc, char const *argv[]*/)
 {
     //TODO
-        char myPseudo[255];
-        //system("./scriptZoom.sh -m");
-        //system("./scriptZoom.sh -p");
-        int choix=4;
+    char myPseudo[MAX_LEN];
+    //system("./scriptZoom.sh -m");
+    //system("./scriptZoom.sh -p");
+    int choix = 4;
 
-        // est ce qu'on fait une fonction pour la récupération d'ip ? 
-        //char ip[30]=recupererIp(); 
+    // est ce qu'on fait une fonction pour la récupération d'ip ?
+    //char ip[30]=recupererIp();
 
-     
-        draw_ascii(empty_picture(' '));
-        printf("veuillez saisir votre pseudo pour vous connecter:\n");
-        scanf("%s",myPseudo);
-        choix=1;
+    draw_ascii(empty_picture(' '));
+    printf("veuillez saisir votre pseudo pour vous connecter:\n");
+    scanf("%s", myPseudo);
+    choix = 1;
 
-        while (choix!=3)
-        { 
-            //draw_ascii(empty_picture(' '));
-            printf("Menu:\n1)Lister les parties en cours\n2)Creer une partie\n3)Quitter\n");
-            scanf("%d",&choix);
-            switch (choix)
-            {
-            case 1:
-                clientAdverse(myPseudo);
-                break;
-            case 2:
-                clientMaitre(myPseudo);
-                break;
-            case 3:
-                break;
-            
-            default:
+    while (choix != 3)
+    {
+        //draw_ascii(empty_picture(' '));
+        printf("Menu:\n1)Lister les parties en cours\n2)Creer une partie\n3)Quitter\n");
+        scanf("%d", &choix);
+        switch (choix)
+        {
+        case 1:
+            clientAdverse(myPseudo);
+            break;
+        case 2:
+            clientMaitre(myPseudo);
+            break;
+        case 3:
+            break;
 
-                break;
-            }
+        default:
+
+            break;
         }
-        
-    
+    }
+
     return 0;
 }
 
-void clientMaitre(char * myPseudo){
+void clientMaitre(char *myPseudo)
+{
     //envois creation party dgram
     printf("debut client maitre\n");
     struct sockaddr_in serv;
-    int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
+    int sock = creerSocketUDP(ADDRSERVERENR, PORT_SVC, &serv);
     req_t req;
-    createPartyReq(&req,myPseudo);
+    createPartyReq(&req, myPseudo);
     buffer_t buff;
-    reqTOstr(&req,buff);
-    ecrireMsgUDP(serv, sock,buff);
+    reqTOstr(&req, buff);
+    ecrireMsgUDP(serv, sock, buff);
     printf("fin client maitre\n");
     //void lireMsgUDP(struct sockaddr_in clt, int sock);
 };
 
-
-void clientAdverse(char* myPseudo){
+void clientAdverse(char *myPseudo){
     //envois creation getpartie dgram
 
-
-
-
     //SI liste
-            //recupererliste  des partie (pseudo adresse)-> liste parties
-            //aficher la liste des partie
-            //choisire une partie via un indice dans la liste ou
-                //0)REVENIR au menu principal
-                //-1)Refresh
-            //si >0    
-                //MENUE
-                    //1)STREAM
-                    //2)JOUER
-        //SI CREER
-
-
-
+    //recupererliste  des partie (pseudo adresse)-> liste parties
+    //aficher la liste des partie
+    //choisire une partie via un indice dans la liste ou
+    //0)REVENIR au menu principal
+    //-1)Refresh
+    //si >0
+    //MENUE
+    //1)STREAM
+    //2)JOUER
+    //SI CREER
 
     /*
     printf("debut client adverse\n");
@@ -144,25 +139,38 @@ void clientAdverse(char* myPseudo){
     ecrireMsgUDP(serv, sock,buff);
     printf("fin client adverse\n");
 
-        */   
-    
+        */
+
 };
 #endif
-// #define SERVER
+#define SERVER
 #ifdef SERVER
-    int main(/*int argc, char const *argv[]*/)
+int main(/*int argc, char const *argv[]*/)
+{
+    int socketEcoute = 0;
+    int socketClient = 0;
+    socklen_t cltLen;
+    struct sockaddr_in clt;
+
+    pthread_t tid[NBMAXCLIENT];
+    long i=0;
+	int idxThread[NBMAXCLIENT];
+    double * status;
+
+
+    // On se met en ecoute sur le port Serveur
+    socketEcoute = creerSocketEcoute(PORT_SERVER);
+
+    while (1)
     {
-        adresse_t clients[NBMAXCLIENT];
-        //socket d'ecoute
-        struct sockaddr_in serv;
-        int sock =creerSocketUDPAdr(&serv);
-        //client emeteur
-        struct sockaddr_in clt;
-        while (1)
-        {
-            req_t req = lireMsgUDP(sock,&clt);
-            lireReqServ(req,&clt,sock);
-        }
-        return 0;
+        cltLen = sizeof(clt);
+        CHECK(socketClient = accept(socketEcoute, (struct sockaddr *)&clt, &cltLen), "Can't connect"); //accept de recevoir mess
+        DEBUG_S1("Nouvelle connexion <%i>\n", socketClient);
+        CHECK_T(pthread_create (&tid[i], NULL, (pf_t)lireReqServ,
+                                (void *)(&socketClient))==0, "Erreur pthread_create()");
+        
+        i++;
     }
+
+}
 #endif

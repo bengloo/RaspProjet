@@ -55,9 +55,10 @@
 #define MAX_LEN 255
 #define NBMAXCLIENT 100
 #define PORT_SVC 5000 
-//#define PORT_SVC 5000 
+#define PORT_SERVER 8123 
 #define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
 #define MAX_BUFF 1024 
+#define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 
 /* ------------------------------------------------------------------------ */
 /*      M A C R O - F O N C T I O N S                                       */
@@ -81,8 +82,11 @@
 #endif
 /* ------------------------------------------------------------------------ */
 
-
-
+/* ------------------------------------------------------------------------ */
+/*      D É F I N I T I O N S   D E   T Y P E S                             */
+/* ------------------------------------------------------------------------ */
+typedef void * (*pf_t)(void *);
+/* ------------------------------------------------------------------------ */
 
 /* ------------------------------------------------------------------------ */
 /*      P R O T O T Y P E S   D E   F O N C T I O N S                       */

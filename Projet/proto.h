@@ -11,20 +11,25 @@
 #include "basic_func.h"
 
 
-    
-
-//#define SERVER
-#ifdef SERVER
+/* ------------------------------------------------------------------------ */
+/*      FONCTION SERVEUR                                                     */
+/* ------------------------------------------------------------------------ */
+  
     //-fct generation des requétes
     void createPartieRep(rep_t *rep,char * ch);
     void getPartiesRep(rep_t *rep,char * ch);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
-    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
+    //void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
+    void newpartieServ(int sock);
     void getparties(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
     //1 fct de selection traitement selon requete
-    void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
-#endif
-#ifdef CLIENT
+    //void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
+    void lireReqServ(int *sock);
+
+/* ------------------------------------------------------------------------ */
+/*      FONCTION CLIENT                                                     */
+/* ------------------------------------------------------------------------ */
+
     //-fct generation des requétes
     void createPartyReq(req_t *req,char * Nom);
     void getPartiesReq();
@@ -47,7 +52,6 @@
     void afficherStream();
     //1 fct de selection traitement selon requete
     void lireReqClient(req_t req);
-#endif
 #endif
 
 

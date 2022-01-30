@@ -1,7 +1,7 @@
   
 #include "session.h"
 //TCP
-    int creerSocketEcoute(int Long){
+    int creerSocketEcoute(unsigned int port){
 
         int sock;
         struct sockaddr_in serv;
@@ -11,7 +11,7 @@
         
         // Préparation de l’adressage du service (d’appel)
         serv.sin_family = PF_INET;
-        serv.sin_port = htons(PORT_SVC);
+        serv.sin_port = htons(port);
         serv.sin_addr.s_addr = INADDR_ANY;
         memset(&serv.sin_zero, 0, 8);
         
@@ -19,7 +19,7 @@
         CHECK(bind(sock, (struct sockaddr *) &serv, sizeof serv) , "Can't bind");
         
         // Mise en écoute de la socket
-        CHECK(listen(sock, Long), "Can't calibrate");
+        CHECK(listen(sock, MAX_SOCK_BACKLOG), "Can't calibrate");
         
         return sock;
 

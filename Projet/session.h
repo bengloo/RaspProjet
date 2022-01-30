@@ -14,7 +14,7 @@
 
 
 //TCP->stream
-    int creerSocketEcoute(int Long);
+    int creerSocketEcoute(unsigned int port);
     void accepterConnexion(struct sockaddr_in clt, int sock);
     void etablirConexion(struct sockaddr_in clt, int sock);
     void ecrireMsgTCP(int sock);

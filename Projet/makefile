@@ -12,6 +12,7 @@ EXECSERVER=serverEnregistrement #nom de l'executable final2
 MAINSOURCE=cltSrv.o#fichier source de l'executable
 LIBFICCLIENT= session.o data.o proto.o graphisme.o#nom des library en .o
 LIBFICSERV= session.o data.o proto.o#nom des library en .o
+LIBSYSTEM= -lpthread 
 HEADERFIC=cltSrv.h#nom des header
 
 debug: op += -DDEBUG
@@ -33,10 +34,10 @@ server:cleanlib comp2
 
 
 comp1: $(MAINSOURCE) $(LIBFICCLIENT)
-	$(c) $(MAINSOURCE) $(LIBFICCLIENT) -o $(EXECCLIENT) -lX11 -lm 
+	$(c) $(MAINSOURCE) $(LIBFICCLIENT) -o $(EXECCLIENT) $(LIBSYSTEM) -lX11 -lm 
 
 comp2: $(MAINSOURCE) $(LIBFICSERV)
-	$(c) $(MAINSOURCE) $(LIBFICSERV) -o $(EXECSERVER)
+	$(c) $(MAINSOURCE) $(LIBFICSERV) -o $(EXECSERVER) $(LIBSYSTEM) 
 
 #inclusion des headers
 $(MAINSOURCE): $(HEADERFIC)
