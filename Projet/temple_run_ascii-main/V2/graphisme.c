@@ -413,3 +413,23 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 	draw_ascii(empty_picture(' '));
 	
 };
+int *init_obstacles(int size) {
+	/*
+	0 = no obstacle
+	1 = right thing
+	2 = left thing
+	3 = down thing
+	4 = up thing
+	*/
+	int *res = calloc(size, sizeof(int));
+	for (int i = 0; i < size; ++i) {
+		res[i] = rand()%5;
+		if (res[i] != 0) {
+			i += 2;
+		}
+	}
+	res[0] = 0;
+	res[1] = 0;
+	res[size-1] = 0;
+	return res;
+}

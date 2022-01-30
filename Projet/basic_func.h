@@ -62,6 +62,15 @@
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 #define ADDRSERVERENR "127.0.0.1"
 
+/*  Parametre graphique */
+#define PATH_WIDTH 1
+#define Y_BORDER 0.7
+#define SIGHT 10	// how far you can see (roughly)
+#define GRAVITY 30
+#define JUMP_SPEED 8
+#define SPEED_INCREASE 0.1
+#define NBMAXOBSTACLES 300
+
 
 /* ------------------------------------------------------------------------ */
 /*      M A C R O - F O N C T I O N S                                       */
@@ -69,8 +78,8 @@
 #define CHECK_T(sts,msg) if (!(sts)) { fprintf(stderr,"%s\n",msg); exit(-1); }
 #define CHECK(sts,msg) if ((sts) == -1) {perror(msg);exit(-1);} 
 #ifdef DEBUG
-    #define DEBUG_I(i) printf("DEBUG_I:%d\n",i);
-    #define DEBUG_S(s) printf("DEBUG_S:%s\n",s);
+    #define DEBUG_I(i) printf("%d\n",i);
+    #define DEBUG_S(s) printf("%s\n",s);
     #define DEBUG_S1(s,p1) printf(s,p1);
     #define DEBUG_S2(s,p1,p2) printf(s,p1,p2);
     #define DEBUG_S3(s,p1,p2,p3) printf(s,p1,p2,p3);

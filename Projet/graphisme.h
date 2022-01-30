@@ -51,4 +51,7 @@ void draw_ascii(char **picture);
 char **empty_picture(char empty_char);
 
 float random_float();
+int min(int a, int b);
+void partie(int * init_obstacles,int* mon_score,int*son_score);
+int *init_obstacles(int size);
 #endif

@@ -69,14 +69,14 @@
 
     void ecrireMsgTCP(int sock, char *msg) {
         // Ecriture du message
-        printf("Envoi du message [%s]\n", MSG);
+        DEBUG_S1("Envoi du message [%s]\n", msg);
         write(sock, msg, strlen(msg)+1);
     }
 
 
-    void lireMsgTCP(int sock, char *reponse, int taille_max){
+    ssize_t  lireMsgTCP(int sock, char *reponse, int taille_max){
         // Réception d’un message
-	    read(sock, reponse, taille_max);
+	    return read(sock, reponse, taille_max);
 
     };
 
