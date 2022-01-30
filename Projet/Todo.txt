@@ -21,4 +21,3 @@
 
 -mettre au propre le code : a faire alexandre 
 attention a la fonction creesocketudp code dupliquer avec la même addr
-modifier makefile pour avoir les debugs1, debugd2, ...

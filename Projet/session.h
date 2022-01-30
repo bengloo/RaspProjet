@@ -12,9 +12,7 @@
 #include "reqRep.h"
 #include "basic_func.h"
 
-#define PORT_SVC 5000 
-#define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
-#define MAX_BUFF 1024 
+
 //TCP->stream
     int creerSocketEcoute(int Long);
     void accepterConnexion(struct sockaddr_in clt, int sock);

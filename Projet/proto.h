@@ -12,7 +12,7 @@
 
 
     
-#define PORT_SVC 5000 
+
 //#define SERVER
 #ifdef SERVER
     //-fct generation des requétes

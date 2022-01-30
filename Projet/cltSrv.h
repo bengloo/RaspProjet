@@ -8,7 +8,7 @@
 #include "proto.h"
 #include "graphisme.h"
 #include "basic_func.h"
-#define NBMAXCLIENT 100
+
 
 void clientMaitre(char *myPseudo);
 void clientAdverse(char* myPseudo);

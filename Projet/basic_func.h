@@ -53,6 +53,11 @@
 /*      CONSTANTES                                                          */
 /* ------------------------------------------------------------------------ */
 #define MAX_LEN 255
+#define NBMAXCLIENT 100
+#define PORT_SVC 5000 
+//#define PORT_SVC 5000 
+#define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
+#define MAX_BUFF 1024 
 
 /* ------------------------------------------------------------------------ */
 /*      M A C R O - F O N C T I O N S                                       */
