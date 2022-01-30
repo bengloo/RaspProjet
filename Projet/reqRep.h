@@ -7,9 +7,22 @@
 #define NOP 0;
 typedef char buffer_t[MAX_BUFF];
 //typedef char* buffer_t;
+
+typedef enum{
+    //Client Maitre vers Serveur
+    CREERPARTIE = 1,
+
+    //Client Adversaire vers Serveur
+    LISTERPARTIE = 20
+
+    // TODO Client Adversaire vers Client Maitre
+
+} idRequeteServeur_t;
+
+
 typedef struct 
 {
-    short idReq;//0 à 999
+    idRequeteServeur_t idReq;//0 à 999
     short lgreq;//0 à 1024
     buffer_t msgReq;
 } req_t;

@@ -47,9 +47,13 @@ int main(/*int argc, char const *argv[]*/)
 
 void clientMaitre(char *myPseudo)
 {
+    req_t req;
+    int sock=0;
     //envois creation party dgram
     DEBUG_S("Debut client maitre\n");
-    creerSocketClient(PORT_SERVER, ADDRSERVERENR);
+    sock=creerSocketClient(PORT_SERVER, ADDRSERVERENR);
+
+    createPartyReq(sock, myPseudo);
 
 };
 

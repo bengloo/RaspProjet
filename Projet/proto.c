@@ -1,3 +1,4 @@
+#include <netdb.h>
 #include "proto.h"
 
 /* ------------------------------------------------------------------------ */
@@ -15,14 +16,21 @@ void getPartiesRep(rep_t *rep, char *ch){
 //    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
 void newpartieServ(int sock)
 {
-    DEBUG_S1("Serveur : New thread pour socket <%i>\n", sock)
+    DEBUG_S1("Serveur : New thread pour socket <%i>\n", sock);
+
+    buffer_t msgLu;
+    // On attend les inputs du Client Maitre
+    lireMsgTCP(sock, msgLu, sizeof(buffer_t));
+    DEBUG_S2("Serveur : socket <%i> msg recu <%s>\n", sock, msgLu);
+
+
     /*rep_t rep;
         createPartieRep(&rep,"1");//TODO ajouté le client à la liste client du server d'enregistrement renvoyé en réponse 0 en cas d'echec (>max client ...) sinonn 
     buffer_t buffrep;
     repTOstr(&rep, buffrep);
     ecrireMsgUDP(*clt, sock, buffrep);
     */
-};
+}
 
 void getparties(short lg, buffer_t buff, struct sockaddr_in *clt, int sock)
 {
@@ -53,14 +61,36 @@ void lireReqServ(int *sock)
 /* ------------------------------------------------------------------------ */
 
 //-fct generation des requétes
-void createPartyReq(req_t *req, char *Nom)
+void createPartyReq(int sock,char * pseudo)
 {
-    req->idReq = 1;
-    printf("test1\n");
-    strcpy(req->msgReq, Nom);
-    printf("test2\n");
-    req->lgreq = strlen(Nom);
-};
+    // On recupere notre adresse IP
+    char hostbuffer[MAX_LEN];
+    char *IPbuffer;
+    struct hostent *host_entry;
+    int hostname;
+    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer)))!=-1, "Erreur gethostname");
+    CHECK_T((host_entry = gethostbyname(hostbuffer))!=NULL, "Erreur gethostbyname");
+    IPbuffer = inet_ntoa(*((struct in_addr*)
+                           host_entry->h_addr_list[0]));
+  
+    // On prepare la requete pour le serveur
+    req_t req;
+    req.idReq=CREERPARTIE;
+    adresse_t monAdr;
+    strcpy(monAdr.ip, IPbuffer);
+    strcpy(monAdr.pseudo, pseudo);
+    monAdr.port=PORT_CLIENTMAITRE;
+    adresseTOstr(&monAdr,req.msgReq);
+    req.lgreq=sizeof(adresse_t);
+
+    // Envoie de la requete au serveur
+    char reqTxt[sizeof(req_t)];
+    reqTOstr(&req,reqTxt);
+
+    ecrireMsgTCP(sock, reqTxt);
+}
+
+
 void getPartiesReq(){};
 void joinPartieReq(){};
 void joinPartieRep(){};

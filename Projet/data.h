@@ -16,7 +16,7 @@
 */
 typedef struct 
 {
-    in_addr_t ip;
+    char ip[MAX_LEN];
     int port;
     char pseudo[MAX_LEN];
 }adresse_t;
@@ -40,6 +40,7 @@ typedef struct
 } statPatie_t;
 
 
+void adresseTOstr(adresse_t *adr,char *dest);
 
 void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);

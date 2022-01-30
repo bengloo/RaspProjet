@@ -22,8 +22,8 @@
     void etablirConexion(struct sockaddr_in clt, int sock);
 
 
-    void ecrireMsgTCP(int sock);
-    void lireMsgTCP(int sock);
+    void ecrireMsgTCP(int sock, char *msg);
+    void lireMsgTCP(int sock, char *reponse, int taille_max);
 //UDP->datagrame
     int creerSocketUDP(char* addrdest,int port,struct sockaddr_in * serv);
     int creerSocketUDPAdr(struct sockaddr_in *serv);

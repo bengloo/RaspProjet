@@ -31,7 +31,7 @@
 /* ------------------------------------------------------------------------ */
 
     //-fct generation des requétes
-    void createPartyReq(req_t *req,char * Nom);
+    void createPartyReq(int sock, char * pseudo);
     void getPartiesReq();
     void joinPartieReq();
     void joinPartieRep();
