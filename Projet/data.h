@@ -53,4 +53,6 @@ void strTOrep(rep_t *req,buffer_t buff);
 /*fonction caste des data imbriqué*/
 void obstTOstring(char *dest,const int * obstacles);
 void stringTOobst(int *dest,const char * obstaclesch);
+void strutToString(statPartie_t* tableau, char ch[300]);
+void stringToStruct(statPartie_t* tableau2, char ch[300]);
 #endif
