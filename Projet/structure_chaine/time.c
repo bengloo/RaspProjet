@@ -37,9 +37,12 @@ int main(void)
     int min=0, sec;
 
     // stockage des secondes + 10 
+    //Si le temps est en dessous de 50 secondes on ne s'intéresse uniquement aux secondes 
     if(info->tm_sec<50)
         sec=info->tm_sec+10;
 
+
+    // sinon on s'interesse aux secondes et aux minutes 
     else {
         int secAux = 59-info->tm_sec;
         min=info->tm_min+1;

@@ -39,7 +39,7 @@
     void getPartiesReq(int sock, char *pseudo);
     void joinPartieReq();
     void joinPartieRep();
-    void startReq();
+    void startReq(int sock);
     void startRep();
     void UpdateStatutPlayerReq();
     void updateStatutPlayerRep();

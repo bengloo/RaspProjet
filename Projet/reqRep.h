@@ -13,9 +13,10 @@ typedef enum{
     CREERPARTIE = 1,
 
     //Client Adversaire vers Serveur
-    LISTERPARTIE = 20
+    LISTERPARTIE = 20,
 
-    // TODO Client Adversaire vers Client Maitre
+    //Client Adversaire vers Client Maitre
+    //START = 30
 
 } idRequeteServeur_t;
 
