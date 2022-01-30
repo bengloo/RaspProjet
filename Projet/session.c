@@ -55,6 +55,11 @@
 
     };
 
+    void fermerSocket(int sock)
+    {
+        if (sock!=0) close(sock);
+    }
+
     // Unsued
     void etablirConexion(struct sockaddr_in clt, int sock){
 

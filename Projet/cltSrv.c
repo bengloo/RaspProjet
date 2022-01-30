@@ -12,6 +12,10 @@ int main(/*int argc, char const *argv[]*/)
     //system("./scriptZoom.sh -p");
     int choix = 4;
 
+   // On catch le SIGINT pour fermer la socket
+    installDeroute(SIGINT,deroute);
+
+
     // est ce qu'on fait une fonction pour la récupération d'ip ?
     //char ip[30]=recupererIp();
 
@@ -48,7 +52,6 @@ int main(/*int argc, char const *argv[]*/)
 void clientMaitre(char *myPseudo)
 {
     req_t req;
-    int sock=0;
     //envois creation party dgram
     DEBUG_S("Debut client maitre\n");
     sock=creerSocketClient(PORT_SERVER, ADDRSERVERENR);
@@ -144,7 +147,6 @@ void clientAdverse(char *myPseudo){
 #ifdef SERVER
 int main(/*int argc, char const *argv[]*/)
 {
-    int socketEcoute = 0;
     int socketClient = 0;
     socklen_t cltLen;
     struct sockaddr_in clt;
@@ -155,13 +157,17 @@ int main(/*int argc, char const *argv[]*/)
     double * status;
 
 
+    // On catch le SIGINT pour fermer la socket
+    installDeroute(SIGINT,deroute);
+
     // On se met en ecoute sur le port Serveur
     socketEcoute = creerSocketEcoute(PORT_SERVER);
+    DEBUG_S1("Serveur socket <%d> en ecoute\n", socketEcoute);
 
     while (1)
     {
         cltLen = sizeof(clt);
-        CHECK(socketClient = accept(socketEcoute, (struct sockaddr *)&clt, &cltLen), "Can't connect"); //accept de recevoir mess
+        CHECK(socketClient = accept(socketEcoute, (struct sockaddr *)&clt, &cltLen), "Can't accept"); //accept de recevoir mess
         DEBUG_S1("Nouvelle connexion <%i>\n", socketClient);
         CHECK_T(pthread_create (&tid[i], NULL, (pf_t)lireReqServ,
                                 (void *)(&socketClient))==0, "Erreur pthread_create()");
@@ -171,3 +177,44 @@ int main(/*int argc, char const *argv[]*/)
 
 }
 #endif
+
+
+void installDeroute(int numSig, void (*pfct)(int)){
+    struct sigaction newAction;
+    //renseigner l'action pour ignorer le crtl C
+    newAction.sa_handler = pfct ;
+    CHECK_T(sigemptyset(&newAction.sa_mask)==0,"--Erreur sigemptyset--");
+    newAction.sa_flags = SA_RESTART ; // permet de redemarrer les appel bloquants
+	//on installe le gestionnaire de SIGINT
+    CHECK_T(sigaction(numSig,&newAction,NULL)==0,"--sigaction--");
+}
+
+
+
+void deroute(int numSig){
+	switch(numSig){
+    	case SIGINT:
+        	DEBUG_S1("\t[PID=%d]^C reçu, on ferme\n",getpid());
+            terminerProcess();
+    	break;
+
+    	default :
+        	printf("Incredible\n");
+	}
+}
+
+void terminerProcess(void)
+{
+#ifdef CLIENT
+    DEBUG_S1("Client fermeture socket <%d>\n", sock);
+    fermerSocket(sock); // Numero Socket serveur
+    exit(0);
+#endif
+
+#ifdef SERVER
+    DEBUG_S1("Serveur fermeture socket <%d>\n", socketEcoute);
+    fermerSocket(socketEcoute); // Numero Socket serveur
+    exit(0);
+#endif
+
+}

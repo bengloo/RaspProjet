@@ -16,6 +16,7 @@
 //TCP->stream
     int creerSocketEcoute(unsigned int port);
     int creerSocketClient(unsigned int port, char *addrIp);
+    void fermerSocket(int sock);
 
     // Unused
     void accepterConnexion(struct sockaddr_in clt, int sock);

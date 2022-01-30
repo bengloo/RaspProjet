@@ -6,5 +6,6 @@
         "unistd.h": "c",
         "proto.h": "c",
         "data.h": "c"
-    }
+    },
+    "C_Cpp.dimInactiveRegions": false
 }

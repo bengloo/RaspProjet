@@ -12,4 +12,21 @@
 
 void clientMaitre(char *myPseudo);
 void clientAdverse(char* myPseudo);
+
+// Gestion de signaux
+void installDeroute(int numSig, void (*pfct)(int)); // deroute un signal vers la funct en 2ème param = pointeur sur une fontion
+void deroute(int numSig); // exemple de fonction qui sera appelee en cas de signal
+void terminerProcess(void);
+
+#ifdef CLIENT
+int sock=0; // Numero Socket client 
+#endif
+
+#ifdef SERVER
+int socketEcoute = 0; // Numero Socket serveur
+int continuer=1;
+#endif
+
+
+
 #endif 

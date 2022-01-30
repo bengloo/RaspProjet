@@ -81,7 +81,7 @@ void createPartyReq(int sock,char * pseudo)
     strcpy(monAdr.pseudo, pseudo);
     monAdr.port=PORT_CLIENTMAITRE;
     adresseTOstr(&monAdr,req.msgReq);
-    req.lgreq=sizeof(adresse_t);
+    req.lgreq=strlen(req.msgReq);
 
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
