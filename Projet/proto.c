@@ -157,7 +157,33 @@ void createPartyReq(int sock, char *pseudo)
     ecrireMsgTCP(sock, reqTxt);
 }
 
-void getPartiesReq(){};
+void getPartiesReq(int sock, char *pseudo){
+    // On recupere notre adresse IP
+    char hostbuffer[MAX_LEN];
+    char *IPbuffer;
+    struct hostent *host_entry;
+    int hostname;
+    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
+    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
+    IPbuffer = inet_ntoa(*((struct in_addr *)
+                               host_entry->h_addr_list[0]));
+
+    // On prepare la requete pour le serveur
+    req_t req;
+    req.idReq = LISTERPARTIE;
+    adresse_t monAdr;
+    strcpy(monAdr.ip, IPbuffer);
+    strcpy(monAdr.pseudo, pseudo);
+    monAdr.port = PORT_CLIENTMAITRE;
+    adresseTOstr(&monAdr, req.msgReq);
+    req.lgreq = strlen(req.msgReq);
+
+    // Envoie de la requete au serveur
+    char reqTxt[sizeof(req_t)];
+    reqTOstr(&req, reqTxt);
+
+    ecrireMsgTCP(sock, reqTxt);
+};
 void joinPartieReq(){};
 void joinPartieRep(){};
 void startReq(){};

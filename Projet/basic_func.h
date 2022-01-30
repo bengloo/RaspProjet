@@ -62,6 +62,15 @@
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 #define ADDRSERVERENR "127.0.0.1"
 
+/*  Parametre graphique */
+#define PATH_WIDTH 1
+#define Y_BORDER 0.7
+#define SIGHT 10	// how far you can see (roughly)
+#define GRAVITY 30
+#define JUMP_SPEED 8
+#define SPEED_INCREASE 0.1
+#define NBMAXOBSTACLES 300
+
 
 /* ------------------------------------------------------------------------ */
 /*      M A C R O - F O N C T I O N S                                       */

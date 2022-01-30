@@ -36,7 +36,7 @@
 
     //-fct generation des requétes
     void createPartyReq(int sock, char * pseudo);
-    void getPartiesReq();
+    void getPartiesReq(int sock, char *pseudo);
     void joinPartieReq();
     void joinPartieRep();
     void startReq();

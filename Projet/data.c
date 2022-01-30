@@ -25,3 +25,18 @@ void strTOrep(rep_t *rep,buffer_t buff){
     sscanf(buff,FMT_REQ,&rep->idRep,&rep->lgrep,rep->msgRep);
 }
 
+/*fonction caste des data imbriqué*/
+void obstTOstring(char *dest,const int * obstacles){
+	for(int i=0;i<NBMAXOBSTACLES;i++){
+		dest[i]=obstacles[i]+'0';
+	}
+	dest[NBMAXOBSTACLES]='\0';
+
+}
+
+void stringTOobst(int *dest,const char * obstaclesch){
+	for(int i=0;i<(int)strlen(obstaclesch);i++){
+		dest[i]=obstaclesch[i]-'0';
+	}
+}
+

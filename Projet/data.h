@@ -50,4 +50,7 @@ void strTOreq(req_t *req,buffer_t buff);
 void repTOstr(rep_t *req,buffer_t buff);
 void strTOrep(rep_t *req,buffer_t buff);
 
+/*fonction caste des data imbriqué*/
+void obstTOstring(char *dest,const int * obstacles);
+void stringTOobst(int *dest,const char * obstaclesch);
 #endif
