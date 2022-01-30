@@ -16,7 +16,7 @@
         memset(&serv.sin_zero, 0, 8);
         
         // Association de l’adressage préparé avec la socket d’écoute
-        CHECK(bind(sock, (struct sockaddr *) &serv, sizeof serv) , "Can't bind");
+        CHECK(bind(sock, (struct sockaddr *) &serv, sizeof serv) , "Can't bind TCP");
         
         // Mise en écoute de la socket
         CHECK(listen(sock, MAX_SOCK_BACKLOG), "Can't calibrate");
@@ -25,7 +25,7 @@
 
     };
 
-
+    // Unsued
     void accepterConnexion(struct sockaddr_in clt, int sock){
 
        	int sd;
@@ -36,7 +36,26 @@
 
     };
 
+    int creerSocketClient(unsigned int port, char *addrIp){
+        int sock;
+        struct sockaddr_in svc;
 
+        // Création de la socket d’appel et de dialogue
+        CHECK(sock=socket(PF_INET, SOCK_STREAM, 0), "Can't create");
+
+        // Préparation de l’adressage du service à contacter
+        svc.sin_family = PF_INET;
+        svc.sin_port = htons (port);
+        svc.sin_addr.s_addr = inet_addr(addrIp);
+        memset(&svc.sin_zero, 0, 8);
+
+        // Demande d’une connexion au service
+        CHECK(connect(sock, (struct sockaddr *)&svc, sizeof svc) , "Can't connect");
+        return sock;
+
+    };
+
+    // Unsued
     void etablirConexion(struct sockaddr_in clt, int sock){
 
         CHECK(connect(sock, (struct sockaddr *)&clt, sizeof clt) , "Can't connect");
@@ -90,7 +109,7 @@
         printf("Server installé avec l'addr %s:%d\n",inet_ntoa(serv->sin_addr),ntohs(serv->sin_port));
         //printf("serveur en écoute  en :%i,%s,%s\n",port,serv->sin_addr.s_addr ,"127.0.0.1");
         // Association de l’adressage préparé avec la socket créée
-        CHECK(bind(sock, (struct sockaddr *) serv, sizeof *serv) , "Can't bind");
+        CHECK(bind(sock, (struct sockaddr *) serv, sizeof *serv) , "Can't bind UDP");
         
         return sock;
     };

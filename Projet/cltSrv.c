@@ -48,16 +48,9 @@ int main(/*int argc, char const *argv[]*/)
 void clientMaitre(char *myPseudo)
 {
     //envois creation party dgram
-    printf("debut client maitre\n");
-    struct sockaddr_in serv;
-    int sock = creerSocketUDP(ADDRSERVERENR, PORT_SVC, &serv);
-    req_t req;
-    createPartyReq(&req, myPseudo);
-    buffer_t buff;
-    reqTOstr(&req, buff);
-    ecrireMsgUDP(serv, sock, buff);
-    printf("fin client maitre\n");
-    //void lireMsgUDP(struct sockaddr_in clt, int sock);
+    DEBUG_S("Debut client maitre\n");
+    creerSocketClient(PORT_SERVER, ADDRSERVERENR);
+
 };
 
 void clientAdverse(char *myPseudo){
@@ -143,7 +136,7 @@ void clientAdverse(char *myPseudo){
 
 };
 #endif
-#define SERVER
+//define SERVER
 #ifdef SERVER
 int main(/*int argc, char const *argv[]*/)
 {

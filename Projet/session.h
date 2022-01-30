@@ -15,8 +15,13 @@
 
 //TCP->stream
     int creerSocketEcoute(unsigned int port);
+    int creerSocketClient(unsigned int port, char *addrIp);
+
+    // Unused
     void accepterConnexion(struct sockaddr_in clt, int sock);
     void etablirConexion(struct sockaddr_in clt, int sock);
+
+
     void ecrireMsgTCP(int sock);
     void lireMsgTCP(int sock);
 //UDP->datagrame

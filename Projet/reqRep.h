@@ -1,7 +1,6 @@
 #ifndef __REQREP_H__
 #define __REQREP_H__
 #include "basic_func.h"
-#define ADDRSERVERENR "127.0.0.1"
 #define FMT_REQ "%3hd:%hd:%[^n]"
 #define MAX_BUFF 1024
 #define OK 1;

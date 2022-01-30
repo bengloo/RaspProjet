@@ -6,7 +6,7 @@
 
 #////////recette par defaut//////////
 c=gcc #type de compilation
-op=-Wall -Wextra #opertion et retoure de la compilation
+op=#-Wall -Wextra #opertion et retoure de la compilation
 EXECCLIENT=client #nom de l'executable final
 EXECSERVER=serverEnregistrement #nom de l'executable final2
 MAINSOURCE=cltSrv.o#fichier source de l'executable
@@ -17,11 +17,9 @@ HEADERFIC=cltSrv.h#nom des header
 
 debug: op += -DDEBUG
 debug : all
+
 #création de l'executable
-all:cleanlib
-all:client
-all:cleanlib
-all:server
+all:clean client server
 	
 
 
@@ -34,9 +32,13 @@ server:cleanlib comp2
 
 
 comp1: $(MAINSOURCE) $(LIBFICCLIENT)
+	rm -f cltSrv.o
+	$(c) -c cltSrv.c -o cltSrv.o $(op) $(CLTSERV)
 	$(c) $(MAINSOURCE) $(LIBFICCLIENT) -o $(EXECCLIENT) $(LIBSYSTEM) -lX11 -lm 
 
 comp2: $(MAINSOURCE) $(LIBFICSERV)
+	rm -f cltSrv.o
+	$(c) -c cltSrv.c -o cltSrv.o $(op) $(CLTSERV)
 	$(c) $(MAINSOURCE) $(LIBFICSERV) -o $(EXECSERVER) $(LIBSYSTEM) 
 
 #inclusion des headers

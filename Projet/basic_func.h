@@ -59,6 +59,8 @@
 #define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
 #define MAX_BUFF 1024 
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
+#define ADDRSERVERENR "127.0.0.1"
+
 
 /* ------------------------------------------------------------------------ */
 /*      M A C R O - F O N C T I O N S                                       */
