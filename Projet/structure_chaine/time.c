@@ -51,9 +51,10 @@ int main(void)
     int decompte=sec-info->tm_sec;
     int decompteAux=decompte;
 
-    printf("\nDépart dans %d secondes \n", decompte);
+    
     if(min==0) {
-
+        
+        printf("\nDépart dans %d secondes \n", decompte);
         // recupération tout le temps de l'heure actuelle
         while(decompte!=0) {
             time(&t);
@@ -71,8 +72,33 @@ int main(void)
         }
     }
 
-    // décompte 
-  //  pritnf
+    else{
+        // décomposition des minutes en seconde
+        int timeSecAux=min*60+sec;
+        int timeSec;
+        int decompte=timeSecAux-(info->tm_min*60+info->tm_sec);
+        int decompteAux=decompte;
+
+        printf("\nDépart dans %d secondes \n", decompte);
+        
+        // recupération tout le temps de l'heure actuelle
+        while(decompte!=0) {
+            time(&t);
+            info=localtime(&t);
+
+            timeSec=info->tm_min*60+info->tm_sec;
+
+            // recalcul du decompte (avec les secondes) a chaque fois
+            decompte=timeSecAux-timeSec;
+
+            // si le decompte à changer alors on l'affiche 
+            if(decompteAux!=decompte)
+                printf("Attention au départ dans %d secondes \n", decompte);
+
+            decompteAux=decompte;
+
+        }
+    }
   
     return 0; 
 }
