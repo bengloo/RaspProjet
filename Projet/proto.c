@@ -34,7 +34,7 @@ void newpartieServ(int sock)
 
 void getparties(short lg, buffer_t buff, struct sockaddr_in *clt, int sock)
 {
-    printf("getpaties<%s>\n", buff);
+    DEBUG_S1("getpaties<%s>\n", buff);
 };
 
 //1 fct de selection traitement selon requete
