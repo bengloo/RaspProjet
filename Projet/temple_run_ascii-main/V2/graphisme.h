@@ -5,13 +5,14 @@
 #include "X11/keysym.h"
 #include <time.h>
 #include <unistd.h>
+#include "basic_func.h"
 
 
 #define X_PIX 500
 #define Y_PIX 200
 #define WIDTH 1
 #define HEIGHT 0.7
-
+#define Y_SCORE
 
 typedef struct Vector{
 	float x;

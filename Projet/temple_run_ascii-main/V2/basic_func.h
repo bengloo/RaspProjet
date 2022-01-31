@@ -62,7 +62,7 @@
 #define ADDRSERVERENR "127.0.0.1"
 
 /*  Parametre graphique */
-#define PATH_WIDTH 1
+#define PATH_WIDTH 2
 #define Y_BORDER 0.7
 #define SIGHT 10	// how far you can see (roughly)
 #define GRAVITY 30

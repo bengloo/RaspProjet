@@ -150,6 +150,16 @@ void draw_ascii(char **picture) {
 	}	
 }
 
+void draw_ascii_score(char **picture,int s1,int s2) {
+	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
+	for (int i = 0; i < Y_PIX; ++i) {
+		for (int j = 0; j < X_PIX; ++j) {
+			printf("%c", picture[i][j]);
+		}
+		printf("\n");
+	}	
+}
+
 char **empty_picture(char empty_char) {
 	char **pic;
 	pic = malloc(sizeof(char *) * Y_PIX);

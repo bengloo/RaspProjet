@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "session.h"
-#include "data.h"
+//#include "data.h"
 #include "reqRep.h"
 #include "basic_func.h"
 
@@ -19,7 +19,7 @@
     void initstatPartie(void);
 
     //-fct generation des requétes
-    void createPartieRep(rep_t *rep,char * ch);
+    void createPartieRep(int * sock);
     void getPartiesRep(rep_t *rep,char * ch);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     //void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);

@@ -8,7 +8,7 @@
 /* ------------------------------------------------------------------------ */
 
 //-fct generation des requétes
-void createPartieRep(rep_t *rep, char *ch){
+void createPartieRep(int *sock){
     
 
 };
@@ -43,7 +43,7 @@ void newpartieServ(req_t *req)
 
     nbPartie++;
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
-    //createPartieRep();//TODO on envois la rep pour validé la creation de partie
+    
 }
 
 void afficherPartie(void)
@@ -106,6 +106,7 @@ void lireReqServ(int *sock)
             DEBUG_S("Case CreerPartie");
             newpartieServ(&req);
             afficherPartie();
+            createPartieRep(sock);
             break;
         case 2:
             DEBUG_S("Case GetPartie");

@@ -40,7 +40,7 @@ void stringTOobst(int *dest,const char * obstaclesch){
 	}
 }
 
-void strutToString(statPartie_t* tableau, char ch[300])
+void strutToString(statPartie_t* tableau, char ch[NBMAXOBSTACLES])
 {
     char aux[300];
 
@@ -92,7 +92,7 @@ void strutToString(statPartie_t* tableau, char ch[300])
 
 }
 
-void stringToStruct(statPartie_t* tableau2, char ch[300])
+void stringToStruct(statPartie_t* tableau2, char ch[NBMAXOBSTACLES])
 {
 
     char aux[100];
