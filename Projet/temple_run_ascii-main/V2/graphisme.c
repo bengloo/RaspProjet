@@ -237,12 +237,13 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 	int s2chiffre[4];
 	int yscore;
 	s1chiffre[3]=s1/1000; 
-	s2chiffre[3]=s2/1000;
 	s1chiffre[2]=(s1-s1chiffre[3]*1000)/100; 
+	s1chiffre[1]=(s1-s1chiffre[3]*1000-s1chiffre[2]*100)/10;
+	s1chiffre[0]=(s1-s1chiffre[3]*1000-s1chiffre[2]*100-s1chiffre[1]*10);  
+
+	s2chiffre[3]=s2/1000;
 	s2chiffre[2]=(s2-s2chiffre[3]*1000)/100;
-	s1chiffre[1]=(s1-s1chiffre[3]*1000-s1chiffre[2]*100)/10; 
 	s2chiffre[1]=(s2-s2chiffre[3]*1000-s2chiffre[2]*100)/10;
-	s1chiffre[0]=(s1-s1chiffre[3]*1000-s1chiffre[2]*100-s1chiffre[1]*10); 
 	s2chiffre[0]=(s2-s2chiffre[3]*1000-s2chiffre[2]*100-s2chiffre[1]*10);   
 	printf("avant\n");
 	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
@@ -254,15 +255,15 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 		}
 		printf("####");
 		//on affiche mon score
-		if(i>=80&& i<80+Y_SCORE*PIX_SCORE){
-			yscore=floor((i-80)/PIX_SCORE);//coordoné dans la matrice de police
+		if(i>=60&& i<60+Y_SCORE*PIX_SCORE){
+			yscore=floor((i-60)/PIX_SCORE);//coordoné dans la matrice de police
 			//TODO écrire "Mon Score:"
 			int flag=0;
 			for(int k=4;k>=0;k--){
 				if(s1chiffre[k]!=0 || flag==1||k==0){//ne veux pas écrire les digit null inutil
 					flag=1;
 					for(int l=0;l<X_SCORE;l++){
-						for(int m=0;m<PIX_SCORE+2;m++){
+						for(int m=0;m<PIX_SCORE*2;m++){
 							printf("%c",tabrefnum[s1chiffre[k]][yscore][l]);
 						}
 					}
@@ -271,10 +272,10 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 
 			}
 		}
-		//on affiche son score
 		/*
-		if(i>=110&& i<110+Y_SCORE*PIX_SCORE){
-			yscore=floor((i-110)/PIX_SCORE);//coordoné dans la matrice de police
+		//on affiche son score
+		if(i>=100&& i<100+Y_SCORE*PIX_SCORE){
+			yscore=floor((i-100)/PIX_SCORE);//coordoné dans la matrice de police
 			//TODO écrire "Mon Score:"
 			int flag=0;
 			for(int k=4;k>=0;k--){
@@ -537,7 +538,8 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 		speed += SPEED_INCREASE*tstep;
 		y_move_speed += SPEED_INCREASE*tstep*0.5;
 		duckspeed += SPEED_INCREASE*tstep*0.5;
-		printf("mon score:%d son score:%d\n", i++,*son_score);
+		i++;
+		// printf("mon score:%d son score:%d\n", i++,*son_score);
 		*mon_score=i;
 		usleep(1000000*tstep);
 	}
