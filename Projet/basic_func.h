@@ -54,10 +54,8 @@
 /* ------------------------------------------------------------------------ */
 #define MAX_LEN 255
 #define NBMAXCLIENT 100
-#define PORT_SVC 5000 //Unused
 #define PORT_SERVER 8123 
 #define PORT_CLIENTMAITRE 8124
-#define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
 #define MAX_BUFF 1024 
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 #define ADDRSERVERENR "127.0.0.1"

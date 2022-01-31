@@ -192,7 +192,7 @@ void getPartiesReq(int sock, char *pseudo){
 void joinPartieReq(){};
 void joinPartieRep(){};
 
-void startReq(/*int sock*/){
+void startReq(int sock){
     
     //Le client adverse prévient le client maitre qu'il est prêt à demarrer 
 
