@@ -48,6 +48,7 @@ int main(void) {
 	//pthread_t tidpartie,serverpartie;
 	//on encapsule la partie dans un thread
 	system("./scriptZoom.sh -m");
+	//draw_ascii_score(empty_picture('?'),123,456);
 	partie(obstRecus,&mon_score,&son_score);
 	system("./scriptZoom.sh -p");
 	printf("mon score:%d son score:%d\n", mon_score,son_score);

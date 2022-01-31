@@ -12,7 +12,9 @@
 #define Y_PIX 200
 #define WIDTH 1
 #define HEIGHT 0.7
-#define Y_SCORE
+#define Y_SCORE 6
+#define X_SCORE 5
+#define PIX_SCORE 4
 
 typedef struct Vector{
 	float x;
@@ -45,6 +47,7 @@ void put_point(vect2 projected, char c, char **picture) ;
 void draw_point(vect dir, vect point, char c, char **picture) ;
 void draw_line(vect dir, vect v_from, vect v_to, char c, char **picture) ;
 void draw_ascii(char **picture);
+void draw_ascii_score(char **picture,int s1,int s2);
 
 char **empty_picture(char empty_char);
 
