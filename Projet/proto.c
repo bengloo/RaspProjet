@@ -190,7 +190,44 @@ void getPartiesReq(int sock, char *pseudo){
 
     ecrireMsgTCP(sock, reqTxt);
 };
-void joinPartieReq(){};
+void joinPartieReq(int sock, int idPartie, char *pseudo){
+    // On recupere notre adresse IP
+   /* char hostbuffer[MAX_LEN];
+    char *IPbuffer;
+    struct hostent *host_entry;
+    int hostname;
+    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
+    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
+    IPbuffer = inet_ntoa(*((struct in_addr *)
+                               host_entry->h_addr_list[0]));
+
+    // On prepare la requete pour le serveur
+    req_t req;
+    req.idReq = JOIN;
+    adresse_t monAdr;
+    strcpy(monAdr.ip, IPbuffer);
+    strcpy(monAdr.pseudo, pseudo);
+    monAdr.port = PORT_CLIENTMAITRE;
+    adresseTOstr(&monAdr, req.msgReq);
+    req.lgreq = strlen(req.msgReq);
+
+    // Envoie de la requete au serveur
+    char reqTxt[sizeof(req_t)];
+    reqTOstr(&req, reqTxt);
+
+    ecrireMsgTCP(sock, reqTxt);
+    
+    initPartie
+    */
+
+
+
+
+
+
+
+
+};
 void joinPartieRep(){};
 
 void startReq(int sock){
@@ -198,7 +235,7 @@ void startReq(int sock){
     //Le client adverse prévient le client maitre qu'il est prêt à demarrer 
 
     // On recupere notre adresse IP
-   /* char hostbuffer[MAX_LEN];
+  /*  char hostbuffer[MAX_LEN];
     char *IPbuffer;
     struct hostent *host_entry;
     int hostname;
@@ -222,10 +259,10 @@ void startReq(int sock){
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
 
-    ecrireMsgTCP(sock, reqTxt); 
+    ecrireMsgTCP(sock, reqTxt); */
     
     // Va ensuite à la fonction partieMaitre
-    */
+    
 
 
 
@@ -236,7 +273,9 @@ void updateStatutPlayerRep(){};
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 void waitParties(){};
 void afficherParties(){};
-void initPartie(){};
+void initPartie(){
+    //
+};
 void getStart(){};
 void partieMaitre(){
     //recuparation du timestamp

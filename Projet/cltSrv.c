@@ -93,15 +93,6 @@ void clientAdverse(char *myPseudo)
     // SI CREER
 
     /*
-    printf("debut client adverse\n");
-    struct sockaddr_in serv;
-    int sock =creerSocketUDP(ADDRSERVERENR,PORT_SVC,&serv);
-    req_t req;
-
-
-    // Récupération des parties (requete d'id 2) afin de les afficher
-    getPartiesReq(2,ip,myPseudo);
-    //afficherParties();
 
     int idPartie, streamOuJoueur;
 
@@ -139,7 +130,7 @@ void clientAdverse(char *myPseudo)
                 break;
             case 2:
                 // Joueur, requête d'id 3
-                joinPartieReq(3, ip, idPartie);
+                joinPartieReq(sock, idPartie, myPseudo);
                 //getStart();
                 break;
 
