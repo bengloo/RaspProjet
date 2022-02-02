@@ -27,31 +27,39 @@ void stringTOobst(int *dest,const char * obstaclesch){
 		dest[i]=obstaclesch[i]-'0';
 	}
 }
+void timeTostring(char *timeDataRep, time_t temps){
+	sprintf(timeDataRep,"%lu",temps);
+};
+
+void stringToTime(time_t *temps,char *timeDataRep){
+	*temps= atol(timeDataRep);
+};
 
 int main(void) {
-	//generation des obsacle
+	//------CLIENT----MAITRE-------
+	//generation des obsacle et top depart
 	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
+	time_t now = time( NULL);
+	//caste data
 	char obstDataRep[NBMAXOBSTACLES+1];
+	char timeDataRep[10];
 	obstTOstring(obstDataRep,obstaclesInitiaux);
-	//printf("%s\n%ld obstacle\n",obstDataRep,strlen(obstDataRep));
-	//on envois avec stream les data en chaine de caractére...
+	timeTostring(timeDataRep,now+9);
 
+	//------CLIENT----ADVERSE-------
+	//uncastdata
 	int obstRecus[NBMAXOBSTACLES+1];
+	time_t timeRecus;
 	stringTOobst(obstRecus,obstDataRep);
-	/*for(int i=0;i<NBMAXOBSTACLES;i++){
-		printf("%d",obstRecus[i]);
-	}*/
-
-	//on lence la partie client
+	stringToTime(&timeRecus,timeDataRep);
+	//init variable globale servant au req
 	int mon_score=0;
 	int son_score=0;
 	char **pic = empty_picture(' ');
-
-	//pthread_t tidpartie,serverpartie;
-	//on encapsule la partie dans un thread
+	//on lence la partie 
 	system("./scriptZoom.sh -m");
 	//draw_ascii_score(empty_picture('?'),mon_score,son_score);
-	partie(obstRecus,&mon_score,&son_score,pic);
+	partie(obstRecus,&mon_score,&son_score,pic,&timeRecus);
 	system("./scriptZoom.sh -p");
 	printf("mon score:%d son score:%d\n", mon_score,son_score);
 }

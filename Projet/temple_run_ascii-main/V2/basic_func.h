@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <wait.h>
 #include <errno.h>
+#include <time.h>
 
 #ifndef __BASIC_FUNC_H__
 #define __BASIC_FUNC_H__

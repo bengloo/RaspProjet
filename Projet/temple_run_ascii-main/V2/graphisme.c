@@ -245,9 +245,9 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 	s2chiffre[2]=(s2-s2chiffre[3]*1000)/100;
 	s2chiffre[1]=(s2-s2chiffre[3]*1000-s2chiffre[2]*100)/10;
 	s2chiffre[0]=(s2-s2chiffre[3]*1000-s2chiffre[2]*100-s2chiffre[1]*10);   
-	printf("avant\n");
+	//printf("avant\n");
 	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
-	printf("aprés\n");
+	//printf("aprés\n");
 	
 	for (int i = 0; i < Y_PIX; ++i) {
 		for (int j = 0; j < X_PIX; ++j) {
@@ -325,9 +325,10 @@ int min(int a, int b) {
 }
 
 
-void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic){
+void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t *top){
 	
-	START:
+	//START:
+
 	srand(time(NULL));
 
 	vect dir = (vect) {1, 0, 0};
@@ -353,6 +354,36 @@ void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic){
 
 	// main game loop
 	int i = 0;
+	long diff=*top-time(NULL);
+	//printf("now:%lu\n",time(NULL));
+	//printf("top:%lu\n",*top);
+	//printf("diff:%lu\n",diff);
+	if(diff>9)diff=9;
+	//getchar();
+	while (diff>0)
+	{
+		printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
+		for (i = 0; i < Y_PIX; ++i) {
+			//on affiche le top.
+			for(int m=0;m<200;m++){
+						printf(" ");
+					}
+			if(i>=100&& i<100+Y_SCORE*PIX_SCORE){
+				int yscore=floor((i-100)/PIX_SCORE);//coordoné dans la matrice de police
+				for(int l=0;l<X_SCORE;l++){
+					for(int m=0;m<PIX_SCORE*2;m++){
+						printf("%c",tabrefnum[diff][yscore][l]);
+					}
+				}
+			}
+			printf("\n");
+		}
+		diff=*top-time(NULL);
+		usleep(1000000*tstep);
+	}
+	//getchar();
+	/*score i*/
+	i=0;
 	while (1) {
 		// keyboard stuff
 		// move left/right
@@ -557,7 +588,7 @@ void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic){
 	}
 	for (int i = 0; i < 200; ++i) {
 		if (key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right)) {
-			goto START;
+			//goto START;
 		}
 		usleep(10000);
 	}
