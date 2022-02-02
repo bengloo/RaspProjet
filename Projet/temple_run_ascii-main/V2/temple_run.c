@@ -43,21 +43,16 @@ int main(void) {
 	time_t now = time( NULL);
 	//caste data
 	char obstDataRep[NBMAXOBSTACLES+1];
-	char timeDataRep[10];
+	char timeDataRep[200];
 	obstTOstring(obstDataRep,obstaclesInitiaux);
-	printf("ch:%s\n",obstDataRep);
 	timeTostring(timeDataRep,now+9);
-
+	//TODO rep clientmaitre à client  adverse pour la demande de join
+	
 	//------CLIENT----ADVERSE-------
 	//uncastdata
 	int obstRecus[NBMAXOBSTACLES+1];
 	time_t timeRecus;
-	printf("ch:%s\n",obstDataRep);
 	stringTOobst(obstRecus,obstDataRep);
-	printf("\n");
-	for(int i=0;i<NBMAXOBSTACLES;i++){
-		printf("%c",obstRecus[i]);
-	}
 	stringToTime(&timeRecus,timeDataRep);
 	//init variable globale servant au req
 	int mon_score=0;
@@ -65,7 +60,6 @@ int main(void) {
 	char **pic = empty_picture(' ');
 	//on lence la partie 
 	system("./scriptZoom.sh -m");
-	getchar();
 	//draw_ascii_score(empty_picture('?'),mon_score,son_score);
 	partie(obstRecus,&mon_score,&son_score,pic,&timeRecus);
 	system("./scriptZoom.sh -p");

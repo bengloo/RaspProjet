@@ -217,3 +217,10 @@ void stringToStruct(statPartie_t* tableau2, char ch[NBMAXOBSTACLES])
 
 }
 
+void timeTostring(char *timeDataRep, time_t temps){
+	sprintf(timeDataRep,"%lu",temps);
+}
+
+void stringToTime(time_t *temps,char *timeDataRep){
+	*temps= atol(timeDataRep);
+}

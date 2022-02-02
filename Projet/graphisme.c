@@ -7,6 +7,88 @@
 #include <unistd.h>*/
 
 #include "graphisme.h"
+const char tabrefnum[10][Y_SCORE][X_SCORE]={
+	{
+		{' ',' ',' ',' ',' '},
+		{' ',' ','#','#',' '},
+		{' ','#',' ',' ','#'},
+		{' ','#','#',' ','#'},
+		{' ','#',' ','#','#'},
+		{' ',' ','#','#',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ',' ',' ','#',' '},
+		{' ',' ','#','#',' '},
+		{' ','#',' ','#',' '},
+		{' ',' ',' ','#',' '},
+		{' ',' ',' ','#',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ','#','#','#',' '},
+		{' ',' ',' ',' ','#'},
+		{' ',' ',' ','#',' '},
+		{' ',' ','#',' ',' '},
+		{' ','#','#','#','#'}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ','#','#','#',' '},
+		{' ',' ',' ',' ','#'},
+		{' ',' ','#','#',' '},
+		{' ',' ',' ',' ','#'},
+		{' ','#','#','#',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ',' ',' ','#','#'},
+		{' ',' ','#',' ','#'},
+		{' ','#',' ',' ','#'},
+		{' ',' ','#','#','#'},
+		{' ',' ',' ',' ','#'}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ','#','#','#','#'},
+		{' ','#',' ',' ',' '},
+		{' ','#','#','#',' '},
+		{' ',' ',' ',' ','#'},
+		{' ','#','#','#',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ',' ','#','#','#'},
+		{' ','#',' ',' ',' '},
+		{' ','#','#','#',' '},
+		{' ','#',' ',' ','#'},
+		{' ',' ','#','#',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ','#','#','#','#'},
+		{' ',' ',' ',' ','#'},
+		{' ',' ',' ','#',' '},
+		{' ',' ','#',' ',' '},
+		{' ',' ','#',' ',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ',' ','#','#',' '},
+		{' ','#',' ',' ','#'},
+		{' ',' ','#','#',' '},
+		{' ','#',' ',' ','#'},
+		{' ',' ','#','#',' '}
+	},
+	{
+		{' ',' ',' ',' ',' '},
+		{' ',' ','#','#',' '},
+		{' ','#',' ',' ','#'},
+		{' ',' ','#','#','#'},
+		{' ',' ',' ',' ','#'},
+		{' ',' ','#','#',' '}
+	}
+};
 
 vect vect_scale(float  s, vect v) {
 	vect res = {s*v.x, s*v.y, s*v.z};
@@ -150,6 +232,74 @@ void draw_ascii(char **picture) {
 	}	
 }
 
+void draw_ascii_score(char **picture,int s1,int s2) {
+	int s1chiffre[4];
+	int s2chiffre[4];
+	int yscore;
+	s1chiffre[3]=s1/1000; 
+	s1chiffre[2]=(s1-s1chiffre[3]*1000)/100; 
+	s1chiffre[1]=(s1-s1chiffre[3]*1000-s1chiffre[2]*100)/10;
+	s1chiffre[0]=(s1-s1chiffre[3]*1000-s1chiffre[2]*100-s1chiffre[1]*10);  
+
+	s2chiffre[3]=s2/1000;
+	s2chiffre[2]=(s2-s2chiffre[3]*1000)/100;
+	s2chiffre[1]=(s2-s2chiffre[3]*1000-s2chiffre[2]*100)/10;
+	s2chiffre[0]=(s2-s2chiffre[3]*1000-s2chiffre[2]*100-s2chiffre[1]*10);   
+	//printf("avant\n");
+	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
+	//printf("aprés\n");
+	
+	for (int i = 0; i < Y_PIX; ++i) {
+		for (int j = 0; j < X_PIX; ++j) {
+			if(picture[i][j]=='o'){printf("%s",ANSI_CYAN);}
+			if(picture[i][j]=='x'){printf("%s",ANSI_WHITE);}
+			printf("%c", picture[i][j]);
+		}
+		printf("%s",ANSI_BLUE);
+		printf("####");
+		printf("%s",ANSI_GREEN);
+		//on affiche mon score
+		if(i>=60&& i<60+Y_SCORE*PIX_SCORE){
+			yscore=floor((i-60)/PIX_SCORE);//coordoné dans la matrice de police
+			//TODO écrire "Mon Score:"
+			int flag=0;
+			for(int k=3;k>=0;k--){
+				if(s1chiffre[k]!=0 || flag==1||k==0){//ne veux pas écrire les digit null inutil
+					flag=1;
+					for(int l=0;l<X_SCORE;l++){
+						for(int m=0;m<PIX_SCORE*2;m++){
+							printf("%c",tabrefnum[s1chiffre[k]][yscore][l]);
+						}
+					}
+				}
+				if(s1chiffre[k]!=0)flag=1;
+
+			}
+		}
+		printf("%s",ANSI_RED);
+		//on affiche son score
+		if(i>=100&& i<100+Y_SCORE*PIX_SCORE){
+			yscore=floor((i-100)/PIX_SCORE);//coordoné dans la matrice de police
+			//TODO écrire "Mon Score:"
+			int flag=0;
+			for(int k=3;k>=0;k--){
+				if(s2chiffre[k]!=0 || flag==1||k==0){//ne veux pas écrire les digit null inutil
+					flag=1;
+					for(int l=0;l<X_SCORE;l++){
+						for(int m=0;m<PIX_SCORE*2;m++){
+							printf("%c",tabrefnum[s2chiffre[k]][yscore][l]);
+						}
+					}
+				}
+				if(s2chiffre[k]!=0)flag=1;
+
+			}
+		}
+		printf("%s",ANSI_RESET);
+		printf("\n");
+	}	
+}
+
 char **empty_picture(char empty_char) {
 	char **pic;
 	pic = malloc(sizeof(char *) * Y_PIX);
@@ -175,9 +325,10 @@ int min(int a, int b) {
 }
 
 
-void partie(int * init_obstacles,int* mon_score,int*son_score){
+void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t *top){
 	
-	START:
+	//START:
+
 	srand(time(NULL));
 
 	vect dir = (vect) {1, 0, 0};
@@ -203,6 +354,36 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 
 	// main game loop
 	int i = 0;
+	long diff=*top-time(NULL);
+	//printf("now:%lu\n",time(NULL));
+	//printf("top:%lu\n",*top);
+	//printf("diff:%lu\n",diff);
+	if(diff>9)diff=9;
+	//getchar();
+	while (diff>0)
+	{
+		printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
+		for (i = 0; i < Y_PIX; ++i) {
+			//on affiche le top.
+			for(int m=0;m<200;m++){
+						printf(" ");
+					}
+			if(i>=100&& i<100+Y_SCORE*PIX_SCORE){
+				int yscore=floor((i-100)/PIX_SCORE);//coordoné dans la matrice de police
+				for(int l=0;l<X_SCORE;l++){
+					for(int m=0;m<PIX_SCORE*2;m++){
+						printf("%c",tabrefnum[diff][yscore][l]);
+					}
+				}
+			}
+			printf("\n");
+		}
+		diff=*top-time(NULL);
+		usleep(1000000*tstep);
+	}
+	//getchar();
+	/*score i*/
+	i=0;
 	while (1) {
 		// keyboard stuff
 		// move left/right
@@ -260,9 +441,9 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 
 			}
 		}
-		char **pic = empty_picture(' ');
+		pic = empty_picture(' ');
 		for (float d = turn_dist; d > 0; d -= 1) {
-			draw_line(dir, (vect){d, -PATH_WIDTH-ypos, -(cam_height+zpos)}, (vect){d, PATH_WIDTH-ypos, -(cam_height+zpos)}, 'o', pic);
+			draw_line(dir, (vect){d, -PATH_WIDTH-ypos, -(cam_height+zpos)}, (vect){d, PATH_WIDTH-ypos, -(cam_height+zpos)}, 'x', pic);
 		}
 
 		// check for collision
@@ -386,13 +567,14 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 			}
 		}
 		turn_dist -= tstep*speed;	
-		draw_ascii(pic);
+		draw_ascii_score(pic,*mon_score,*son_score);
 		// printf("%f %d \n", turn_dist, next_turn);
 		// printf("%d\n", key_is_pressed(XK_Right));
 		speed += SPEED_INCREASE*tstep;
 		y_move_speed += SPEED_INCREASE*tstep*0.5;
 		duckspeed += SPEED_INCREASE*tstep*0.5;
-		printf("mon score:%d son score:%d\n", i++,*son_score);
+		i++;
+		// printf("mon score:%d son score:%d\n", i++,*son_score);
 		*mon_score=i;
 		usleep(1000000*tstep);
 	}
@@ -406,7 +588,7 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 	}
 	for (int i = 0; i < 200; ++i) {
 		if (key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right)) {
-			goto START;
+			//goto START;
 		}
 		usleep(10000);
 	}

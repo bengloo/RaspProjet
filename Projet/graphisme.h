@@ -14,6 +14,9 @@
 #define Y_PIX 200
 #define WIDTH 1
 #define HEIGHT 0.7
+#define Y_SCORE 6
+#define X_SCORE 5
+#define PIX_SCORE 4
 
 
 typedef struct Vector{
@@ -52,6 +55,6 @@ char **empty_picture(char empty_char);
 
 float random_float();
 int min(int a, int b);
-void partie(int * init_obstacles,int* mon_score,int*son_score);
+void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t *top);
 int *init_obstacles(int size);
 #endif

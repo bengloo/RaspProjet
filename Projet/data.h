@@ -55,4 +55,6 @@ void obstTOstring(char *dest,const int * obstacles);
 void stringTOobst(int *dest,const char * obstaclesch);
 void strutToString(statPartie_t* tableau, char ch[300]);
 void stringToStruct(statPartie_t* tableau2, char ch[300]);
+void timeTostring(char *timeDataRep, time_t temps);
+void stringToTime(time_t *temps,char *timeDataRep);
 #endif
