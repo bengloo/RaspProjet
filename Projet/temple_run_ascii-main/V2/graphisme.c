@@ -251,15 +251,19 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 	
 	for (int i = 0; i < Y_PIX; ++i) {
 		for (int j = 0; j < X_PIX; ++j) {
+			if(picture[i][j]=='o'){printf("%s",ANSI_CYAN);}
+			if(picture[i][j]=='x'){printf("%s",ANSI_WHITE);}
 			printf("%c", picture[i][j]);
 		}
+		printf("%s",ANSI_BLUE);
 		printf("####");
+		printf("%s",ANSI_GREEN);
 		//on affiche mon score
 		if(i>=60&& i<60+Y_SCORE*PIX_SCORE){
 			yscore=floor((i-60)/PIX_SCORE);//coordoné dans la matrice de police
 			//TODO écrire "Mon Score:"
 			int flag=0;
-			for(int k=4;k>=0;k--){
+			for(int k=3;k>=0;k--){
 				if(s1chiffre[k]!=0 || flag==1||k==0){//ne veux pas écrire les digit null inutil
 					flag=1;
 					for(int l=0;l<X_SCORE;l++){
@@ -272,17 +276,17 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 
 			}
 		}
-		/*
+		printf("%s",ANSI_RED);
 		//on affiche son score
 		if(i>=100&& i<100+Y_SCORE*PIX_SCORE){
 			yscore=floor((i-100)/PIX_SCORE);//coordoné dans la matrice de police
 			//TODO écrire "Mon Score:"
 			int flag=0;
-			for(int k=4;k>=0;k--){
+			for(int k=3;k>=0;k--){
 				if(s2chiffre[k]!=0 || flag==1||k==0){//ne veux pas écrire les digit null inutil
 					flag=1;
 					for(int l=0;l<X_SCORE;l++){
-						for(int m=0;m<PIX_SCORE+1;m++){
+						for(int m=0;m<PIX_SCORE*2;m++){
 							printf("%c",tabrefnum[s2chiffre[k]][yscore][l]);
 						}
 					}
@@ -290,8 +294,8 @@ void draw_ascii_score(char **picture,int s1,int s2) {
 				if(s2chiffre[k]!=0)flag=1;
 
 			}
-		}*/
-		
+		}
+		printf("%s",ANSI_RESET);
 		printf("\n");
 	}	
 }
@@ -321,7 +325,7 @@ int min(int a, int b) {
 }
 
 
-void partie(int * init_obstacles,int* mon_score,int*son_score){
+void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic){
 	
 	START:
 	srand(time(NULL));
@@ -406,9 +410,9 @@ void partie(int * init_obstacles,int* mon_score,int*son_score){
 
 			}
 		}
-		char **pic = empty_picture(' ');
+		pic = empty_picture(' ');
 		for (float d = turn_dist; d > 0; d -= 1) {
-			draw_line(dir, (vect){d, -PATH_WIDTH-ypos, -(cam_height+zpos)}, (vect){d, PATH_WIDTH-ypos, -(cam_height+zpos)}, 'o', pic);
+			draw_line(dir, (vect){d, -PATH_WIDTH-ypos, -(cam_height+zpos)}, (vect){d, PATH_WIDTH-ypos, -(cam_height+zpos)}, 'x', pic);
 		}
 
 		// check for collision
