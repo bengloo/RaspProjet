@@ -2,6 +2,8 @@
 #include "proto.h"
 #include "cltSrv.h"
 #include "basic_func.h"
+#include "data.h"
+
 
 
 /* ------------------------------------------------------------------------ */
@@ -13,9 +15,10 @@ void afficherPartie(void)
     int i = 0;
     statPartie_t *partie;
 
-    CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
-
     printf("Liste parties disponibles:\n");
+#ifdef SERVER
+    CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
+#endif
     for (i = 0; i < nbPartie; i++)
     {
         partie = &listePartie[i];
@@ -32,7 +35,10 @@ void afficherPartie(void)
                partie->scoreMaitre,
                partie->scoreAdverse);
     }
+#ifdef SERVER
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
+#endif
+
 
 }
 
@@ -96,15 +102,23 @@ int newpartieServ(int sock, req_t *req)
 	return OK;
 }
 
-void getparties(short lg, buffer_t buff, struct sockaddr_in *clt, int sock)
+void getParties(int sock)
 {
-    DEBUG_S1("getparties<%s>\n", buff);
-    char ch[300];
-    strutToString(listePartie, ch);
-    //getPartiesRep(,ch);on renvois la liste des parties 
-};
-void getPartiesRep(rep_t *rep, char *ch){
+    DEBUG_S("Debut getParties\n");
+    rep_t rep;
+    rep.idRep = LISTERPARTIE;
+	
+	CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
+	listePartieTOStr(listePartie, rep.msgRep);
+    CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
+    rep.lgrep = strlen(rep.msgRep);
+    DEBUG_S1("getParties msgRep=<%s>\n", rep.msgRep);
 
+    // Envoie de la requete au serveur
+    char repTxt[sizeof(rep_t)];
+    repTOstr(&rep, repTxt);
+
+    ecrireMsgTCP(sock, repTxt);
 };
 
 //1 fct de selection traitement selon requete
@@ -123,25 +137,30 @@ void lireReqServ(int *sock)
 		afficherPartie();
         lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
         DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
-        strTOreq(&req, msgLu);
-        DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
+		if (lenLu>0)
+		{
+			strTOreq(&req, msgLu);
+			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
 
-        switch (req.idReq)
-        {
-        case CREERPARTIE:
-            DEBUG_S("Case CreerPartie");
-            newpartieServ(*sock, &req);
-            break;
-        case LISTERPARTIE:
-            DEBUG_S("Case GetPartie");
-            //getparties(req.lgreq, req.msgReq, clt, sock);
-            break;
+			switch (req.idReq)
+			{
+			case CREERPARTIE:
+				DEBUG_S("Case CreerPartie");
+				newpartieServ(*sock, &req);
+				break;
+			case LISTERPARTIE:
+				DEBUG_S("Case GetPartie");
+				getParties(*sock);
+				break;
 
-        default:
-            DEBUG_S("Case Default");
-            break;
-        }
+			default:
+				DEBUG_S("Case Default");
+				break;
+			}
+		}
     }
+
+	DEBUG_S1("Serveur : le client avec la socket <%d> a quitté la connexion\n", *sock);
 
     // Le Client a fermé on cloture la socket client
     fermerSocket(*sock);
@@ -161,6 +180,12 @@ void initstatPartie(void)
 //-fct generation des requétes
 void createPartyReq(int sock, char *pseudo)
 {
+	// Verification on est connecte
+	if (sock == 0)
+	{
+		printf("Connectez vous avant svp\n");
+		return;
+	}
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
     char *IPbuffer;
@@ -195,6 +220,11 @@ void createPartyReq(int sock, char *pseudo)
 	lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
     DEBUG_S1("Client : message reçu len <%d>\n", lenLu);
 	strTOrep(&rep, msgLu);
+	if (rep.idRep != STATUT)
+	{
+		printf("Mauvaise reponse reçu : impossible\n");
+		return;
+	}
 	strTOstatutReq(&statut, rep.msgRep);
 	DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
 	if (statut.statut == OK)
@@ -204,33 +234,45 @@ void createPartyReq(int sock, char *pseudo)
 
 }
 
-void getPartiesReq(int sock, char *pseudo){
-    // On recupere notre adresse IP
-    char hostbuffer[MAX_LEN];
-    char *IPbuffer;
-    struct hostent *host_entry;
-    int hostname;
-    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
-    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr *)
-                               host_entry->h_addr_list[0]));
+void getPartiesReq(int sock){
+	// Verification on est connecte
+	if (sock == 0)
+	{
+		printf("Connectez vous avant svp\n");
+		return;
+	}
 
     // On prepare la requete pour le serveur
     req_t req;
     req.idReq = LISTERPARTIE;
-    adresse_t monAdr;
-    strcpy(monAdr.ip, IPbuffer);
-    strcpy(monAdr.pseudo, pseudo);
-    monAdr.port = PORT_CLIENTMAITRE;
-    adresseTOstr(&monAdr, req.msgReq);
-    req.lgreq = strlen(req.msgReq);
+    req.lgreq = 0;
 
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
 
     ecrireMsgTCP(sock, reqTxt);
+	
+	// Attente de la reponse du serveur
+	buffer_t msgLu;
+    int lenLu = 1;
+	rep_t rep;
+	statutReq_t statut;
+
+	lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
+    DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
+	strTOrep(&rep, msgLu);
+	if (rep.idRep != LISTERPARTIE)
+	{
+		printf("Mauvaise reponse reçu : impossible\n");
+		return;
+	}
+	StrTOlistePartie(listePartie, rep.msgRep);
+	DEBUG_S1("getPartiesReq retour nbPartie <%d>\n", nbPartie);
+	afficherPartie();
+
 };
+
 void joinPartieReq(int sock, int idPartie, char *pseudo){
     // On recupere notre adresse IP
    /* char hostbuffer[MAX_LEN];

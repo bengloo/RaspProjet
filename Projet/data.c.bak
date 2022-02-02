@@ -1,4 +1,5 @@
 #include "data.h"
+#include "cltSrv.h"
 const char *statutPartieTxt[]={"RUN ", "STOP", "FAIL", "WAIT"};
 
 void adresseTOstr(adresse_t *adr,char *dest)
@@ -21,6 +22,50 @@ void strTOstatutReq(statutReq_t *adr,char *dest)
     sscanf(dest,"%d",&adr->statut);
 }
 
+void listePartieTOStr(statPartie_t *listePartie, char *dest)
+{
+	char *str=dest;
+	for(int i=0; i<nbPartie; i++)
+	{
+		statPartie_t *partie = &listePartie[i];
+        sprintf(str, "%3d:%3d:%15s:%5d:%20s:%15s:%5d:%20s:%5d:%5d:",
+               partie->id,
+               partie->statut,
+               partie->addrMaitre.ip,
+               partie->addrMaitre.port,
+               partie->addrMaitre.pseudo,
+               partie->addrAdverse.ip,
+               partie->addrAdverse.port,
+               partie->addrAdverse.pseudo,
+               partie->scoreMaitre,
+               partie->scoreAdverse);
+		str+=106;
+	}
+}
+
+void StrTOlistePartie(statPartie_t *listePartie, char *dest)
+{
+	char *str=dest;
+	nbPartie=0;
+	while(strlen(str)!=0)
+	{
+		statPartie_t *partie = &listePartie[nbPartie];
+        sscanf(str, "%3d:%3d:%15s:%5d:%20s:%15s:%5d:%20s:%5d:%5d:",
+               &partie->id,
+               (int*)&partie->statut,
+               partie->addrMaitre.ip,
+               &partie->addrMaitre.port,
+               partie->addrMaitre.pseudo,
+               partie->addrAdverse.ip,
+               &partie->addrAdverse.port,
+               partie->addrAdverse.pseudo,
+               &partie->scoreMaitre,
+               &partie->scoreAdverse);
+		str+=106;
+		nbPartie++;
+	}
+}
+
 void reqTOstr(req_t *req,buffer_t buff){
     sprintf(buff,"%3d:%d:%s",req->idReq,req->lgreq,req->msgReq);
 }
@@ -32,7 +77,7 @@ void repTOstr(rep_t *rep,buffer_t buff){
     sprintf(buff,"%3d:%d:%s",rep->idRep,rep->lgrep,rep->msgRep);
 }
 void strTOrep(rep_t *rep,buffer_t buff){
-    sscanf(buff,FMT_REQ,&rep->idRep,&rep->lgrep,rep->msgRep);
+    sscanf(buff,FMT_REQ,(short int*)&rep->idRep,&rep->lgrep,rep->msgRep);
 }
 
 /*fonction caste des data imbriqué*/

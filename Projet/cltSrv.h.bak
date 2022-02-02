@@ -11,7 +11,7 @@
 
 
 void connecterServeur(void);
-
+void clientAdverse(char* myPseudo);
 
 // Gestion de signaux
 void installDeroute(int numSig, void (*pfct)(int)); // deroute un signal vers la funct en 2ème param = pointeur sur une fontion

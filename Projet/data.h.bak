@@ -50,8 +50,8 @@ typedef struct
 void adresseTOstr(adresse_t *adr,char *dest);
 void strTOadresse(adresse_t *adr,char *dest);
 
-void statutReqTOstr(statutReq_t *adr,char *dest)
-void strTOstatutReq(statutReq_t *adr,char *dest)
+void statutReqTOstr(statutReq_t *adr,char *dest);
+void strTOstatutReq(statutReq_t *adr,char *dest);
 
 void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);

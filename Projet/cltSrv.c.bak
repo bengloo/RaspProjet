@@ -21,7 +21,11 @@ int continuer = 1;
 #ifdef CLIENT
 void afficherMenu()
 {
-	printf("Menu:\n1)Lister les parties en cours\n2)Creer une partie\n3)Quitter\n");
+	printf("Menu:\n \
+		1)Se connecter au serveur\n\
+		2) Lister les parties en cours\n\
+		3)Creer une partie\n\
+		0)Quitter\n");
 }
 
 int main(/*int argc, char const *argv[]*/)
@@ -43,19 +47,21 @@ int main(/*int argc, char const *argv[]*/)
     scanf("%s", myPseudo);
     choix = 1;
 
-    while (choix != 3)
+    while (choix != 0)
     {
+		afficherMenu();
         // draw_ascii(empty_picture(' '));
         scanf("%d", &choix);
         switch (choix)
         {
         case 1:
-            clientAdverse(myPseudo);
+			connecterServeur();
             break;
         case 2:
-            clientMaitre(myPseudo);
+            getPartiesReq(sock);
             break;
         case 3:
+            createPartyReq(sock, myPseudo);
             break;
 
         default:
@@ -67,96 +73,20 @@ int main(/*int argc, char const *argv[]*/)
     return 0;
 }
 
-void clientMaitre(char *myPseudo)
+void connecterServeur(void)
 {
     req_t req;
     // envois creation party dgram
-    DEBUG_S("Debut client maitre\n");
-	if (sock == 0)
-		sock = creerSocketClient(PORT_SERVER, ADDRSERVERENR);
-
-    createPartyReq(sock, myPseudo);
+    DEBUG_S("Debut connecterServeur\n");
+	if (sock != 0)
+	{
+		printf("Deja connecté au serveur\n");
+		return;
+	}
+	
+	sock = creerSocketClient(PORT_SERVER, ADDRSERVERENR);
+	if (sock == 0) printf("Erreur connection serveur\n");
 };
-
-void clientAdverse(char *myPseudo)
-{
-    req_t req;
-    // envois creation party dgram
-    DEBUG_S("Debut client maitre\n");
-    sock = creerSocketClient(PORT_SERVER, ADDRSERVERENR);
-
-    getPartiesReq(sock, myPseudo);
-
-    // SI liste
-    // recupererliste  des partie (pseudo adresse)-> liste parties
-    // aficher la liste des partie
-    // choisire une partie via un indice dans la liste ou
-    // 0)REVENIR au menu principal
-    //-1)Refresh
-    // si >0
-    // MENUE
-    // 1)STREAM
-    // 2)JOUER
-    // SI CREER
-
-    /*
-
-    int idPartie, streamOuJoueur;
-
-    printf("Choisissez une partie dans la liste ou tapez 0 pour revenir au menu principal ou bien -1 pour Refresh \n");
-    scanf("%d",&idPartie); // choix déjà initialisé avant
-
-    if(idPartie<=0) {
-        switch (idPartie)
-        {
-            case -1:
-                // Refresh
-
-                break;
-            case 0:
-                // revenir au menu
-
-                break;
-
-            default:
-
-                break;
-        }
-    }
-
-    else {
-
-        printf("Menu : \n 1) pour regarder la partie n° %d \n 2) pour jouer dans la partie n° %d \n", idPartie, idPartie);
-        scanf("%d",&idstreamOuJoueur);
-        switch (idstreamOuJoueur)
-        {
-            case 1:
-                // Stream, requete d'id 9
-                streamReq(9,ip);
-
-                break;
-            case 2:
-                // Joueur, requête d'id 3
-                joinPartieReq(sock, idPartie, myPseudo);
-                //getStart();
-                break;
-
-            default:
-
-                break;
-        }
-
-
-    }
-
-    buffer_t buff;
-    reqTOstr(&req,buff);
-    ecrireMsgUDP(serv, sock,buff);
-    printf("fin client adverse\n");
-
-        */
-};
-
 
 #endif
 // define SERVER
