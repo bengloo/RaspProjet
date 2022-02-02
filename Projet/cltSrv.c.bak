@@ -45,7 +45,6 @@ int main(/*int argc, char const *argv[]*/)
 
     while (choix != 3)
     {
-		afficherMenu();
         // draw_ascii(empty_picture(' '));
         scanf("%d", &choix);
         switch (choix)

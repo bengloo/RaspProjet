@@ -21,11 +21,6 @@ typedef struct
     char pseudo[MAX_LEN];
 }adresse_t;
 
-typedef struct 
-{
-    int statut;
-}statutReq_t;
-
 typedef enum{
     RUNNING = 0,
     STOPPED = 1,
@@ -50,19 +45,9 @@ typedef struct
 void adresseTOstr(adresse_t *adr,char *dest);
 void strTOadresse(adresse_t *adr,char *dest);
 
-void statutReqTOstr(statutReq_t *adr,char *dest);
-void strTOstatutReq(statutReq_t *adr,char *dest);
-
 void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);
 void repTOstr(rep_t *req,buffer_t buff);
 void strTOrep(rep_t *req,buffer_t buff);
 
-/*fonction caste des data imbriqué*/
-void obstTOstring(char *dest,const int * obstacles);
-void stringTOobst(int *dest,const char * obstaclesch);
-void strutToString(statPartie_t* tableau, char ch[300]);
-void stringToStruct(statPartie_t* tableau2, char ch[300]);
-void timeTostring(char *timeDataRep, time_t temps);
-void stringToTime(time_t *temps,char *timeDataRep);
 #endif

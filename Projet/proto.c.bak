@@ -120,7 +120,6 @@ void lireReqServ(int *sock)
 
     while (lenLu > 0)
     {
-		afficherPartie();
         lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
         DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
         strTOreq(&req, msgLu);

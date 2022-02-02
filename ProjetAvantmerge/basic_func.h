@@ -33,6 +33,8 @@
 
 
 
+
+
 /* ------------------------------------------------------------------------ */
 /*                      I N C L U D E S                                     */
 /* ------------------------------------------------------------------------ */
@@ -50,34 +52,15 @@
 /* ------------------------------------------------------------------------ */
 /*      CONSTANTES                                                          */
 /* ------------------------------------------------------------------------ */
-#define OK 1
-#define NOT_OK 0
 #define MAX_LEN 255
 #define NBMAXCLIENT 100
 #define PORT_SVC 5000 //Unused
 #define PORT_SERVER 8123 
 #define PORT_CLIENTMAITRE 8124
+#define MSG "100:Je dis que \"le fond de l’eau est clair par ici ! Où ça ?\"" 
 #define MAX_BUFF 1024 
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 #define ADDRSERVERENR "127.0.0.1"
-
-/*  Parametre graphique */
-#define PATH_WIDTH 1
-#define Y_BORDER 0.7
-#define SIGHT 10	// how far you can see (roughly)
-#define GRAVITY 30
-#define JUMP_SPEED 8
-#define SPEED_INCREASE 0.1
-#define NBMAXOBSTACLES 300
-#define ANSI_RESET "\033[0m"
-#define ANSI_BLACK  "\033[30m"
-#define ANSI_RED  "\033[31m"
-#define ANSI_GREEN  "\033[32m"
-#define ANSI_YELLOW  "\033[33m"
-#define ANSI_BLUE  "\033[34m"
-#define ANSI_PURPLE  "\033[35m"
-#define ANSI_CYAN  "\033[36m"
-#define ANSI_WHITE  "\033[37m"
 
 
 /* ------------------------------------------------------------------------ */
