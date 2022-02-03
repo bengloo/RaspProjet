@@ -46,6 +46,8 @@ serverEnregistrement
 *.su
 *.idb
 *.pdb
+*.BACK
+*.back
 
 # Kernel Module Compile Results
 *.mod*
