@@ -10,6 +10,7 @@
 #include "basic_func.h"
 
 
+
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR                                                     */
 /* ------------------------------------------------------------------------ */
@@ -35,7 +36,7 @@
     void createPartyReq(int sock, char * pseudo);
     void getPartiesReq(int sock);
     void joinPartieReq(int sock, int idPartie, char *pseudo);
-    void joinPartieRep();
+    void joinPartieRep(int sock,char*obstacle,char*topdepart);
     void startReq(int sock);
     void startRep();
     void UpdateStatutPlayerReq();
@@ -43,7 +44,7 @@
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     void waitParties();
     void afficherParties();
-    void initPartie();
+    void initPartie(int sock);
     void getStart();
     void partieMaitre();
     void partieAdverse();
@@ -52,7 +53,7 @@
     void stream();
     void afficherStream();
     //1 fct de selection traitement selon requete
-    void lireReqClient(req_t req);
+    void lireReqClient(int *sock);
 #endif
 
 

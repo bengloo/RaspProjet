@@ -325,7 +325,7 @@ int min(int a, int b) {
 }
 
 
-void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t *top){
+void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t top){
 	
 	//START:
 
@@ -354,7 +354,7 @@ void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t 
 
 	// main game loop
 	int i = 0;
-	long diff=*top-time(NULL);
+	long diff=top-time(NULL);
 	//printf("now:%lu\n",time(NULL));
 	//printf("top:%lu\n",*top);
 	//printf("diff:%lu\n",diff);
@@ -378,7 +378,7 @@ void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t 
 			}
 			printf("\n");
 		}
-		diff=*top-time(NULL);
+		diff=top-time(NULL);
 		usleep(1000000*tstep);
 	}
 	//getchar();

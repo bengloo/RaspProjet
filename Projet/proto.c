@@ -3,8 +3,10 @@
 #include "cltSrv.h"
 #include "basic_func.h"
 #include "data.h"
+#include "graphisme.h"
 
-
+int mon_score=0;
+int son_score=0;
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR    & CLIENT                                                  */
@@ -231,7 +233,8 @@ void createPartyReq(int sock, char *pseudo)
 		printf("Creation de partir sur le serveur réussie\n");
 	else
 		printf("Echec de creation de partir sur le serveur\n");
-
+    
+    serverPartie();
 }
 
 void getPartiesReq(int sock){
@@ -311,7 +314,10 @@ void joinPartieReq(int sock, int idPartie, char *pseudo){
 
 
 };
-void joinPartieRep(){};
+void joinPartieRep(int sock,char*obstacle,char*topdepart){
+    //TODO.....
+
+};
 
 void startReq(int sock){
     
@@ -354,10 +360,30 @@ void startRep(){};
 void UpdateStatutPlayerReq(){};
 void updateStatutPlayerRep(){};
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
-void waitParties(){};
+void waitParties(){
+};
 void afficherParties(){};
-void initPartie(){
-    //
+void initPartie(int sock){
+    /*
+    //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
+	//int mon_score=0; //OK
+	//int son_score=0; //OK
+	char **pic = empty_picture(' ');//TODO
+
+	//generation des obsacle et top depart
+	//srand((unsigned int)time);
+	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
+	time_t now = time( NULL);
+	//caste data
+	char obstDataRep[NBMAXOBSTACLES+1];
+	char timeDataRep[200];
+	obstTOstring(obstDataRep,obstaclesInitiaux);
+	timeTostring(timeDataRep,now+9);
+	
+    joinPartieRep(sock,timeDataRep,obstDataRep);//TODO complété le contenus
+    partie(obstaclesInitiaux,&mon_score,&son_score,pic,(time_t)(time+9));
+    
+    */
 };
 void getStart(){};
 void partieMaitre(){
@@ -379,41 +405,32 @@ void updateStatutPlayerInvite(){};
 void stream(){};
 void afficherStream(){};
 //1 fct de selection traitement selon requete
-void lireReqClient(req_t req)
+void lireReqClient(int *sock)
 {
-    switch (req.idReq)
+    DEBUG_S1("Serveur : New thread pour socket <%i>\n", *sock);
+
+    buffer_t msgLu;
+    req_t req;
+    int lenLu = 1;
+    // On attend les inputs du Client adverse
+    while (lenLu > 0)
     {
-    case 1:
-        waitParties();
-        break;
-    case 2:
-        afficherParties();
-        break;
-    case 3:
-        initPartie();
-        break;
-    case 4:
-        getStart();
-        break;
-    case 5:
-        partieMaitre();
-        break;
-    case 6:
-        partieAdverse();
-        break;
-    case 7:
-        updateStatutPlayerMaitre();
-        break;
-    case 8:
-        updateStatutPlayerInvite();
-        break;
-    case 9:
-        stream();
-        break;
-    case 10:
-        afficherStream();
-        break;
-    default:
-        break;
+		afficherPartie();
+        lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
+        DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
+		if (lenLu>0)
+		{
+			strTOreq(&req, msgLu);
+			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
+
+            switch (req.idReq)
+            {
+            case JOIN:
+                initPartie(*sock);
+                break;
+            default:
+                break;
+            }
+        }
     }
 }

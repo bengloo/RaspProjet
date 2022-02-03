@@ -4,10 +4,14 @@
 statPartie_t listePartie[NBMAXCLIENT]; // Liste des parties en cours
 unsigned nbPartie = 0;                 // nb de partie en cours
 
+//mutex server enregistrement
 sem_t mutex;
+//mutex server partie
+sem_t mutexpartie;
 
 #ifdef CLIENT
-int sock = 0; // Numero Socket client
+//vis à vis du server
+int sock = 0; // Numero Socket client dus server
 #endif
 
 #ifdef SERVER
@@ -62,6 +66,7 @@ int main(/*int argc, char const *argv[]*/)
             break;
         case 3:
             createPartyReq(sock, myPseudo);
+
             break;
 
         default:
@@ -175,4 +180,46 @@ void terminerProcess(void)
 	}
     exit(0);
 #endif
+}
+
+void serverPartie(){
+
+    int socketEcoutePartie = 0; // Numero SocketPartie
+    int socketClientPartie[NBMAXCLIENT];
+    int nbClient = 0;
+    int continuer = 1;
+    //Creation d'une sockPartie en ecoute des autres clients
+    socklen_t cltLen;
+    struct sockaddr_in clt;
+
+    pthread_t tid[NBMAXCLIENT];
+    int idxThread[NBMAXCLIENT];
+    double *status;
+
+    //TODO adapté instalderoute pour passé en parametre la socket a fermé que ce soit inter client ou server 
+    /*
+    // On catch le SIGINT pour fermer la socket
+    installDeroute(SIGINT, deroute);
+    */
+
+    // On se met en ecoute sur le port  du Serveur de partie
+    socketEcoutePartie = creerSocketEcoute(PORT_CLIENTMAITRE_PARTIE);
+    DEBUG_S1("Serveur de partie socket <%d> en ecoute\n", socketEcoutePartie);
+
+    // On prepar le mutex autorise (permet de refoulé les adverssaire voulant joindre une partie inexsitante ou dejas commencé)
+    CHECK_T(sem_init(&mutexpartie, 0, 1) == 0, "erreur initialisation mutex");
+    CHECK_T(sem_post(&mutexpartie) == 0, "erreur post mutex");
+
+    while (1)//TODO tant que partie en cour ou attente
+    {
+        cltLen = sizeof(clt);
+        CHECK(socketClientPartie[nbClient] = accept(socketEcoutePartie, (struct sockaddr *)&clt, &cltLen), "Can't accept"); // accept de recevoir mess
+        DEBUG_S1("Nouvelle connexion <%i>\n", socketClientPartie[nbClient]);
+        CHECK_T(pthread_create(&tid[nbClient], NULL, (pf_t)lireReqClient,
+                               (void *)(&socketClientPartie[nbClient])) == 0,
+                "Erreur pthread_create()");
+
+        nbClient++;
+    }
+
 }

@@ -17,6 +17,7 @@ void connecterServeur(void);
 void installDeroute(int numSig, void (*pfct)(int)); // deroute un signal vers la funct en 2ème param = pointeur sur une fontion
 void deroute(int numSig); // exemple de fonction qui sera appelee en cas de signal
 void terminerProcess(void);
+void serverPartie();//generre le server de partie de la meme manierre que le server d'enregistrement 
 
 #ifdef CLIENT
 extern int sock; // Numero Socket client 

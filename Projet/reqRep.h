@@ -19,7 +19,7 @@ typedef enum{
     LISTERPARTIE = 20,
 
     //Client Adversaire vers Client Maitre
-    //JOIN = 30,
+    JOIN = 30,
 
     //START = 40
 
