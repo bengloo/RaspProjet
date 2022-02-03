@@ -21,6 +21,11 @@ typedef struct
     char pseudo[MAX_LEN];
 }adresse_t;
 
+typedef struct 
+{
+    int statut;
+}statutReq_t;
+
 typedef enum{
     RUNNING = 0,
     STOPPED = 1,
@@ -44,6 +49,12 @@ typedef struct
 
 void adresseTOstr(adresse_t *adr,char *dest);
 void strTOadresse(adresse_t *adr,char *dest);
+
+void statutReqTOstr(statutReq_t *adr,char *dest);
+void strTOstatutReq(statutReq_t *adr,char *dest);
+
+void listePartieTOStr(statPartie_t *listePartie, char *dest);
+void StrTOlistePartie(statPartie_t *listePartie, char *dest);
 
 void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);

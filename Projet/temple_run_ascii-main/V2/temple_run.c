@@ -36,6 +36,13 @@ void stringToTime(time_t *temps,char *timeDataRep){
 }
 
 int main(void) {
+	
+	//init variable globale servant au req
+	int mon_score=0;
+	int son_score=0;
+	char **pic = empty_picture(' ');
+	
+	
 	//------CLIENT----MAITRE-------
 	//generation des obsacle et top depart
 	srand(time);
@@ -47,17 +54,14 @@ int main(void) {
 	obstTOstring(obstDataRep,obstaclesInitiaux);
 	timeTostring(timeDataRep,now+9);
 	//TODO rep clientmaitre à client  adverse pour la demande de join
-	
+	//partie(obstaclesInitiaux,&mon_score,&son_score,pic,time+9);
+
 	//------CLIENT----ADVERSE-------
 	//uncastdata
 	int obstRecus[NBMAXOBSTACLES+1];
 	time_t timeRecus;
 	stringTOobst(obstRecus,obstDataRep);
 	stringToTime(&timeRecus,timeDataRep);
-	//init variable globale servant au req
-	int mon_score=0;
-	int son_score=0;
-	char **pic = empty_picture(' ');
 	//on lence la partie 
 	system("./scriptZoom.sh -m");
 	//draw_ascii_score(empty_picture('?'),mon_score,son_score);

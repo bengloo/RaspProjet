@@ -3,20 +3,23 @@
 #include "basic_func.h"
 #define FMT_REQ "%3hd:%hd:%[^n]"
 #define MAX_BUFF 1024
-#define OK 1;
-#define NOP 0;
+#define OK 1
+#define NOP 0
 typedef char buffer_t[MAX_BUFF];
 //typedef char* buffer_t;
 
 typedef enum{
-    //Client Maitre vers Serveur
-    CREERPARTIE = 1,
+    // Status
+	STATUT = 1,
+	
+	//Client Maitre vers Serveur
+    CREERPARTIE = 10,
 
     //Client Adversaire vers Serveur
     LISTERPARTIE = 20,
 
     //Client Adversaire vers Client Maitre
-    //JOIN = 30,
+    JOIN = 30,
 
     //START = 40
 
@@ -32,7 +35,7 @@ typedef struct
 
 typedef struct 
 {
-    short idRep;//0 à 999
+    idRequeteServeur_t idRep;//0 à 999
     short lgrep;//0 à 1024
     buffer_t msgRep;
 } rep_t;
