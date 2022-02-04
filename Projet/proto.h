@@ -33,9 +33,9 @@
 /* ------------------------------------------------------------------------ */
 
     //-fct generation des requétes
-    void createPartyReq(int sock, char * pseudo);
-    void getPartiesReq(int sock);
-    void joinPartieReq(int sock, int idPartie, char *pseudo);
+    int createPartyReq(int sock, char * pseudo);
+    int getPartiesReq(int sock);
+    int joinPartieReq(int sock, int idPartie, char *pseudo);
     void joinPartieRep(int sock,char*obstacle,char*topdepart);
     void startReq(int sock);
     void startRep();
@@ -46,14 +46,13 @@
     void afficherParties();
     void initPartie(int sock);
     void getStart();
-    void partieMaitre();
-    void partieAdverse();
     void updateStatutPlayerMaitre();
     void updateStatutPlayerInvite();
     void stream();
     void afficherStream();
     //1 fct de selection traitement selon requete
     void lireReqClient(int *sock);
+    
 #endif
 
 

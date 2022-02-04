@@ -5,9 +5,6 @@
 #include "data.h"
 #include "graphisme.h"
 
-int mon_score=0;
-int son_score=0;
-
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR    & CLIENT                                                  */
 /* ------------------------------------------------------------------------ */
@@ -180,13 +177,13 @@ void initstatPartie(void)
 /* ------------------------------------------------------------------------ */
 
 //-fct generation des requétes
-void createPartyReq(int sock, char *pseudo)
+int createPartyReq(int sock, char *pseudo)
 {
 	// Verification on est connecte
 	if (sock == 0)
 	{
 		printf("Connectez vous avant svp\n");
-		return;
+		return 0;
 	}
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
@@ -225,7 +222,7 @@ void createPartyReq(int sock, char *pseudo)
 	if (rep.idRep != STATUT)
 	{
 		printf("Mauvaise reponse reçu : impossible\n");
-		return;
+		return 0;
 	}
 	strTOstatutReq(&statut, rep.msgRep);
 	DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
@@ -234,15 +231,15 @@ void createPartyReq(int sock, char *pseudo)
 	else
 		printf("Echec de creation de partir sur le serveur\n");
     
-    serverPartie();
+    return 1;
 }
 
-void getPartiesReq(int sock){
+int getPartiesReq(int sock){
 	// Verification on est connecte
 	if (sock == 0)
 	{
 		printf("Connectez vous avant svp\n");
-		return;
+		return 0;
 	}
 
     // On prepare la requete pour le serveur
@@ -268,24 +265,22 @@ void getPartiesReq(int sock){
 	if (rep.idRep != LISTERPARTIE)
 	{
 		printf("Mauvaise reponse reçu : impossible\n");
-		return;
+		return 0;
 	}
 	StrTOlistePartie(listePartie, rep.msgRep);
 	DEBUG_S1("getPartiesReq retour nbPartie <%d>\n", nbPartie);
-	afficherPartie();
-
+    return 1;
 };
 
-void joinPartieReq(int sock, int idPartie, char *pseudo){
+int joinPartieReq(int sock, int idPartie, char *pseudo){
     // On recupere notre adresse IP
-   /* char hostbuffer[MAX_LEN];
+    char hostbuffer[MAX_LEN];
     char *IPbuffer;
     struct hostent *host_entry;
     int hostname;
     CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
     CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr *)
-                               host_entry->h_addr_list[0]));
+    IPbuffer = inet_ntoa(*((struct in_addr *)host_entry->h_addr_list[0]));
 
     // On prepare la requete pour le serveur
     req_t req;
@@ -300,19 +295,11 @@ void joinPartieReq(int sock, int idPartie, char *pseudo){
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
-
     ecrireMsgTCP(sock, reqTxt);
-    
-    initPartie
-    */
+    char repTxt[sizeof(rep_t)];
+    lireMsgTCP(sock,repTxt,MAX_LEN);
 
-
-
-
-
-
-
-
+    return 1;
 };
 void joinPartieRep(int sock,char*obstacle,char*topdepart){
     //TODO.....
@@ -386,20 +373,6 @@ void initPartie(int sock){
     */
 };
 void getStart(){};
-void partieMaitre(){
-    //recuparation du timestamp
-
-
-
-
-
-
-
-    // prévenir l'adversaire via startRep()
-
-
-};
-void partieAdverse(){};
 void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
 void stream(){};
