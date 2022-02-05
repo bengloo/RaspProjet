@@ -1,44 +1,12 @@
 #!/bin/bash
 
-#On dézoom
-
-#xdotool key control+0x002d
-
-
-#On remet la fenêtre au zoom normal
-
-#xdotool key Ctrl+0
-
-
-
-
-
-function zoomArriere() {
-	xdotool key 0xffe9+0xffc7
-	for i in 1 2 3 4 5 6 7
-
-	do
-
-		xdotool key control+0x002d
-
-	done
-}
-
-function zoomAvant() {
-	xdotool key 0xffe9+0xffc7
-	xdotool key control+0x0030
-}
-
-while getopts "mp" opt; do 
-	case $opt in 
-	m)
-		zoomArriere
-		;;
-	p)
-		zoomAvant
-		;;
-	\?)
-	exit 1
-	;;
-	esac 
-done 
+projet_mid_jeu=2 # A changer si menu different dans gnome profil cf README par shift+F10
+projet_mid_menu=3 # A changer si menu different dans gnome profil cf README par shift+F10
+if [ $1 = "-m" ]; then
+	xdotool key shift+F10 r $projet_mid_jeu
+	resize -s 200 800 > /dev/null
+else 
+	# cas p
+	resize -s 40 120  > /dev/null
+	xdotool key shift+F10 r $projet_mid_menu
+fi
