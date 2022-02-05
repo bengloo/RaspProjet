@@ -58,8 +58,8 @@ void StrTOlistePartie(statPartie_t *listePartie, char *dest);
 
 void reqTOstr(req_t *req,buffer_t buff);
 void strTOreq(req_t *req,buffer_t buff);
-void repTOstr(rep_t *req,buffer_t buff);
-void strTOrep(rep_t *req,buffer_t buff);
+void repTOstr(rep_t *rep,buffer_t buff);
+void strTOrep(rep_t *rep,buffer_t buff);
 
 /*fonction caste des data imbriqué*/
 void obstTOstring(char *dest,const int * obstacles);
@@ -68,4 +68,6 @@ void strutToString(statPartie_t* tableau, char ch[300]);
 void stringToStruct(statPartie_t* tableau2, char ch[300]);
 void timeTostring(char *timeDataRep, time_t temps);
 void stringToTime(time_t *temps,char *timeDataRep);
+void initPartiTOString(char *dataTxt,time_t temps,int *obstacle);
+void StringinitTOParti(time_t *temps,int *obstacle,char *dataTxt);
 #endif

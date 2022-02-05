@@ -4,24 +4,22 @@
 statPartie_t listePartie[NBMAXCLIENT]; // Liste des parties en cours
 unsigned nbPartie = 0;                 // nb de partie en cours
 
-//mutex server enregistrement
+// mutex server enregistrement
 sem_t mutex;
-//mutex server partie
+// mutex server partie
 sem_t mutexpartie;
 
 #ifdef CLIENT
-//vis à vis du server
+// vis à vis du server
 int sock = 0; // Numero Socket client du server  d'enregistrement
 
-//vis à vis du client Maitre adverse
-int sockPartie = 0; // Numero Socket client du server  de partie
+// vis à vis du client Maitre adverse
+int sockPartie = 0;         // Numero Socket client du server  de partie
 int socketEcoutePartie = 0; // Numero SocketPartie
 int socketClientPartie[NBMAXCLIENT];
 int nbClientPartie = 0;
-int continuerPartie = 1;//inutiliser ?
+int continuerPartie = 1; // inutiliser ?
 
-int mon_score=0;
-int son_score=0;
 char myPseudo[MAX_LEN];
 
 #endif
@@ -30,14 +28,14 @@ char myPseudo[MAX_LEN];
 int socketEcoute = 0; // Numero Socket serveur
 int socketClient[NBMAXCLIENT];
 int nbClient = 0;
-int continuer = 1;//inutiliser ?
+int continuer = 1; // inutiliser ?
 #endif
 
 //#define CLIENT
 #ifdef CLIENT
 void afficherMenu()
 {
-	printf("Menu:\n \
+    printf("Menu:\n \
 		1) Se connecter au serveur\n\
 		2) Lister les parties en cours\n\
 		3) Creer une partie\n\
@@ -45,7 +43,6 @@ void afficherMenu()
 		10) Lancer partie en solo\n\
 		0) Quitter\n");
 }
-
 
 int main(/*int argc, char const *argv[]*/)
 {
@@ -61,27 +58,26 @@ int main(/*int argc, char const *argv[]*/)
 
     while (choix != 0)
     {
-		afficherMenu();
+        afficherMenu();
         // draw_ascii(empty_picture(' '));
         scanf("%d", &choix);
         switch (choix)
         {
         case 1:
-			connecterServeur();
+            connecterServeur();
             break;
         case 2:
-            partieAdverse(sock,myPseudo);
+            partieAdverse(sock, myPseudo);
             break;
         case 3:
-            partieMaitre(sock,myPseudo);
+            partieMaitre(sock, myPseudo);
             break;
-		case 4:
-            afficherStream(sock,myPseudo);
-            break;	
+        case 4:
+            afficherStream(sock, myPseudo);
+            break;
         case 10:
-            partieSolo(sock,myPseudo);
+            partieSolo(sock, myPseudo);
             break;
-
 
         default:
 
@@ -97,19 +93,37 @@ void connecterServeur(void)
     req_t req;
     // envois creation party dgram
     DEBUG_S("Debut connecterServeur\n");
-	if (sock != 0)
-	{
-		printf("Deja connecté au serveur\n");
-		return;
-	}
-	
-	sock = creerSocketClient(PORT_SERVER, ADDRSERVERENR);
-	if (sock == 0) printf("Erreur connection serveur\n");
+    if (sock != 0)
+    {
+        printf("Deja connecté au serveur\n");
+        return;
+    }
+
+    sock = creerSocketClient(PORT_SERVER, ADDRSERVERENR);
+    if (sock == 0)
+        printf("Erreur connection serveur\n");
 };
 
-int serverPartie(){
+void connecterServeurPartie(adresse_t addrServerPartie)
+{
+    req_t req;
+    // envois creation party dgram
+    DEBUG_S("Debut connecterServeurPartie\n");
+    if (sockPartie != 0)
+    {
+        printf("Deja connecté au serveurPartie\n");
+        return;
+    }
+    DEBUG_S2("tentative de conexion à %d,%s",PORT_CLIENTMAITRE_PARTIE,addrServerPartie.ip);
+    sockPartie = creerSocketClient(PORT_CLIENTMAITRE_PARTIE,addrServerPartie.ip);
+    if (sockPartie == 0)
+        printf("Erreur connection serveurPartie\n");
+};
 
-    //Creation d'une sockPartie en ecoute des autres clients
+int serverPartie()
+{
+
+    // Creation d'une sockPartie en ecoute des autres clients
     socklen_t cltLen;
     struct sockaddr_in clt;
 
@@ -117,7 +131,7 @@ int serverPartie(){
     int idxThread[NBMAXCLIENT];
     double *status;
 
-    //TODO adapté instalderoute pour passé en parametre la socket a fermé que ce soit inter client ou server 
+    // TODO adapté instalderoute pour passé en parametre la socket a fermé que ce soit inter client ou server
     /*
     // On catch le SIGINT pour fermer la socket
     installDeroute(SIGINT, deroute);
@@ -131,47 +145,70 @@ int serverPartie(){
     CHECK_T(sem_init(&mutexpartie, 0, 1) == 0, "erreur initialisation mutex");
     CHECK_T(sem_post(&mutexpartie) == 0, "erreur post mutex");
 
-    while (1)//TODO tant que partie en cour ou attente
+    while (1) // TODO tant que partie en cour ou attente
     {
         cltLen = sizeof(clt);
         CHECK(socketClientPartie[nbClientPartie] = accept(socketEcoutePartie, (struct sockaddr *)&clt, &cltLen), "Can't accept"); // accept de recevoir mess
         DEBUG_S1("Nouvelle connexion <%i>\n", socketClientPartie[nbClientPartie]);
-        CHECK_T(pthread_create(&tid[nbClientPartie], NULL, (pf_t)lireReqClient,(void *)(&socketClientPartie[nbClientPartie])) == 0,"Erreur pthread_create()");
+        CHECK_T(pthread_create(&tid[nbClientPartie], NULL, (pf_t)lireReqClient, (void *)(&socketClientPartie[nbClientPartie])) == 0, "Erreur pthread_create()");
 
         nbClientPartie++;
     }
     return 0;
 }
 
-void partieMaitre(int sock,char *myPseudo){
-    
-    if(createPartyReq(sock, myPseudo)){
-        if(serverPartie()){
-            //TODO reinitialisé les varaible globale de partie avant de revenir au menu.
-        }else{
-            //TODO update le statut de la partie au server d'enregistrement en erreure
-            
+void partieMaitre(int masock, char *myPseudo)
+{
+
+    if (createPartyReq(masock, myPseudo))
+    {
+        if (serverPartie())
+        {
+            // TODO reinitialisé les varaible globale de partie avant de revenir au menu.
+        }
+        else
+        {
+            // TODO update le statut de la partie au server d'enregistrement en erreure
         };
     };
 
-   //retour au menu
+    // retour au menu
 };
-void partieAdverse(int sock,char *myPseudo){
-   if(getPartiesReq(sock)){
-        int choix=-2;
-        while (choix!=-1)
+void partieAdverse(int masock, char *myPseudo)
+{
+    if (getPartiesReq(masock))
+    {
+        int choix = -2;
+        while (choix != -1)
         {
+            choix=-2;
             afficherPartie();
             printf("\n\n-1:Revenir au menu principal\n selectioné une partie avec son indices\n");
             scanf("%d", &choix);
-            if(choix>=0 && choix<nbPartie){
-                joinPartieReq(sock,choix,myPseudo);
+            if (choix >= 0 && choix < nbPartie)
+            {
+                connecterServeurPartie(listePartie[choix].addrMaitre);
+                printf("ADVERSE:on c'est conecter au server  de partie sockPartie<%d>\n",sockPartie);
+                if(sockPartie!=0){
+                    time_t top;
+                    int obstRecus[NBMAXOBSTACLES+1];
+                    if(joinPartieReq(sockPartie, myPseudo,obstRecus,&top)){
+                        printf("debut init partie\n");
+                        int mon_score=0; 
+                        int son_score=0; 
+                        char **pic = empty_picture(' ');
+                        partie(obstRecus,&mon_score,&son_score,pic,top);
+                    }else{
+                        printf("imposible de joindre cette partie\n");
+                    }
+                }
+                getchar();
+                //TODO lencé partie
             }
         }
-       
-   };
+    };
 
-    //retour menu
+    // retour menu
 };
 
 #endif
@@ -252,14 +289,13 @@ void terminerProcess(void)
     DEBUG_S1("Serveur fermeture socket <%d>\n", socketEcoute);
     fermerSocket(socketEcoute); // Numero Socket serveur
     CHECK_T(sem_destroy(&mutex) == 0, "erreur destroy mutex");
-	// On force la fermeture des socket
+    // On force la fermeture des socket
     DEBUG_S("Serveur fermeture des sockets clientes\n");
-	for (int i=0; i< nbClient; i++)
-	{
-		fermerSocket(socketClient[i]);
-		DEBUG_S1("Serveur fermeture socket cliente <%d>\n", socketClient[i]);
-	}
+    for (int i = 0; i < nbClient; i++)
+    {
+        fermerSocket(socketClient[i]);
+        DEBUG_S1("Serveur fermeture socket cliente <%d>\n", socketClient[i]);
+    }
     exit(0);
 #endif
 }
-

@@ -28,7 +28,7 @@ void listePartieTOStr(statPartie_t *listePartie, char *dest)
 	for(int i=0; i<nbPartie; i++)
 	{
 		statPartie_t *partie = &listePartie[i];
-        sprintf(str, "%3d:%3d:%15s:%5d:%20s:%15s:%5d:%20s:%5d:%5d:",
+        sprintf(str, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
                partie->id,
                partie->statut,
                partie->addrMaitre.ip,
@@ -81,19 +81,7 @@ void strTOrep(rep_t *rep,buffer_t buff){
 }
 
 /*fonction caste des data imbriqué*/
-void obstTOstring(char *dest,const int * obstacles){
-	for(int i=0;i<NBMAXOBSTACLES;i++){
-		dest[i]=obstacles[i]+'0';
-	}
-	dest[NBMAXOBSTACLES]='\0';
 
-}
-
-void stringTOobst(int *dest,const char * obstaclesch){
-	for(int i=0;i<(int)strlen(obstaclesch);i++){
-		dest[i]=obstaclesch[i]-'0';
-	}
-}
 
 void strutToString(statPartie_t* tableau, char ch[NBMAXOBSTACLES])
 {
@@ -279,3 +267,32 @@ void timeTostring(char *timeDataRep, time_t temps){
 void stringToTime(time_t *temps,char *timeDataRep){
 	*temps= atol(timeDataRep);
 }
+void obstTOstring(char *dest,const int * obstacles){
+	for(int i=0;i<NBMAXOBSTACLES;i++){
+		dest[i]=obstacles[i]+'0';
+	}
+	dest[NBMAXOBSTACLES]='\0';
+
+}
+
+void stringTOobst(int *dest,const char * obstaclesch){
+	for(int i=0;i<(int)strlen(obstaclesch);i++){
+		dest[i]=obstaclesch[i]-'0';
+	}
+}
+
+void initPartiTOString(char *dataTxt,time_t temps,int *obstacle){
+    char obstaclech[NBMAXOBSTACLES+1];
+    obstTOstring(obstaclech,obstacle);
+    char topdepart[200];
+    timeTostring(topdepart,temps);
+    sprintf(dataTxt,"%s;%s",obstaclech,topdepart);
+} 
+
+void StringinitTOParti(time_t *temps,int *obstacle,char *dataTxt){
+    char obstaclech[NBMAXOBSTACLES+1];
+    char topdepart[200];
+    sscanf(dataTxt,"%s;%s",obstaclech,topdepart);
+    stringToTime(temps,topdepart);
+    stringTOobst(obstacle,obstaclech);
+} 
