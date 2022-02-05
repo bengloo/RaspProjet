@@ -37,8 +37,6 @@ void afficherPartie(void)
 #ifdef SERVER
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
 #endif
-
-
 }
 
 /* ------------------------------------------------------------------------ */
@@ -49,12 +47,13 @@ void afficherPartie(void)
 ///-à chaque req ,on associera &fct de traitement qui genere une réponse
 //    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
 //-fct generation des requétes
-void createPartieRep(int sock, int status){
+void createPartieRep(int sock, int status)
+{
     rep_t rep;
     rep.idRep = STATUT;
-	statutReq_t statut;
-	statut.statut=status;
-	statutReqTOstr(&statut, rep.msgRep);
+    statutReq_t statut;
+    statut.statut = status;
+    statutReqTOstr(&statut, rep.msgRep);
     rep.lgrep = strlen(rep.msgRep);
 
     // Envoie de la requete au serveur
@@ -62,18 +61,16 @@ void createPartieRep(int sock, int status){
     repTOstr(&rep, repTxt);
 
     ecrireMsgTCP(sock, repTxt);
-
-
 };
 int newpartieServ(int sock, req_t *req)
 {
-	// Peut on encore accueillir des clients
-	if (nbPartie == NBMAXCLIENT)
-	{
-		createPartieRep(sock, NOT_OK);
-		return NOT_OK;
-	}
-	
+    // Peut on encore accueillir des clients
+    if (nbPartie == NBMAXCLIENT)
+    {
+        createPartieRep(sock, NOT_OK);
+        return NOT_OK;
+    }
+
     adresse_t clientMaitre;
 
     DEBUG_S("Nouvelle partie avant strTOadresse");
@@ -95,11 +92,11 @@ int newpartieServ(int sock, req_t *req)
     nouvellePartie->scoreAdverse = 0;
 
     DEBUG_S2("Nouvelle partie pour clientMaitre ip <%s> pseudo <%s>\n", nouvellePartie->addrMaitre.ip, nouvellePartie->addrMaitre.pseudo);
-	nbPartie++;
+    nbPartie++;
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
-	
-	createPartieRep(sock, OK);
-	return OK;
+
+    createPartieRep(sock, OK);
+    return OK;
 }
 
 void getParties(int sock)
@@ -107,9 +104,9 @@ void getParties(int sock)
     DEBUG_S("Debut getParties\n");
     rep_t rep;
     rep.idRep = LISTERPARTIE;
-	
-	CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
-	listePartieTOStr(listePartie, rep.msgRep);
+
+    CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
+    listePartieTOStr(listePartie, rep.msgRep);
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
     rep.lgrep = strlen(rep.msgRep);
     DEBUG_S1("getParties msgRep=<%s>\n", rep.msgRep);
@@ -134,33 +131,33 @@ void lireReqServ(int *sock)
 
     while (lenLu > 0)
     {
-		afficherPartie();
+        afficherPartie();
         lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
         DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
-		if (lenLu>0)
-		{
-			strTOreq(&req, msgLu);
-			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
+        if (lenLu > 0)
+        {
+            strTOreq(&req, msgLu);
+            DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
 
-			switch (req.idReq)
-			{
-			case CREERPARTIE:
-				DEBUG_S("Case CreerPartie");
-				newpartieServ(*sock, &req);
-				break;
-			case LISTERPARTIE:
-				DEBUG_S("Case GetPartie");
-				getParties(*sock);
-				break;
+            switch (req.idReq)
+            {
+            case CREERPARTIE:
+                DEBUG_S("Case CreerPartie");
+                newpartieServ(*sock, &req);
+                break;
+            case LISTERPARTIE:
+                DEBUG_S("Case GetPartie");
+                getParties(*sock);
+                break;
 
-			default:
-				DEBUG_S("Case Default");
-				break;
-			}
-		}
+            default:
+                DEBUG_S("Case Default");
+                break;
+            }
+        }
     }
 
-	DEBUG_S1("Serveur : le client avec la socket <%d> a quitté la connexion\n", *sock);
+    DEBUG_S1("Serveur : le client avec la socket <%d> a quitté la connexion\n", *sock);
 
     // Le Client a fermé on cloture la socket client
     fermerSocket(*sock);
@@ -180,17 +177,17 @@ void initstatPartie(void)
 //-fct generation des requétes
 int createPartyReq(int sock, char *pseudo)
 {
-	// Verification on est connecte
-	if (sock == 0)
-	{
-		printf("Connectez vous avant svp\n");
-		return 0;
-	}
+    // Verification on est connecte
+    if (sock == 0)
+    {
+        printf("Connectez vous avant svp\n");
+        return 0;
+    }
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
-    char IPbuffer[MAX_LEN];							   
-	getMyIp(IPbuffer);
-	DEBUG_S2("Creation partie avec IP <%s> et port <%d>\n", IPbuffer, port);
+    char IPbuffer[MAX_LEN];
+    getMyIp(IPbuffer);
+    DEBUG_S2("Creation partie avec IP <%s> et port <%d>\n", IPbuffer, port);
 
     // On prepare la requete pour le serveur
     req_t req;
@@ -206,39 +203,40 @@ int createPartyReq(int sock, char *pseudo)
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
     ecrireMsgTCP(sock, reqTxt);
-	
-	// Attente de la reponse du serveur
-	buffer_t msgLu;
+
+    // Attente de la reponse du serveur
+    buffer_t msgLu;
     int lenLu = 1;
-	rep_t rep;
-	statutReq_t statut;
+    rep_t rep;
+    statutReq_t statut;
 
-	lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
+    lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
     DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
-	strTOrep(&rep, msgLu);
+    strTOrep(&rep, msgLu);
 
-	if (rep.idRep != STATUT)
-	{
-		printf("Mauvaise reponse reçu : impossible\n");
-		return 0;
-	}
-	strTOstatutReq(&statut, rep.msgRep);
-	DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
-	if (statut.statut == OK)
-		printf("Creation de partie sur le serveur réussie\n");
-	else
-		printf("Echec de creation de partir sur le serveur\n");
-    
+    if (rep.idRep != STATUT)
+    {
+        printf("Mauvaise reponse reçu : impossible\n");
+        return 0;
+    }
+    strTOstatutReq(&statut, rep.msgRep);
+    DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
+    if (statut.statut == OK)
+        printf("Creation de partie sur le serveur réussie\n");
+    else
+        printf("Echec de creation de partir sur le serveur\n");
+
     return 1;
 }
 
-int getPartiesReq(int sock){
-	// Verification on est connecte
-	if (sock == 0)
-	{
-		printf("Connectez vous avant svp\n");
-		return 0;
-	}
+int getPartiesReq(int sock)
+{
+    // Verification on est connecte
+    if (sock == 0)
+    {
+        printf("Connectez vous avant svp\n");
+        return 0;
+    }
 
     // On prepare la requete pour le serveur
     req_t req;
@@ -250,33 +248,34 @@ int getPartiesReq(int sock){
     reqTOstr(&req, reqTxt);
 
     ecrireMsgTCP(sock, reqTxt);
-	
-	// Attente de la reponse du serveur
-	buffer_t msgLu;
-    int lenLu = 1;
-	rep_t rep;
-	statutReq_t statut;
 
-	lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
+    // Attente de la reponse du serveur
+    buffer_t msgLu;
+    int lenLu = 1;
+    rep_t rep;
+    statutReq_t statut;
+
+    lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
     DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
-	strTOrep(&rep, msgLu);
-	if (rep.idRep != LISTERPARTIE)
-	{
-		printf("Mauvaise reponse reçu : impossible\n");
-		return 0;
-	}
-	StrTOlistePartie(listePartie, rep.msgRep);
-	DEBUG_S1("getPartiesReq retour nbPartie <%d>\n", nbPartie);
+    strTOrep(&rep, msgLu);
+    if (rep.idRep != LISTERPARTIE)
+    {
+        printf("Mauvaise reponse reçu : impossible\n");
+        return 0;
+    }
+    StrTOlistePartie(listePartie, rep.msgRep);
+    DEBUG_S1("getPartiesReq retour nbPartie <%d>\n", nbPartie);
     return 1;
 };
 
 // Fonction joinPartieReq utilisée par l'adversaire
-int joinPartieReq(int masock, char *pseudo,int * obst,time_t * top){
-    
+int joinPartieReq(int masock, char *pseudo, int *obst, time_t *top)
+{
+
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
-	char IPbuffer[MAX_LEN];							   
-	getMyIp(IPbuffer);
+    char IPbuffer[MAX_LEN];
+    getMyIp(IPbuffer);
 
     // On prepare la requete pour le client Maitre
     req_t req;
@@ -292,18 +291,20 @@ int joinPartieReq(int masock, char *pseudo,int * obst,time_t * top){
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
     ecrireMsgTCP(masock, reqTxt);
-	
-	// Le CLient Maitre repond avec les DATA de la partie
+
+    // Le CLient Maitre repond avec les DATA de la partie
     char repTxt[sizeof(rep_t)];
-    lireMsgTCP(masock,repTxt,MAX_LEN);
-    printf("DATA init partie recus:%s\n",repTxt);
+    lireMsgTCP(masock, repTxt, MAX_LEN);
+    printf("DATA init partie recus:%s\n", repTxt);
     rep_t rep;
-    strTOrep(&rep,repTxt);
-    if(rep.idRep=50){  
-        StringinitTOParti(top,obst,rep.msgRep);
-        
-    }else{
-		printf("Reponse du client maitre incoherente\n");
+    strTOrep(&rep, repTxt);
+    if (rep.idRep = 50)
+    {
+        StringinitTOParti(top, obst, rep.msgRep);
+    }
+    else
+    {
+        printf("Reponse du client maitre incoherente\n");
         return 0;
     }
     getchar();
@@ -311,44 +312,45 @@ int joinPartieReq(int masock, char *pseudo,int * obst,time_t * top){
 };
 
 // Fonction joinPartieRep utilisée par le client maitre
-void joinPartieRep(int masock,int*obstacle,time_t temps){
+void joinPartieRep(int masock, int *obstacle, time_t temps)
+{
     rep_t rep;
     rep.idRep = STARTPARTIE;
-    initPartiTOString(rep.msgRep,temps,obstacle);
+    initPartiTOString(rep.msgRep, temps, obstacle);
     rep.lgrep = strlen(rep.msgRep);
 
     // Envoie de la requete au serveur
     char repTxt[sizeof(rep_t)];
     repTOstr(&rep, repTxt);
-    printf("DATA init envoyé:%s\n",repTxt);
+    printf("DATA init envoyé:%s\n", repTxt);
     ecrireMsgTCP(masock, repTxt);
 };
 
-void initPartie(int masock, adresse_t *adversaire){
-    
+void initPartie(int masock, adresse_t *adversaire)
+{
+
     //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
-	printf("debut init partie\n");
-    int mon_score=0; 
-	int son_score=0; 
-	char **pic = empty_picture(' ');
-	//generation des obsacle et top depart
-	//srand((unsigned int)time);
-	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
-	time_t now = time( NULL);
-	
-	//caste data
-    joinPartieRep(masock,obstaclesInitiaux,now+9);//TODO complété le contenus
+    printf("debut init partie\n");
+    int mon_score = 0;
+    int son_score = 0;
+    char **pic = empty_picture(' ');
+    //generation des obsacle et top depart
+    //srand((unsigned int)time);
+    int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
+    time_t now = time(NULL);
+
+    //caste data
+    joinPartieRep(masock, obstaclesInitiaux, now + 9); //TODO complété le contenus
     printf("Pret pour lancer la partie");
-    partie(obstaclesInitiaux,&mon_score,&son_score,pic,now+9);
+    partie(obstaclesInitiaux, &mon_score, &son_score, pic, now + 9);
 };
 
-
 void startReq(int sock){
-    
-    //Le client adverse prévient le client maitre qu'il est prêt à demarrer 
+
+    //Le client adverse prévient le client maitre qu'il est prêt à demarrer
 
     // On recupere notre adresse IP
-  /*  char hostbuffer[MAX_LEN];
+    /*  char hostbuffer[MAX_LEN];
     char *IPbuffer;
     struct hostent *host_entry;
     int hostname;
@@ -373,44 +375,38 @@ void startReq(int sock){
     reqTOstr(&req, reqTxt);
 
     ecrireMsgTCP(sock, reqTxt); */
-    
+
     // Va ensuite à la fonction partieMaitre
-    
-
-
 
 };
 void startRep(){};
 void UpdateStatutPlayerReq(){};
 void updateStatutPlayerRep(){};
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
-void waitParties(){
-};
+void waitParties(){};
 void afficherParties(){};
-
-
 
 void getStart(){};
 void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
-void stream(){}; // publier ma partie
-void afficherStream(int sock,char *myPseudo){}; // voir une partie
-void partieSolo(int sock,char *myPseudo){
+void stream(){};                                 // publier ma partie
+void afficherStream(int sock, char *myPseudo){}; // voir une partie
+void partieSolo(int sock, char *myPseudo)
+{
     //init variable globale servant au req
-	int mon_score=0;
-	int son_score=0;
-	char **pic = empty_picture(' ');
-	//generation des obsacle et top depart
-	//srand(time);
-	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
-	time_t now = time( NULL);
-	//on lence la partie 
-	system("./scriptZoom.sh -m");
-	//draw_ascii_score(empty_picture('?'),mon_score,son_score);
-	partie(obstaclesInitiaux,&mon_score,&son_score,pic,now+3);
-	system("./scriptZoom.sh -p");
-	//printf("mon score:%d son score:%d\n", mon_score,son_score);
-
+    int mon_score = 0;
+    int son_score = 0;
+    char **pic = empty_picture(' ');
+    //generation des obsacle et top depart
+    //srand(time);
+    int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
+    time_t now = time(NULL);
+    //on lence la partie
+    system("./scriptZoom.sh -m");
+    //draw_ascii_score(empty_picture('?'),mon_score,son_score);
+    partie(obstaclesInitiaux, &mon_score, &son_score, pic, now + 3);
+    system("./scriptZoom.sh -p");
+    //printf("mon score:%d son score:%d\n", mon_score,son_score);
 };
 
 //1 fct de selection traitement selon requete

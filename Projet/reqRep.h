@@ -8,11 +8,12 @@
 typedef char buffer_t[MAX_BUFF];
 //typedef char* buffer_t;
 
-typedef enum{
+typedef enum
+{
     // Status
-	STATUT = 1,
-	
-	//Client Maitre vers Serveur
+    STATUT = 1,
+
+    //Client Maitre vers Serveur
     CREERPARTIE = 10,
 
     //Client Adversaire vers Serveur
@@ -24,22 +25,21 @@ typedef enum{
     //Client lecteur vers Client Maitre
     STREAM = 40,
 
-    STARTPARTIE=50
+    STARTPARTIE = 50
 
 } idRequeteServeur_t;
 
-
-typedef struct 
+typedef struct
 {
-    idRequeteServeur_t idReq;//0 à 999
-    short lgreq;//0 à 1024
+    idRequeteServeur_t idReq; //0 à 999
+    short lgreq;              //0 à 1024
     buffer_t msgReq;
 } req_t;
 
-typedef struct 
+typedef struct
 {
-    idRequeteServeur_t idRep;//0 à 999
-    short lgrep;//0 à 1024
+    idRequeteServeur_t idRep; //0 à 999
+    short lgrep;              //0 à 1024
     buffer_t msgRep;
 } rep_t;
 #endif
