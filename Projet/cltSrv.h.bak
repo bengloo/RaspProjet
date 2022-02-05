@@ -20,7 +20,7 @@ void terminerProcess(void);
 
 
 #ifdef CLIENT
-extern int sock; // Numero Socket client vers serveur
+extern int sock; // Numero Socket client 
 void partieMaitre(int sock,char *myPseudo);
 void partieAdverse(int sock,char *myPseudo);
 int serverPartie();//generre le server de partie de la meme manierre que le server d'enregistrement 

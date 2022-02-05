@@ -1,0 +1,23 @@
+-Finir Session.c et .h coté Stram tcp 
+-dans Proto.c ligne 14 createPartieRep(&rep,"1");
+    ajouté le client à la liste client du server d'enregistrement renvoyé en réponse  0 en cas d'echec (>max client ...) sinonn 1*/
+-dans cltsrv.c ligne 165 lireReqServ(req,&clt,sock);
+    imbriqué cette fonction dans un thread pour liberé l'écoute
+    les parametre req et clt dois étre passé en parametre du thread et réafecté en double à l'interieir de celui ci 
+-caste des data (voir avec laurelene et hugo)
+    genere les data de partie (parcours) et faire les fonction de converssion en chaine de caratere et vis versa
+    genere les data de parties (tableau du server d'enregistrement) et faire les fonction de converssion en chaine de caratere et vis versa
+-crere une fonction permettant de recuperer un timestemp fiable et lui ajouté n seconde. 
+- fonction du server de partie executé par un thread par le joueur maitre
+    -étre sur écoute tcp
+    ....
+-fonction clientadverse 
+    -implementé getpartiesreq/rep... en udp
+    -menu 
+    -implementé join partie TCP 
+    ...
+-fonction permettant de recuperer une ip non aloué 
+    -à utilisé pour le client actuellment on ne peux avoir que un client unique en 127.0.0.1 
+
+-mettre au propre le code : a faire alexandre 
+attention a la fonction creesocketudp code dupliquer avec la même addr

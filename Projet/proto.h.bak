@@ -50,8 +50,7 @@
     void updateStatutPlayerInvite();
     void stream();
     void afficherStream(int sock,char *myPseudo);
-     void partieSolo(int sock,char *myPseudo);
-   //1 fct de selection traitement selon requete
+    //1 fct de selection traitement selon requete
     void lireReqClient(int *sock);
     
 #endif

@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <wait.h>
 #include <errno.h>
+#include <time.h>
 
 #ifndef __BASIC_FUNC_H__
 #define __BASIC_FUNC_H__
@@ -29,6 +30,8 @@
 
 
 /* ------------------------------------------------------------------------ */
+
+
 
 
 
@@ -50,15 +53,11 @@
 /* ------------------------------------------------------------------------ */
 /*      CONSTANTES                                                          */
 /* ------------------------------------------------------------------------ */
-#define OK 1
-#define NOT_OK 0
 #define MAX_LEN 255
 #define NBMAXCLIENT 100
 #define PORT_SVC 5000 //Unused
-#define PORT_SERVER 8123 //port du server d'enregistrement pour parlé auc client
-#define PORT_CLIENTMAITRE 8124 //port de n'importe quel client pour parlé au server d'enregistrement
-#define PORT_CLIENTMAITRE_PARTIE 8125 //por du client maitre pour parlé au autre client
-// #define PORT_CLIENTADVERSE_PARTIE 8126 //INUTILE : le client adverse parle au client maitre sur la socket maitre //port du client adverse pour parlé au client maitre
+#define PORT_SERVER 8123 
+#define PORT_CLIENTMAITRE 8124
 #define MAX_BUFF 1024 
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 #define ADDRSERVERENR "127.0.0.1"

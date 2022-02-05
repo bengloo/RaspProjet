@@ -3,7 +3,8 @@
 #include "cltSrv.h"
 #include "basic_func.h"
 #include "data.h"
-#include "graphisme.h"
+
+
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR    & CLIENT                                                  */
@@ -177,13 +178,13 @@ void initstatPartie(void)
 /* ------------------------------------------------------------------------ */
 
 //-fct generation des requétes
-int createPartyReq(int sock, char *pseudo)
+void createPartyReq(int sock, char *pseudo)
 {
 	// Verification on est connecte
 	if (sock == 0)
 	{
 		printf("Connectez vous avant svp\n");
-		return 0;
+		return;
 	}
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
@@ -222,7 +223,7 @@ int createPartyReq(int sock, char *pseudo)
 	if (rep.idRep != STATUT)
 	{
 		printf("Mauvaise reponse reçu : impossible\n");
-		return 0;
+		return;
 	}
 	strTOstatutReq(&statut, rep.msgRep);
 	DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
@@ -230,16 +231,15 @@ int createPartyReq(int sock, char *pseudo)
 		printf("Creation de partir sur le serveur réussie\n");
 	else
 		printf("Echec de creation de partir sur le serveur\n");
-    
-    return 1;
+
 }
 
-int getPartiesReq(int sock){
+void getPartiesReq(int sock){
 	// Verification on est connecte
 	if (sock == 0)
 	{
 		printf("Connectez vous avant svp\n");
-		return 0;
+		return;
 	}
 
     // On prepare la requete pour le serveur
@@ -265,24 +265,26 @@ int getPartiesReq(int sock){
 	if (rep.idRep != LISTERPARTIE)
 	{
 		printf("Mauvaise reponse reçu : impossible\n");
-		return 0;
+		return;
 	}
 	StrTOlistePartie(listePartie, rep.msgRep);
 	DEBUG_S1("getPartiesReq retour nbPartie <%d>\n", nbPartie);
-    return 1;
+	afficherPartie();
+
 };
 
-int joinPartieReq(int sock, int idPartie, char *pseudo){
+void joinPartieReq(int sock, int idPartie, char *pseudo){
     // On recupere notre adresse IP
-    char hostbuffer[MAX_LEN];
+   /* char hostbuffer[MAX_LEN];
     char *IPbuffer;
     struct hostent *host_entry;
     int hostname;
     CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
     CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr *)host_entry->h_addr_list[0]));
+    IPbuffer = inet_ntoa(*((struct in_addr *)
+                               host_entry->h_addr_list[0]));
 
-    // On prepare la requete pour le client Maitre
+    // On prepare la requete pour le serveur
     req_t req;
     req.idReq = JOIN;
     adresse_t monAdr;
@@ -295,16 +297,21 @@ int joinPartieReq(int sock, int idPartie, char *pseudo){
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
+
     ecrireMsgTCP(sock, reqTxt);
-    char repTxt[sizeof(rep_t)];
-    lireMsgTCP(sock,repTxt,MAX_LEN);
+    
+    initPartie
+    */
 
-    return 1;
-};
-void joinPartieRep(int sock,char*obstacle,char*topdepart){
-    //TODO.....
+
+
+
+
+
+
 
 };
+void joinPartieRep(){};
 
 void startReq(int sock){
     
@@ -347,68 +354,66 @@ void startRep(){};
 void UpdateStatutPlayerReq(){};
 void updateStatutPlayerRep(){};
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
-void waitParties(){
-};
+void waitParties(){};
 void afficherParties(){};
-void initPartie(int sock){
-    /*
-    //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
-	//int mon_score=0; //OK
-	//int son_score=0; //OK
-	char **pic = empty_picture(' ');//TODO
-
-	//generation des obsacle et top depart
-	//srand((unsigned int)time);
-	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
-	time_t now = time( NULL);
-	//caste data
-	char obstDataRep[NBMAXOBSTACLES+1];
-	char timeDataRep[200];
-	obstTOstring(obstDataRep,obstaclesInitiaux);
-	timeTostring(timeDataRep,now+9);
-	
-    joinPartieRep(sock,timeDataRep,obstDataRep);//TODO complété le contenus
-    partie(obstaclesInitiaux,&mon_score,&son_score,pic,(time_t)(time+9));
-    
-    */
+void initPartie(){
+    //
 };
 void getStart(){};
+void partieMaitre(){
+    //recuparation du timestamp
+
+
+
+
+
+
+
+    // prévenir l'adversaire via startRep()
+
+
+};
+void partieAdverse(){};
 void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
-void stream(){}; // publier ma partie
-void afficherStream(int sock,char *myPseudo){}; // voir une partie
-void partieSolo(int sock,char *myPseudo){};
-
+void stream(){};
+void afficherStream(){};
 //1 fct de selection traitement selon requete
-void lireReqClient(int *sock)
+void lireReqClient(req_t req)
 {
-    DEBUG_S1("Serveur : New thread pour socket <%i>\n", *sock);
-
-    buffer_t msgLu;
-    req_t req;
-    int lenLu = 1;
-    // On attend les inputs du Client adverse
-    while (lenLu > 0)
+    switch (req.idReq)
     {
-		afficherPartie();
-        lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
-        DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
-		if (lenLu>0)
-		{
-			strTOreq(&req, msgLu);
-			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
-
-            switch (req.idReq)
-            {
-            case JOIN:
-                initPartie(*sock);
-                break;
-            case STREAM:
-                stream();
-                break;
-            default:
-                break;
-            }
-        }
+    case 1:
+        waitParties();
+        break;
+    case 2:
+        afficherParties();
+        break;
+    case 3:
+        initPartie();
+        break;
+    case 4:
+        getStart();
+        break;
+    case 5:
+        partieMaitre();
+        break;
+    case 6:
+        partieAdverse();
+        break;
+    case 7:
+        updateStatutPlayerMaitre();
+        break;
+    case 8:
+        updateStatutPlayerInvite();
+        break;
+    case 9:
+        stream();
+        break;
+    case 10:
+        afficherStream();
+        break;
+    default:
+        break;
     }
 }

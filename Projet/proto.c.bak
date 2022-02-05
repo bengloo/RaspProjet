@@ -377,8 +377,6 @@ void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
 void stream(){}; // publier ma partie
 void afficherStream(int sock,char *myPseudo){}; // voir une partie
-void partieSolo(int sock,char *myPseudo){};
-
 //1 fct de selection traitement selon requete
 void lireReqClient(int *sock)
 {

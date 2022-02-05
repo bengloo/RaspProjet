@@ -75,7 +75,7 @@ int main(/*int argc, char const *argv[]*/)
         case 3:
             partieMaitre(sock,myPseudo);
             break;
-		case 4:
+		case 3:
             afficherStream(sock,myPseudo);
             break;	
         case 10:

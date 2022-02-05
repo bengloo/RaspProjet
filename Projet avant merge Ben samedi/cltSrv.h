@@ -18,12 +18,8 @@ void installDeroute(int numSig, void (*pfct)(int)); // deroute un signal vers la
 void deroute(int numSig); // exemple de fonction qui sera appelee en cas de signal
 void terminerProcess(void);
 
-
 #ifdef CLIENT
-extern int sock; // Numero Socket client vers serveur
-void partieMaitre(int sock,char *myPseudo);
-void partieAdverse(int sock,char *myPseudo);
-int serverPartie();//generre le server de partie de la meme manierre que le server d'enregistrement 
+extern int sock; // Numero Socket client 
 #endif
 
 #ifdef SERVER

@@ -6,9 +6,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "session.h"
+#include "data.h"
 #include "reqRep.h"
 #include "basic_func.h"
-
 
 
 /* ------------------------------------------------------------------------ */
@@ -19,10 +19,12 @@
     void initstatPartie(void);
 
     //-fct generation des requétes
-	void createPartieRep(int sock, int status);
+    void createPartieRep(rep_t *rep,char * ch);
+    void getPartiesRep(rep_t *rep,char * ch);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
-    int newpartieServ(int sock, req_t *req);
-    void getParties(int sock);
+    //void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
+    void newpartieServ(req_t *req);
+    void getparties(short lg,buffer_t buff,struct sockaddr_in *clt,int sock);
     //1 fct de selection traitement selon requete
     //void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
     void lireReqServ(int *sock);
@@ -33,27 +35,27 @@
 /* ------------------------------------------------------------------------ */
 
     //-fct generation des requétes
-    int createPartyReq(int sock, char * pseudo);
-    int getPartiesReq(int sock);
-    int joinPartieReq(int sock, int idPartie, char *pseudo);
-    void joinPartieRep(int sock,char*obstacle,char*topdepart);
-    void startReq(int sock);
+    void createPartyReq(int sock, char * pseudo);
+    void getPartiesReq();
+    void joinPartieReq();
+    void joinPartieRep();
+    void startReq();
     void startRep();
     void UpdateStatutPlayerReq();
     void updateStatutPlayerRep();
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     void waitParties();
     void afficherParties();
-    void initPartie(int sock);
+    void initPartie();
     void getStart();
+    void partieMaitre();
+    void partieAdverse();
     void updateStatutPlayerMaitre();
     void updateStatutPlayerInvite();
     void stream();
-    void afficherStream(int sock,char *myPseudo);
-     void partieSolo(int sock,char *myPseudo);
-   //1 fct de selection traitement selon requete
-    void lireReqClient(int *sock);
-    
+    void afficherStream();
+    //1 fct de selection traitement selon requete
+    void lireReqClient(req_t req);
 #endif
 
 
