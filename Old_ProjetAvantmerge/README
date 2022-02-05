@@ -1,9 +1,0 @@
-# MidlewareProjetLe3
-
-make client #pour generer l'executable client 
-make server #pour generer l'executable serverEnregistrement
-make cleanlib #pour enlever les .o
-make clean #pour enlever les executable
-make zip #genere un zip avec les .c .h et readme
-
-
