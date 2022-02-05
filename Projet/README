@@ -9,6 +9,11 @@ make zip #genere un zip avec les .c .h et readme
 # Afin de pouvoir gerer automatiquement le zoom dans le schelle
 instaler xdottool via sudo apt-get install xdotool
 doné les droit au scriptZoom.sh 
+importer les profiles gnpoes par : dconf load /org/gnome/terminal/ < ./profile_gnome.txt
+verifier l'ordre des profiles en faisant shift+F10 puis Profiles et regarder le numero du profile projet_mid_jeu (par defaut devrait etre 2) et projet_mid_menu (par defaut devrait etre 3)
+Si ce n'est pas 2 et 3 dans cet ordre alors modifier le script scriptZoom.sh en reportant les bons numeros
+
+
 en cas de problemme d'installation il est toujour posible de zommer et dezomer manuelment durant l'execution du code 
 
 # installé la lib X11 permettant la gestion des entré clavier pour le jeux. 
