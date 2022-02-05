@@ -273,7 +273,8 @@ int getPartiesReq(int sock){
     return 1;
 };
 
-int joinPartieReq(int sock, int idPartie, char *pseudo){
+int joinPartieReq(int masock, char *pseudo,int * obst,time_t * top){
+    
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
     char *IPbuffer;
@@ -282,7 +283,6 @@ int joinPartieReq(int sock, int idPartie, char *pseudo){
     CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
     CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
     IPbuffer = inet_ntoa(*((struct in_addr *)host_entry->h_addr_list[0]));
-
     // On prepare la requete pour le client Maitre
     req_t req;
     req.idReq = JOIN;
@@ -296,14 +296,33 @@ int joinPartieReq(int sock, int idPartie, char *pseudo){
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
-    ecrireMsgTCP(sock, reqTxt);
+    ecrireMsgTCP(masock, reqTxt);
     char repTxt[sizeof(rep_t)];
-    lireMsgTCP(sock,repTxt,MAX_LEN);
-
+    lireMsgTCP(masock,repTxt,MAX_LEN);
+    printf("DATA init partie recus:%s\n",repTxt);
+    rep_t rep;
+    strTOrep(&rep,repTxt);
+    if(rep.idRep=50){  
+        StringinitTOParti(top,obst,rep.msgRep);
+        
+    }else{
+        return 0;
+    }
+    getchar();
     return 1;
 };
-void joinPartieRep(int sock,char*obstacle,char*topdepart){
-    //TODO.....
+void joinPartieRep(int masock,int*obstacle,time_t temps){
+    rep_t rep;
+    rep.idRep = STARTPARTIE;
+    initPartiTOString(rep.msgRep,temps,obstacle);
+    rep.lgrep = strlen(rep.msgRep);
+
+    // Envoie de la requete au serveur
+    char repTxt[sizeof(rep_t)];
+    repTOstr(&rep, repTxt);
+    printf("DATA init envoyé:%s\n",repTxt);
+    getchar();
+    ecrireMsgTCP(masock, repTxt);
 
 };
 
@@ -351,27 +370,24 @@ void updateStatutPlayerRep(){};
 void waitParties(){
 };
 void afficherParties(){};
-void initPartie(int sock){
-    /*
+void initPartie(int masock){
+    
     //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
-	//int mon_score=0; //OK
-	//int son_score=0; //OK
-	char **pic = empty_picture(' ');//TODO
-
+	printf("debut init partie\n");
+    int mon_score=0; 
+	int son_score=0; 
+	char **pic = empty_picture(' ');
 	//generation des obsacle et top depart
 	//srand((unsigned int)time);
 	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
 	time_t now = time( NULL);
 	//caste data
-	char obstDataRep[NBMAXOBSTACLES+1];
-	char timeDataRep[200];
-	obstTOstring(obstDataRep,obstaclesInitiaux);
-	timeTostring(timeDataRep,now+9);
-	
-    joinPartieRep(sock,timeDataRep,obstDataRep);//TODO complété le contenus
-    partie(obstaclesInitiaux,&mon_score,&son_score,pic,(time_t)(time+9));
-    
-    */
+    joinPartieRep(masock,obstaclesInitiaux,now+9);//TODO complété le contenus
+    printf("prés pour lencé la partie");
+    getchar();
+    system("./scriptZoom.sh -m");
+    partie(obstaclesInitiaux,&mon_score,&son_score,pic,now+9);
+    system("./scriptZoom.sh -p");
 };
 void getStart(){};
 void updateStatutPlayerMaitre(){};
@@ -397,31 +413,29 @@ void partieSolo(int sock,char *myPseudo){
 };
 
 //1 fct de selection traitement selon requete
-void lireReqClient(int *sock)
+void lireReqClient(int *masock)
 {
-    DEBUG_S1("Serveur : New thread pour socket <%i>\n", *sock);
-
+    DEBUG_S1("Serveur Partie: New thread pour socket <%i>\n", *masock);
+    
     buffer_t msgLu;
     req_t req;
     int lenLu = 1;
     // On attend les inputs du Client adverse
     while (lenLu > 0)
     {
-		afficherPartie();
-        lenLu = lireMsgTCP(*sock, msgLu, sizeof(buffer_t));
+		//afficherPartie();
+        lenLu = lireMsgTCP(*masock, msgLu, sizeof(buffer_t));
         DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
 		if (lenLu>0)
 		{
 			strTOreq(&req, msgLu);
-			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *sock, msgLu, req.idReq);
-
+			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *masock, msgLu, req.idReq);
+            
             switch (req.idReq)
             {
             case JOIN:
-                initPartie(*sock);
-                break;
-            case STREAM:
-                stream();
+                printf("SERVER PARTI:on demande à joindre la partie\n");
+                initPartie(*masock);
                 break;
             default:
                 break;

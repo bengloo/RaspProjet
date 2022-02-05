@@ -22,7 +22,10 @@ typedef enum{
     JOIN = 30,
 
     //Client lecteur vers Client Maitre
-    STREAM = 40
+    STREAM = 40,
+
+    STARTPARTIE=50
+
 } idRequeteServeur_t;
 
 

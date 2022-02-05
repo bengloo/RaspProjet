@@ -11,6 +11,7 @@
 
 
 void connecterServeur(void);
+void connecterServeurPartie(adresse_t serverPartie);
 
 
 // Gestion de signaux

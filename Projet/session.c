@@ -37,11 +37,11 @@
     };
 
     int creerSocketClient(unsigned int port, char *addrIp){
-        int sock;
+        int masock;
         struct sockaddr_in svc;
 
         // Création de la socket d’appel et de dialogue
-        CHECK(sock=socket(PF_INET, SOCK_STREAM, 0), "Can't create");
+        CHECK(masock=socket(PF_INET, SOCK_STREAM, 0), "Can't create");
 
         // Préparation de l’adressage du service à contacter
         svc.sin_family = PF_INET;
@@ -50,8 +50,8 @@
         memset(&svc.sin_zero, 0, 8);
 
         // Demande d’une connexion au service
-        CHECK(connect(sock, (struct sockaddr *)&svc, sizeof svc) , "Can't connect");
-        return sock;
+        CHECK(connect(masock, (struct sockaddr *)&svc, sizeof svc) , "Can't connect");
+        return masock;
 
     };
 
