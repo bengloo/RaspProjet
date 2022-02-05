@@ -65,7 +65,7 @@ int main(void) {
 	//on lence la partie 
 	system("./scriptZoom.sh -m");
 	//draw_ascii_score(empty_picture('?'),mon_score,son_score);
-	partie(obstRecus,&mon_score,&son_score,pic,&timeRecus);
+	partie(obstRecus,&mon_score,&son_score,pic,timeRecus);
 	system("./scriptZoom.sh -p");
 	printf("mon score:%d son score:%d\n", mon_score,son_score);
 }
