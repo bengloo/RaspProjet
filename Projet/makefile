@@ -33,12 +33,16 @@ server:cleanlib comp2
 
 comp1: $(MAINSOURCE) $(LIBFICCLIENT)
 	rm -f cltSrv.o
+	rm -f proto.o
 	$(c) -c cltSrv.c -o cltSrv.o $(op) $(CLTSERV)
+	$(c) -c proto.c -o proto.o $(op) $(CLTSERV)
 	$(c) $(MAINSOURCE) $(LIBFICCLIENT) -o $(EXECCLIENT) $(LIBSYSTEM) -lX11 -lm 
 
 comp2: $(MAINSOURCE) $(LIBFICSERV)
 	rm -f cltSrv.o
+	rm -f proto.o
 	$(c) -c cltSrv.c -o cltSrv.o $(op) $(CLTSERV)
+	$(c) -c proto.c -o proto.o $(op) $(CLTSERV)
 	$(c) $(MAINSOURCE) $(LIBFICSERV) -o $(EXECSERVER) $(LIBSYSTEM) 
 
 #inclusion des headers

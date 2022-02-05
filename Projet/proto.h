@@ -9,12 +9,17 @@
 #include "reqRep.h"
 #include "basic_func.h"
 
+/* ------------------------------------------------------------------------ */
+/*      FONCTION SERVEUR    & CLIENT                                                  */
+/* ------------------------------------------------------------------------ */
+
+void afficherPartie(void);
 
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR                                                     */
 /* ------------------------------------------------------------------------ */
-  
+#ifdef SERVER
     // Initialisation
     void initstatPartie(void);
 
@@ -26,11 +31,12 @@
     //1 fct de selection traitement selon requete
     //void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
     void lireReqServ(int *sock);
-    void afficherPartie(void);
+#endif
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION CLIENT                                                     */
 /* ------------------------------------------------------------------------ */
+#ifdef CLIENT
 
     //-fct generation des requétes
     int createPartyReq(int sock, char * pseudo);
@@ -53,7 +59,8 @@
      void partieSolo(int sock,char *myPseudo);
    //1 fct de selection traitement selon requete
     void lireReqClient(int *sock);
-    
+#endif
+ 
 #endif
 
 
