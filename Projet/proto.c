@@ -377,7 +377,26 @@ void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
 void stream(){}; // publier ma partie
 void afficherStream(int sock,char *myPseudo){}; // voir une partie
-void partieSolo(int sock,char *myPseudo){};
+void partieSolo(int sock,char *myPseudo){
+    //init variable globale servant au req
+	int mon_score=0;
+	int son_score=0;
+	char **pic = empty_picture(' ');
+	//generation des obsacle et top depart
+	//srand(time);
+	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
+	time_t now = time( NULL);
+
+	//------CLIENT----ADVERSE-------
+	//uncastdata
+	//on lence la partie 
+	system("./scriptZoom.sh -m");
+	//draw_ascii_score(empty_picture('?'),mon_score,son_score);
+	partie(obstaclesInitiaux,&mon_score,&son_score,pic,now+3);
+	system("./scriptZoom.sh -p");
+	//printf("mon score:%d son score:%d\n", mon_score,son_score);
+
+};
 
 //1 fct de selection traitement selon requete
 void lireReqClient(int *sock)
