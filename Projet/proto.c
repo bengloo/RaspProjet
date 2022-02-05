@@ -44,6 +44,7 @@ void afficherPartie(void)
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR                                                     */
 /* ------------------------------------------------------------------------ */
+#ifdef SERVER
 
 ///-à chaque req ,on associera &fct de traitement qui genere une réponse
 //    void newpartieServ(short lg,buffer_t buff,struct sockaddr_in *clt,int sock){
@@ -171,11 +172,11 @@ void initstatPartie(void)
     nbPartie = 0;
 }
 
-
+#endif
 /* ------------------------------------------------------------------------ */
 /*      FONCTION CLIENT                                                     */
 /* ------------------------------------------------------------------------ */
-
+#ifdef CLIENT
 //-fct generation des requétes
 int createPartyReq(int sock, char *pseudo)
 {
@@ -428,3 +429,4 @@ void lireReqClient(int *sock)
         }
     }
 }
+#endif
