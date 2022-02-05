@@ -51,6 +51,7 @@ $(MAINSOURCE): $(HEADERFIC)
 # suppression des fichiers temporaires
 cleanlib: 
 	rm -f *.o
+	rm -f *.bak
  
 # suppression de tous les fichiers, sauf les sources,
 # en vue d'une reconstruction complète
