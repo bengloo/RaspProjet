@@ -25,7 +25,7 @@ function zoomArriere() {
 }
 
 function zoomAvant() {
-
+	xdotool key 0xffe9+0xffc7
 	xdotool key control+0x0030
 }
 
