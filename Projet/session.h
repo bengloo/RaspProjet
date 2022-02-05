@@ -12,8 +12,9 @@
 #include "reqRep.h"
 #include "basic_func.h"
 
+	void getMyIp(char*str);
 
-//TCP->stream
+	//TCP->stream
     int creerSocketEcoute(unsigned int port);
     int creerSocketClient(unsigned int port, char *addrIp);
     void fermerSocket(int sock);

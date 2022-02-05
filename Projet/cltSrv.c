@@ -9,9 +9,12 @@ sem_t mutex;
 // mutex server partie
 sem_t mutexpartie;
 
+
 #ifdef CLIENT
 // vis à vis du server
 int sock = 0; // Numero Socket client du server  d'enregistrement
+int port=0; // Port d'écoute
+
 
 // vis à vis du client Maitre adverse
 int sockPartie = 0;         // Numero Socket client du server  de partie
@@ -44,12 +47,16 @@ void afficherMenu()
 		0) Quitter\n");
 }
 
-int main(/*int argc, char const *argv[]*/)
+int main(int argc, char const *argv[])
 {
     int choix = 4;
 
     // On catch le SIGINT pour fermer la socket
     installDeroute(SIGINT, deroute);
+
+	// Lecture parametre
+	port=PORT_CLIENTMAITRE_PARTIE;
+	readParam(argc, argv, &port);
 
     draw_ascii(empty_picture(' '));
     printf("veuillez saisir votre pseudo pour vous connecter:\n");
@@ -114,8 +121,8 @@ void connecterServeurPartie(adresse_t addrServerPartie)
         printf("Deja connecté au serveurPartie\n");
         return;
     }
-    DEBUG_S2("tentative de conexion à %d,%s",PORT_CLIENTMAITRE_PARTIE,addrServerPartie.ip);
-    sockPartie = creerSocketClient(PORT_CLIENTMAITRE_PARTIE,addrServerPartie.ip);
+    DEBUG_S2("tentative de conexion à %d,%s",addrServerPartie.port,addrServerPartie.ip);
+    sockPartie = creerSocketClient(addrServerPartie.port,addrServerPartie.ip);
     if (sockPartie == 0)
         printf("Erreur connection serveurPartie\n");
 };
@@ -138,22 +145,46 @@ int serverPartie()
     */
 
     // On se met en ecoute sur le port  du Serveur de partie
-    socketEcoutePartie = creerSocketEcoute(PORT_CLIENTMAITRE_PARTIE);
+    socketEcoutePartie = creerSocketEcoute(port);
     DEBUG_S1("Serveur de partie socket <%d> en ecoute\n", socketEcoutePartie);
 
+	// Cette socket n'est pas multithreader car elle est dedié au client connecté
+
     // On prepar le mutex autorise (permet de refoulé les adverssaire voulant joindre une partie inexsitante ou dejas commencé)
-    CHECK_T(sem_init(&mutexpartie, 0, 1) == 0, "erreur initialisation mutex");
+/*    CHECK_T(sem_init(&mutexpartie, 0, 1) == 0, "erreur initialisation mutex");
     CHECK_T(sem_post(&mutexpartie) == 0, "erreur post mutex");
 
     while (1) // TODO tant que partie en cour ou attente
     {
+		*/
         cltLen = sizeof(clt);
+        printf("Attente de connexion d'un client sur port <%d>\n", port);
         CHECK(socketClientPartie[nbClientPartie] = accept(socketEcoutePartie, (struct sockaddr *)&clt, &cltLen), "Can't accept"); // accept de recevoir mess
         DEBUG_S1("Nouvelle connexion <%i>\n", socketClientPartie[nbClientPartie]);
-        CHECK_T(pthread_create(&tid[nbClientPartie], NULL, (pf_t)lireReqClient, (void *)(&socketClientPartie[nbClientPartie])) == 0, "Erreur pthread_create()");
+        //CHECK_T(pthread_create(&tid[nbClientPartie], NULL, (pf_t)lireReqClient, (void *)(&socketClientPartie[nbClientPartie])) == 0, "Erreur pthread_create()");
+        //lireReqClient((void *)(&socketClientPartie[nbClientPartie]));
 
-        nbClientPartie++;
-    }
+		// On attend que le client adverse demanade le join
+		char msgLu[MAX_LEN];
+		int lenLu = lireMsgTCP(socketClientPartie[nbClientPartie], msgLu, sizeof(buffer_t));
+        DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
+		if (lenLu>0)
+		{
+			rep_t rep;
+			strTOrep(&rep, msgLu);
+			if (rep.idRep == JOIN)
+			{
+				adresse_t adversaire;
+				strTOadresse(&adversaire, rep.msgRep);
+                printf("SERVER PARTI:joueur <%s> demande à joindre la partie\n", adversaire.pseudo);
+                initPartie(socketClientPartie[nbClientPartie], &adversaire);
+			}
+		}
+		fermerSocket(socketClientPartie[nbClientPartie]);
+		fermerSocket(socketEcoutePartie);
+
+        //nbClientPartie++;
+    //}
     return 0;
 }
 
@@ -188,7 +219,7 @@ void partieAdverse(int masock, char *myPseudo)
             if (choix >= 0 && choix < nbPartie)
             {
                 connecterServeurPartie(listePartie[choix].addrMaitre);
-                printf("ADVERSE:on c'est conecter au server  de partie sockPartie<%d>\n",sockPartie);
+                printf("ADVERSE:on s'est conecter au client maitre de partie sockPartie<%d>\n",sockPartie);
                 if(sockPartie!=0){
                     time_t top;
                     int obstRecus[NBMAXOBSTACLES+1];
@@ -215,7 +246,7 @@ void partieAdverse(int masock, char *myPseudo)
 // define SERVER
 #ifdef SERVER
 
-int main(/*int argc, char const *argv[]*/)
+int main(int argc, char const *argv[])
 {
     socklen_t cltLen;
     struct sockaddr_in clt;
@@ -227,8 +258,12 @@ int main(/*int argc, char const *argv[]*/)
     // On catch le SIGINT pour fermer la socket
     installDeroute(SIGINT, deroute);
 
+	// Lecture parametre
+	int port=PORT_SERVER; // Attention si on change ici il faut rendre aussi dynamique dans les clients
+	// readParam(argc, argv, &port);
+
     // On se met en ecoute sur le port Serveur
-    socketEcoute = creerSocketEcoute(PORT_SERVER);
+    socketEcoute = creerSocketEcoute(port);
     DEBUG_S1("Serveur socket <%d> en ecoute\n", socketEcoute);
 
     // Initialisatio des parties
@@ -251,6 +286,28 @@ int main(/*int argc, char const *argv[]*/)
     }
 }
 #endif
+
+void usage(const char *prg)
+{
+	printf("usage :%s <port>\n", prg);
+}
+
+void readParam(int argc, char const *argv[], int *port)
+{
+	if (argc>1)
+	{
+		*port = atoi(argv[1]);
+		char tmp[MAX_LEN];
+		sprintf(tmp, "%d", *port);
+		if (strcmp(tmp,argv[1])!=0)
+		{
+			usage(argv[0]);
+			exit(0);
+		}
+	}
+	
+}
+
 
 void installDeroute(int numSig, void (*pfct)(int))
 {

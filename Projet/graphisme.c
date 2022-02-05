@@ -328,7 +328,9 @@ int min(int a, int b) {
 void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t top){
 	
 	//START:
-
+	// On change la resolution cf README
+	system("./scriptZoom.sh -m");
+	
 	srand(time(NULL));
 
 	vect dir = (vect) {1, 0, 0};
@@ -593,6 +595,10 @@ void partie(int * init_obstacles,int* mon_score,int*son_score,char **pic,time_t 
 		usleep(10000);
 	}
 	draw_ascii(empty_picture(' '));
+	
+	// On remet  la resolution cf README
+	system("./scriptZoom.sh -p");
+
 	
 };
 int *init_obstacles(int size) {

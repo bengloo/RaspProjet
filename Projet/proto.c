@@ -188,13 +188,9 @@ int createPartyReq(int sock, char *pseudo)
 	}
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
-    char *IPbuffer;
-    struct hostent *host_entry;
-    int hostname;
-    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
-    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr *)
-                               host_entry->h_addr_list[0]));
+    char IPbuffer[MAX_LEN];							   
+	getMyIp(IPbuffer);
+	DEBUG_S2("Creation partie avec IP <%s> et port <%d>\n", IPbuffer, port);
 
     // On prepare la requete pour le serveur
     req_t req;
@@ -202,7 +198,7 @@ int createPartyReq(int sock, char *pseudo)
     adresse_t monAdr;
     strcpy(monAdr.ip, IPbuffer);
     strcpy(monAdr.pseudo, pseudo);
-    monAdr.port = PORT_CLIENTMAITRE;
+    monAdr.port = port;
     adresseTOstr(&monAdr, req.msgReq);
     req.lgreq = strlen(req.msgReq);
 
@@ -218,8 +214,9 @@ int createPartyReq(int sock, char *pseudo)
 	statutReq_t statut;
 
 	lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
-    DEBUG_S1("Client : message reçu len <%d>\n", lenLu);
+    DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
 	strTOrep(&rep, msgLu);
+
 	if (rep.idRep != STATUT)
 	{
 		printf("Mauvaise reponse reçu : impossible\n");
@@ -228,7 +225,7 @@ int createPartyReq(int sock, char *pseudo)
 	strTOstatutReq(&statut, rep.msgRep);
 	DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
 	if (statut.statut == OK)
-		printf("Creation de partir sur le serveur réussie\n");
+		printf("Creation de partie sur le serveur réussie\n");
 	else
 		printf("Echec de creation de partir sur le serveur\n");
     
@@ -273,30 +270,30 @@ int getPartiesReq(int sock){
     return 1;
 };
 
+// Fonction joinPartieReq utilisée par l'adversaire
 int joinPartieReq(int masock, char *pseudo,int * obst,time_t * top){
     
     // On recupere notre adresse IP
     char hostbuffer[MAX_LEN];
-    char *IPbuffer;
-    struct hostent *host_entry;
-    int hostname;
-    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
-    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr *)host_entry->h_addr_list[0]));
+	char IPbuffer[MAX_LEN];							   
+	getMyIp(IPbuffer);
+
     // On prepare la requete pour le client Maitre
     req_t req;
     req.idReq = JOIN;
     adresse_t monAdr;
     strcpy(monAdr.ip, IPbuffer);
     strcpy(monAdr.pseudo, pseudo);
-    monAdr.port = PORT_CLIENTMAITRE;
+    monAdr.port = 0; // le client distant n'a pas de port d'écoute
     adresseTOstr(&monAdr, req.msgReq);
     req.lgreq = strlen(req.msgReq);
 
-    // Envoie de la requete au serveur
+    // Envoie de la requete JOIN au client maitre
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
     ecrireMsgTCP(masock, reqTxt);
+	
+	// Le CLient Maitre repond avec les DATA de la partie
     char repTxt[sizeof(rep_t)];
     lireMsgTCP(masock,repTxt,MAX_LEN);
     printf("DATA init partie recus:%s\n",repTxt);
@@ -306,11 +303,14 @@ int joinPartieReq(int masock, char *pseudo,int * obst,time_t * top){
         StringinitTOParti(top,obst,rep.msgRep);
         
     }else{
+		printf("Reponse du client maitre incoherente\n");
         return 0;
     }
     getchar();
     return 1;
 };
+
+// Fonction joinPartieRep utilisée par le client maitre
 void joinPartieRep(int masock,int*obstacle,time_t temps){
     rep_t rep;
     rep.idRep = STARTPARTIE;
@@ -321,10 +321,27 @@ void joinPartieRep(int masock,int*obstacle,time_t temps){
     char repTxt[sizeof(rep_t)];
     repTOstr(&rep, repTxt);
     printf("DATA init envoyé:%s\n",repTxt);
-    getchar();
     ecrireMsgTCP(masock, repTxt);
-
 };
+
+void initPartie(int masock, adresse_t *adversaire){
+    
+    //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
+	printf("debut init partie\n");
+    int mon_score=0; 
+	int son_score=0; 
+	char **pic = empty_picture(' ');
+	//generation des obsacle et top depart
+	//srand((unsigned int)time);
+	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
+	time_t now = time( NULL);
+	
+	//caste data
+    joinPartieRep(masock,obstaclesInitiaux,now+9);//TODO complété le contenus
+    printf("Pret pour lancer la partie");
+    partie(obstaclesInitiaux,&mon_score,&son_score,pic,now+9);
+};
+
 
 void startReq(int sock){
     
@@ -347,7 +364,7 @@ void startReq(int sock){
     adresse_t monAdr;
     strcpy(monAdr.ip, IPbuffer);
     strcpy(monAdr.pseudo, pseudo);
-    monAdr.port = PORT_CLIENTMAITRE;
+    monAdr.port = PORT_CLIENTMAITRE_PARTIE;
     adresseTOstr(&monAdr, req.msgReq);
     req.lgreq = strlen(req.msgReq);
 
@@ -370,25 +387,9 @@ void updateStatutPlayerRep(){};
 void waitParties(){
 };
 void afficherParties(){};
-void initPartie(int masock){
-    
-    //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
-	printf("debut init partie\n");
-    int mon_score=0; 
-	int son_score=0; 
-	char **pic = empty_picture(' ');
-	//generation des obsacle et top depart
-	//srand((unsigned int)time);
-	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
-	time_t now = time( NULL);
-	//caste data
-    joinPartieRep(masock,obstaclesInitiaux,now+9);//TODO complété le contenus
-    printf("prés pour lencé la partie");
-    getchar();
-    system("./scriptZoom.sh -m");
-    partie(obstaclesInitiaux,&mon_score,&son_score,pic,now+9);
-    system("./scriptZoom.sh -p");
-};
+
+
+
 void getStart(){};
 void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
@@ -413,13 +414,17 @@ void partieSolo(int sock,char *myPseudo){
 };
 
 //1 fct de selection traitement selon requete
+//UNUSED
+/*
 void lireReqClient(int *masock)
 {
-    DEBUG_S1("Serveur Partie: New thread pour socket <%i>\n", *masock);
+    //DEBUG_S1("Serveur Partie: New thread pour socket <%i>\n", *masock);
+    DEBUG_S1("Serveur Partie: Debut lireReqClient pour socket <%i>\n", *masock);
     
     buffer_t msgLu;
     req_t req;
     int lenLu = 1;
+	
     // On attend les inputs du Client adverse
     while (lenLu > 0)
     {
@@ -443,4 +448,5 @@ void lireReqClient(int *masock)
         }
     }
 }
+*/
 #endif

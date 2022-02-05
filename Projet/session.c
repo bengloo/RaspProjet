@@ -1,7 +1,45 @@
-  
+#include <netdb.h>
+#include <ifaddrs.h>
+#include <unistd.h>
+#include <arpa/inet.h>
 #include "session.h"
+  
+
+void getMyIp(char*str)
+{
+    struct ifaddrs *addr, *intf;
+    char hostname[NI_MAXHOST];
+    int family, s;
+    
+	*str='\0';
+
+    if (getifaddrs(&intf) == -1) {
+        perror("getifaddrs");
+        exit(EXIT_FAILURE);
+    }
+
+    for (addr = intf; addr != NULL; addr = addr->ifa_next) {
+        family = addr->ifa_addr->sa_family;
+    //AF_INET est la famille d'adresses pour IPv4
+        if (family == AF_INET) {
+          //getnameinfo permet la résolution de noms.
+          s = getnameinfo(addr->ifa_addr, 
+                          sizeof(struct sockaddr_in),
+                          hostname, 
+                          NI_MAXHOST, 
+                          NULL, 
+                          0, 
+                          NI_NUMERICHOST);
+			DEBUG_S2("Host <%s> IP<%s>\n", addr->ifa_name, hostname);
+          if (strcmp(addr->ifa_name, "lo") != 0)
+				strcpy(str, hostname);
+        }
+    }
+}
+
+
 //TCP
-    int creerSocketEcoute(unsigned int port){
+		int creerSocketEcoute(unsigned int port){
 
         int sock;
         struct sockaddr_in serv;

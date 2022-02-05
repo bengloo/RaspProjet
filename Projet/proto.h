@@ -8,6 +8,7 @@
 #include "session.h"
 #include "reqRep.h"
 #include "basic_func.h"
+#include "data.h"
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR    & CLIENT                                                  */
@@ -50,7 +51,7 @@ void afficherPartie(void);
     //-à chaque req ,on associera &fct de traitement qui genere une réponse
     void waitParties();
     void afficherParties();
-    void initPartie(int sock);
+    void initPartie(int sock, adresse_t *adversaire);
     void getStart();
     void updateStatutPlayerMaitre();
     void updateStatutPlayerInvite();
@@ -58,7 +59,7 @@ void afficherPartie(void);
     void afficherStream(int sock,char *myPseudo);
      void partieSolo(int sock,char *myPseudo);
    //1 fct de selection traitement selon requete
-    void lireReqClient(int *sock);
+    //void lireReqClient(int *sock);
 #endif
  
 #endif

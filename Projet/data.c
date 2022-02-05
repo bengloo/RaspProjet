@@ -25,6 +25,7 @@ void strTOstatutReq(statutReq_t *adr,char *dest)
 void listePartieTOStr(statPartie_t *listePartie, char *dest)
 {
 	char *str=dest;
+	DEBUG_S1("listePartieTOStr : nbPartie <%d>\n", nbPartie);
 	for(int i=0; i<nbPartie; i++)
 	{
 		statPartie_t *partie = &listePartie[i];
@@ -39,8 +40,10 @@ void listePartieTOStr(statPartie_t *listePartie, char *dest)
                partie->addrAdverse.pseudo,
                partie->scoreMaitre,
                partie->scoreAdverse);
-		str+=106;
+		str+=strlen(str);
 	}
+	DEBUG_S1("listePartieTOStr : str <%s>\n", dest);
+
 }
 
 void StrTOlistePartie(statPartie_t *listePartie, char *dest)
@@ -61,23 +64,36 @@ void StrTOlistePartie(statPartie_t *listePartie, char *dest)
                partie->addrAdverse.pseudo,
                &partie->scoreMaitre,
                &partie->scoreAdverse);
-		str+=106;
+
+		// On avance jusqu'au 10eme :
+		int cpt=10;
+		while ((*str != '\0') && (cpt >0))
+		{
+			if (*str ==':') cpt--;
+			str++;
+		}
+		DEBUG_S1("token <%s>", str);
 		nbPartie++;
 	}
 }
 
 void reqTOstr(req_t *req,buffer_t buff){
     sprintf(buff,"%3d:%d:%s",req->idReq,req->lgreq,req->msgReq);
+	DEBUG_S4("reqTOstr str <%s> Id <%d> len <%d> msg <%s>\n", buff, req->idReq,req->lgreq,req->msgReq);
 }
 void strTOreq(req_t *req,buffer_t buff){
     sscanf(buff,FMT_REQ,(short int*)&req->idReq,&req->lgreq,req->msgReq);
+	DEBUG_S4("strTOreq str <%s> Id <%d> len <%d> msg <%s>\n", buff, req->idReq,req->lgreq,req->msgReq);
 }
 
 void repTOstr(rep_t *rep,buffer_t buff){
-    sprintf(buff,"%3d:%d:%s",rep->idRep,rep->lgrep,rep->msgRep);
+    sprintf(buff,"%d:%hd:%s",rep->idRep,rep->lgrep,rep->msgRep);
+	DEBUG_S4("repTOstr str <%s> Id <%d> len <%d> msg <%s>\n", buff, rep->idRep,rep->lgrep,rep->msgRep);
+
 }
 void strTOrep(rep_t *rep,buffer_t buff){
-    sscanf(buff,FMT_REQ,(short int*)&rep->idRep,&rep->lgrep,rep->msgRep);
+    sscanf(buff,"%d:%hd:%s",(int*)&rep->idRep,&rep->lgrep,rep->msgRep);
+	DEBUG_S4("strTOrep str <%s> Id <%d> len <%d> msg <%s>\n", buff, rep->idRep,rep->lgrep,rep->msgRep);
 }
 
 /*fonction caste des data imbriqué*/

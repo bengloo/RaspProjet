@@ -10,6 +10,8 @@
 #include "basic_func.h"
 
 
+void readParam(int argc, char const *argv[], int *port);
+
 void connecterServeur(void);
 void connecterServeurPartie(adresse_t serverPartie);
 
@@ -22,6 +24,8 @@ void terminerProcess(void);
 
 #ifdef CLIENT
 extern int sock; // Numero Socket client vers serveur
+extern int port; // Port d'écoute
+
 void partieMaitre(int sock,char *myPseudo);
 void partieAdverse(int sock,char *myPseudo);
 int serverPartie();//generre le server de partie de la meme manierre que le server d'enregistrement 
