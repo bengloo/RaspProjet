@@ -386,9 +386,6 @@ void partieSolo(int sock,char *myPseudo){
 	//srand(time);
 	int * obstaclesInitiaux=init_obstacles(NBMAXOBSTACLES);
 	time_t now = time( NULL);
-
-	//------CLIENT----ADVERSE-------
-	//uncastdata
 	//on lence la partie 
 	system("./scriptZoom.sh -m");
 	//draw_ascii_score(empty_picture('?'),mon_score,son_score);
