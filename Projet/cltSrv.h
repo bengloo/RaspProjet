@@ -9,7 +9,7 @@
 #include "graphisme.h"
 #include "basic_func.h"
 
-void readParam(int argc, char const *argv[], int *port);
+void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer);
 
 void connecterServeur(void);
 void connecterServeurPartie(adresse_t serverPartie);
@@ -21,7 +21,8 @@ void terminerProcess(void);
 
 #ifdef CLIENT
 extern int sock; // Numero Socket client vers serveur
-extern int port; // Port d'écoute
+extern int portClientMaitre; // Port d'écoute
+extern char ipServer[MAX_LEN]; // IP du Server
 
 void partieMaitre(int sock, char *myPseudo);
 void partieAdverse(int sock, char *myPseudo);

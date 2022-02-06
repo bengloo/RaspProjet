@@ -187,7 +187,7 @@ int createPartyReq(int sock, char *pseudo)
     char hostbuffer[MAX_LEN];
     char IPbuffer[MAX_LEN];
     getMyIp(IPbuffer);
-    DEBUG_S2("Creation partie avec IP <%s> et port <%d>\n", IPbuffer, port);
+    DEBUG_S2("Creation partie avec IP <%s> et port <%d>\n", IPbuffer, portClientMaitre);
 
     // On prepare la requete pour le serveur
     req_t req;
@@ -195,7 +195,7 @@ int createPartyReq(int sock, char *pseudo)
     adresse_t monAdr;
     strcpy(monAdr.ip, IPbuffer);
     strcpy(monAdr.pseudo, pseudo);
-    monAdr.port = port;
+    monAdr.port = portClientMaitre;
     adresseTOstr(&monAdr, req.msgReq);
     req.lgreq = strlen(req.msgReq);
 
@@ -307,25 +307,12 @@ int joinPartieReq(int masock, char *pseudo, int *obst, time_t *top)
         printf("Reponse du client maitre incoherente\n");
         return 0;
     }
-    getchar();
     return 1;
 };
 
-// Fonction joinPartieRep utilisée par le client maitre
-void joinPartieRep(int masock, int *obstacle, time_t temps)
-{
-    rep_t rep;
-    rep.idRep = STARTPARTIE;
-    initPartiTOString(rep.msgRep, temps, obstacle);
-    rep.lgrep = strlen(rep.msgRep);
 
-    // Envoie de la requete au serveur
-    char repTxt[sizeof(rep_t)];
-    repTOstr(&rep, repTxt);
-    printf("DATA init envoyé:%s\n", repTxt);
-    ecrireMsgTCP(masock, repTxt);
-};
 
+// Utilise par client maitre
 void initPartie(int masock, adresse_t *adversaire)
 {
 
@@ -344,6 +331,22 @@ void initPartie(int masock, adresse_t *adversaire)
     printf("Pret pour lancer la partie");
     partie(obstaclesInitiaux, &mon_score, &son_score, pic, now + 9);
 };
+
+// Fonction joinPartieRep utilisée par le client maitre
+void joinPartieRep(int masock, int *obstacle, time_t temps)
+{
+    rep_t rep;
+    rep.idRep = STARTPARTIE;
+    initPartiTOString(rep.msgRep, temps, obstacle);
+    rep.lgrep = strlen(rep.msgRep);
+
+    // Envoie de la requete au serveur
+    char repTxt[sizeof(rep_t)];
+    repTOstr(&rep, repTxt);
+    printf("DATA init envoyé:%s\n", repTxt);
+    ecrireMsgTCP(masock, repTxt);
+};
+
 
 void startReq(int sock){
 

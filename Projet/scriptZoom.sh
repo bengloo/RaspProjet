@@ -7,6 +7,6 @@ if [ $1 = "-m" ]; then
 	resize -s 200 800 > /dev/null
 else 
 	# cas p
-	resize -s 40 120  > /dev/null
 	xdotool key shift+F10 r $projet_mid_menu
+	resize -s 30 110  > /dev/null
 fi
