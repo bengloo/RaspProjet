@@ -64,7 +64,7 @@ void partieTOstr(char *dest,statPartie_t partie)
 }
 void strTOpartie(statPartie_t *partie, char *dataTxt)
 {
-    sscanf(dataTxt, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
+    sscanf(dataTxt, "%d:%d:%[^:]:%d:%[^:]:%[^:]:%d:%[^:]:%d:%d:",
                 &partie->id,
                 (int*)&partie->statut,
                 partie->addrMaitre.ip,

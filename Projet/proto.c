@@ -174,18 +174,31 @@ void updateStatutPartie(char *txt){
     printf("update statpartie :%s\n",txt);
     strTOpartie(&statePartie,txt);
     for(int i=0;i<nbPartie;i++){
-        if(listePartie[i].id=statePartie.id){
-            printf("trouvé");
-            /*
-            Listepartie[statePartie.id].statut=partie.statut;
-            Listepartie[statePartie.id].addrAdverse.port=partie.addrAdverse.port;
-            strcpy(partie.addrAdverse.ip,Listepartie[statepartie.id].addrAdverse.ip);
-            strcpy(partie.addrAdverse.pseudo,Listepartie[statepartie.id].addrAdverse.pseudo);
-            Listepartie[statepartie.id].addrAdverse.port=partie.addrAdverse.port;
-            strcpy(partie.addrAdverse.ip,Listepartie[statepartie.id].addrAdverse.ip);
-            strcpy(partie.addrAdverse.pseudo,Listepartie[statepartie.id].addrAdverse.pseudo);
-            Listepartie[statepartie.id].scoreMaitre=partie.scoreMaitre;
-            Listepartie[statepartie.id].scoreAdverse=partie.scoreAdverse;*/
+        if(listePartie[i].id==statePartie.id){
+            printf("id:%d\nstatut:%d\nport:%d\nip:%s\npseudo:%s\nport:%d\nip:%s\npseudo:%s\nscore1:%d\nscore2:%d\n",
+            statePartie.id,
+            statePartie.statut,
+            statePartie.addrMaitre.port,
+            statePartie.addrMaitre.ip,
+            statePartie.addrMaitre.pseudo,
+            statePartie.addrAdverse.port,
+            statePartie.addrAdverse.ip,
+            statePartie.addrAdverse.pseudo,
+            statePartie.scoreMaitre,
+            statePartie.scoreAdverse
+            );
+            if(statePartie.statut!=-1)listePartie[statePartie.id].statut=statePartie.statut;
+
+            if(statePartie.addrMaitre.port!=-1)listePartie[statePartie.id].addrMaitre.port=statePartie.addrMaitre.port;
+            if(strcmp(statePartie.addrMaitre.ip,"SAME"))strcpy(listePartie[statePartie.id].addrMaitre.ip,statePartie.addrMaitre.ip);
+            if(strcmp(statePartie.addrMaitre.pseudo,"SAME"))strcpy(listePartie[statePartie.id].addrMaitre.pseudo,statePartie.addrMaitre.pseudo);
+
+            if(statePartie.addrAdverse.port!=-1)listePartie[statePartie.id].addrAdverse.port=statePartie.addrAdverse.port;
+            if(strcmp(statePartie.addrAdverse.ip,"SAME"))strcpy(listePartie[statePartie.id].addrAdverse.ip,statePartie.addrAdverse.ip);
+            if(strcmp(statePartie.addrAdverse.pseudo,"SAME"))strcpy(listePartie[statePartie.id].addrAdverse.pseudo,statePartie.addrAdverse.pseudo);
+            
+            if(statePartie.scoreMaitre!=-1)listePartie[statePartie.id].scoreMaitre=statePartie.scoreMaitre;
+            if(statePartie.scoreAdverse!=-1)listePartie[statePartie.id].scoreAdverse=statePartie.scoreAdverse;
         }
     }
 
