@@ -187,18 +187,20 @@ void updateStatutPartie(char *txt){
             statePartie.scoreMaitre,
             statePartie.scoreAdverse
             );
-            if(statePartie.statut!=-1)listePartie[statePartie.id].statut=statePartie.statut;
+            CHECK_T(sem_wait(&mutex) == 0, "erreur attente mutex");
+                if(statePartie.statut!=-1)listePartie[statePartie.id].statut=statePartie.statut;
 
-            if(statePartie.addrMaitre.port!=-1)listePartie[statePartie.id].addrMaitre.port=statePartie.addrMaitre.port;
-            if(strcmp(statePartie.addrMaitre.ip,"SAME"))strcpy(listePartie[statePartie.id].addrMaitre.ip,statePartie.addrMaitre.ip);
-            if(strcmp(statePartie.addrMaitre.pseudo,"SAME"))strcpy(listePartie[statePartie.id].addrMaitre.pseudo,statePartie.addrMaitre.pseudo);
+                if(statePartie.addrMaitre.port!=-1)listePartie[statePartie.id].addrMaitre.port=statePartie.addrMaitre.port;
+                if(strcmp(statePartie.addrMaitre.ip,"SAME"))strcpy(listePartie[statePartie.id].addrMaitre.ip,statePartie.addrMaitre.ip);
+                if(strcmp(statePartie.addrMaitre.pseudo,"SAME"))strcpy(listePartie[statePartie.id].addrMaitre.pseudo,statePartie.addrMaitre.pseudo);
 
-            if(statePartie.addrAdverse.port!=-1)listePartie[statePartie.id].addrAdverse.port=statePartie.addrAdverse.port;
-            if(strcmp(statePartie.addrAdverse.ip,"SAME"))strcpy(listePartie[statePartie.id].addrAdverse.ip,statePartie.addrAdverse.ip);
-            if(strcmp(statePartie.addrAdverse.pseudo,"SAME"))strcpy(listePartie[statePartie.id].addrAdverse.pseudo,statePartie.addrAdverse.pseudo);
-            
-            if(statePartie.scoreMaitre!=-1)listePartie[statePartie.id].scoreMaitre=statePartie.scoreMaitre;
-            if(statePartie.scoreAdverse!=-1)listePartie[statePartie.id].scoreAdverse=statePartie.scoreAdverse;
+                if(statePartie.addrAdverse.port!=-1)listePartie[statePartie.id].addrAdverse.port=statePartie.addrAdverse.port;
+                if(strcmp(statePartie.addrAdverse.ip,"SAME"))strcpy(listePartie[statePartie.id].addrAdverse.ip,statePartie.addrAdverse.ip);
+                if(strcmp(statePartie.addrAdverse.pseudo,"SAME"))strcpy(listePartie[statePartie.id].addrAdverse.pseudo,statePartie.addrAdverse.pseudo);
+                
+                if(statePartie.scoreMaitre!=-1)listePartie[statePartie.id].scoreMaitre=statePartie.scoreMaitre;
+                if(statePartie.scoreAdverse!=-1)listePartie[statePartie.id].scoreAdverse=statePartie.scoreAdverse;
+             CHECK_T(sem_post(&mutex) == 0, "erreur poste mutex");
         }
     }
 

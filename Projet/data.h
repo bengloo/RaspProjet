@@ -31,7 +31,7 @@ typedef struct
 
 typedef enum
 {
-    RUNNING = 4,
+    RUNNING = 0,
     STOPPED = 1,
     FAILED = 2,
     WAITTINGADVERSE = 3
