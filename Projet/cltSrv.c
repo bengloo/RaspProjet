@@ -174,6 +174,9 @@ int serverPartie()
             statPartie_t partie;
             partie.id=0;
             partie.statut=RUNNING;
+            strcpy(partie.addrMaitre.ip,"SAME");
+            partie.addrMaitre.port=-1;
+            strcpy(partie.addrMaitre.pseudo,"SAME");
             strcpy(partie.addrAdverse.ip,adversaire.ip);
             partie.addrAdverse.port=adversaire.port;
             strcpy(partie.addrAdverse.pseudo,adversaire.pseudo);
@@ -181,6 +184,8 @@ int serverPartie()
             partie.scoreAdverse=0;
 
             updateStatutPartieReq(sock,partie);
+            getchar();
+            getchar();
             initPartie(socketClientPartie[nbClientPartie], &adversaire);
         }
     }

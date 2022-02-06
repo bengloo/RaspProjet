@@ -31,7 +31,7 @@ typedef struct
 
 typedef enum
 {
-    RUNNING = 0,
+    RUNNING = 4,
     STOPPED = 1,
     FAILED = 2,
     WAITTINGADVERSE = 3
@@ -77,6 +77,6 @@ void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt);
 void scoreTOstr(char*ch,int monscore,int sonscore);
 void strTOscore(char*dest,int* monscore,int* sonscore);
 
-void partieTOstr(statPartie_t *Listepartie, char *dest);
-void StrTOlistePartie(statPartie_t *listePartie, char *dest);
+void partieTOstr(char *dest,statPartie_t partie);
+void strTOpartie(statPartie_t *partie, char *datatxt);
 #endif

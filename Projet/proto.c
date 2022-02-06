@@ -153,7 +153,8 @@ void lireReqServ(int *sock)
                 break;
             case STATUTPARTIE:
                 DEBUG_S("Case STATUTPARTIE");
-                StrTOlistePartie(listePartie,req.msgReq);
+                updateStatutPartie(req.msgReq);
+                //StrTOlistePartie(listePartie,req.msgReq);
                 break;
             default:
                 DEBUG_S("Case Default");
@@ -168,6 +169,27 @@ void lireReqServ(int *sock)
     fermerSocket(*sock);
 }
 
+void updateStatutPartie(char *txt){
+    statPartie_t statePartie;
+    printf("update statpartie :%s\n",txt);
+    strTOpartie(&statePartie,txt);
+    for(int i=0;i<nbPartie;i++){
+        if(listePartie[i].id=statePartie.id){
+            printf("trouvé");
+            /*
+            Listepartie[statePartie.id].statut=partie.statut;
+            Listepartie[statePartie.id].addrAdverse.port=partie.addrAdverse.port;
+            strcpy(partie.addrAdverse.ip,Listepartie[statepartie.id].addrAdverse.ip);
+            strcpy(partie.addrAdverse.pseudo,Listepartie[statepartie.id].addrAdverse.pseudo);
+            Listepartie[statepartie.id].addrAdverse.port=partie.addrAdverse.port;
+            strcpy(partie.addrAdverse.ip,Listepartie[statepartie.id].addrAdverse.ip);
+            strcpy(partie.addrAdverse.pseudo,Listepartie[statepartie.id].addrAdverse.pseudo);
+            Listepartie[statepartie.id].scoreMaitre=partie.scoreMaitre;
+            Listepartie[statepartie.id].scoreAdverse=partie.scoreAdverse;*/
+        }
+    }
+
+}
 // initialisation de la structure statPatie_t
 void initstatPartie(void)
 {
@@ -528,7 +550,7 @@ void updateStatutPartieReq(int masock,statPartie_t statutpartie){
     DEBUG_S("Debut getParties\n");
     req_t req;
     req.idReq = STATUTPARTIE;
-    partieTOstr(&statutpartie,req.msgReq);
+    partieTOstr(req.msgReq,statutpartie);
     req.lgreq = strlen(req.msgReq);
     DEBUG_S1("getParties msgReq=<%s>\n", req.msgReq);
 

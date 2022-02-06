@@ -28,6 +28,7 @@ void createPartieRep(int sock, int status);
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 int newpartieServ(int sock, req_t *req);
 void getParties(int sock);
+void updateStatutPartie(char *txt);
 //1 fct de selection traitement selon requete
 //void lireReqServ(req_t req,struct sockaddr_in *clt,int sock);
 void lireReqServ(int *sock);

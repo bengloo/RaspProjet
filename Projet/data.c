@@ -47,7 +47,7 @@ void listePartieTOStr(statPartie_t *listePartie, char *dest)
     }
     DEBUG_S1("listePartieTOStr : str <%s>\n", dest);
 }
-void PartieTOStr(statPartie_t partie, char *dest)
+void partieTOstr(char *dest,statPartie_t partie)
 {
     sprintf(dest, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
                 partie.id,
@@ -62,26 +62,20 @@ void PartieTOStr(statPartie_t partie, char *dest)
                 partie.scoreAdverse);
 
 }
-void partieTOstr(statPartie_t *Listepartie, char *dest)
+void strTOpartie(statPartie_t *partie, char *dataTxt)
 {
-    statPartie_t partie;
-    sscanf(dest, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
-                &partie.id,//dejas renseigné 
-                (int*)&partie.statut,//dejas renseigné 
-                partie.addrMaitre.ip,//dejas renseigné 
-                &partie.addrMaitre.port,//dejas renseigné 
-                partie.addrMaitre.pseudo,//dejas renseigné 
-                partie.addrAdverse.ip,
-                &partie.addrAdverse.port,
-                partie.addrAdverse.pseudo,
-                &partie.scoreMaitre,
-                &partie.scoreAdverse);
-                Listepartie[partie.id].statut=partie.statut;
-                Listepartie[partie.id].addrAdverse.port=partie.addrAdverse.port;
-                strcpy(partie.addrAdverse.ip,Listepartie[partie.id].addrAdverse.ip);
-                strcpy(partie.addrAdverse.pseudo,Listepartie[partie.id].addrAdverse.pseudo);
-                Listepartie[partie.id].scoreMaitre=partie.scoreMaitre;
-                Listepartie[partie.id].scoreAdverse=partie.scoreAdverse;
+    sscanf(dataTxt, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
+                &partie->id,
+                (int*)&partie->statut,
+                partie->addrMaitre.ip,
+                &partie->addrMaitre.port,
+                partie->addrMaitre.pseudo,
+                partie->addrAdverse.ip,
+                &partie->addrAdverse.port,
+                partie->addrAdverse.pseudo,
+                &partie->scoreMaitre,
+                &partie->scoreAdverse);
+                
 }
 
 void StrTOlistePartie(statPartie_t *listePartie, char *dest)
