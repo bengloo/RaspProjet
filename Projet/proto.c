@@ -231,6 +231,7 @@ int createPartyReq(int sock, char *pseudo)
 
 int getPartiesReq(int sock)
 {
+	DEBUG_S("getPartiesReq debut");
     // Verification on est connecte
     if (sock == 0)
     {
@@ -295,18 +296,48 @@ int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *t
     // Le CLient Maitre repond avec les DATA de la partie
     char repTxt[sizeof(rep_t)];
     lireMsgTCP(masock, repTxt, MAX_LEN);
-    printf("DATA init partie recus:%s\n", repTxt);
+    printf("DATA init partie recues:%s\n", repTxt);
     rep_t rep;
     strTOrep(&rep, repTxt);
-    if (rep.idRep = 50)
+    if (rep.idRep = STARTPARTIE)
     {
         StringinitTOParti(top, partie, rep.msgRep);
+/* 		
+		char tmp[MAX_LEN];
+		initPartiTOString(tmp, *top, partie);
+		
+		DEBUG_S1("RECU : <%s>\n", rep.msgRep);
+		DEBUG_S1("GENE : <%s>\n", tmp);
+        return 0;
+		
+ */		
+		
     }
     else
     {
         printf("Reponse du client maitre incoherente\n");
         return 0;
     }
+	
+	// On envoie le Ok à l'adversaire
+    rep.idRep = STATUT;
+    statutReq_t statut;
+    statut.statut = OK;
+    statutReqTOstr(&statut, rep.msgRep);
+    rep.lgrep = strlen(rep.msgRep);
+    repTOstr(&rep, repTxt);
+    ecrireMsgTCP(masock, repTxt);
+	
+	// Pret a jouer
+	DEBUG_S("Pret pour lancer la partie");
+		
+	int mon_score = 0;
+	int son_score = 0;
+	
+	char **pic = empty_picture(' ');
+    jouerPartie(partie, &mon_score, &son_score, pic, *top);
+					//partie(obstRecus, &mon_score, &son_score, pic, top);
+
     return 1;
 };
 
@@ -317,7 +348,7 @@ void initPartie(int masock, adresse_t *adversaire)
 {
 
     //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
-    printf("debut init partie\n");
+    DEBUG_S("debut initPartie\n");
     int mon_score = 0;
     int son_score = 0;
     char **pic = empty_picture(' ');
@@ -327,28 +358,108 @@ void initPartie(int masock, adresse_t *adversaire)
     partieGraphique_t partie;
 	initPartieGraphisme(&partie);
     time_t now = time(NULL);
+	DEBUG_S("Partie initialisee avec succes\n");
 
     //caste data
-    joinPartieRep(masock, &partie, now + 9); //TODO complété le contenus
+    joinPartieRep(masock, &partie, now + DELAY_START);
     printf("Pret pour lancer la partie");
-    jouerPartie(&partie, &mon_score, &son_score, pic, now + 0); // Remettre  9
+    jouerPartie(&partie, &mon_score, &son_score, pic, now + DELAY_START);
 };
 
 // Fonction joinPartieRep utilisée par le client maitre
 void joinPartieRep(int masock, partieGraphique_t *partie, time_t temps)
 {
+    DEBUG_S("debut joinPartieRep\n");
     rep_t rep;
     rep.idRep = STARTPARTIE;
+    DEBUG_S("initPartiTOString: on transforme partie en texte\n");
     initPartiTOString(rep.msgRep, temps, partie);
+    DEBUG_S1("initPartiTOString: resultat <%s>\n", rep.msgRep);
     rep.lgrep = strlen(rep.msgRep);
 
-    // Envoie de la requete au serveur
+    // Envoie de la partie au client adverse
     char repTxt[sizeof(rep_t)];
     repTOstr(&rep, repTxt);
-    printf("DATA init envoyé:%s\n", repTxt);
+    printf("Envoi de la partie à l'adversaire:%s\n", repTxt);
     ecrireMsgTCP(masock, repTxt);
+	
+	// Verification que le client adverse a bien reçu
+	statutReq_t statut;
+	char msgLu[MAX_LEN];
+    DEBUG_S("Client : Attente du OK d l'adversaire\n");
+    int lenLu = lireMsgTCP(masock, msgLu, sizeof(buffer_t));
+    DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
+    strTOrep(&rep, msgLu);
+    if (rep.idRep != STATUT)
+    {
+        printf("Mauvaise reponse reçu : impossible\n");
+        return;
+    }
+	strTOstatutReq(&statut, rep.msgRep);
+    DEBUG_S4("Client : socket <%i> msg recu <%s> avec idReq <%d> et statut <%d>\n", sock, msgLu, rep.idRep, statut.statut);
+    if (statut.statut == OK)
+        printf("Le client adverse a bien reçu la partie\n");
+    else
+        printf("Echec envoi partie à client adverse\n");
 };
 
+// permet de jouer seul
+void partieSolo(int sock, char *myPseudo)
+{
+    //init variable globale servant au req
+    int mon_score = 0;
+    int son_score = 0;
+    char **pic = empty_picture(' ');
+    //generation des obsacle et top depart
+    //srand(time);
+    //int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
+	partieGraphique_t partieGraphique;
+	initPartieGraphisme(&partieGraphique);
+    time_t now = time(NULL);
+    //on lence la partie
+    system("./scriptZoom.sh -m");
+    //draw_ascii_score(empty_picture('?'),mon_score,son_score);
+    jouerPartie(&partieGraphique, &mon_score, &son_score, pic, now + DELAY_START);
+    system("./scriptZoom.sh -p");
+    //printf("mon score:%d son score:%d\n", mon_score,son_score);
+};
+
+//1 fct de selection traitement selon requete
+//UNUSED
+/*
+void lireReqClient(int *masock)
+{
+    //DEBUG_S1("Serveur Partie: New thread pour socket <%i>\n", *masock);
+    DEBUG_S1("Serveur Partie: Debut lireReqClient pour socket <%i>\n", *masock);
+    
+    buffer_t msgLu;
+    req_t req;
+    int lenLu = 1;
+	
+    // On attend les inputs du Client adverse
+    while (lenLu > 0)
+    {
+		//afficherPartie();
+        lenLu = lireMsgTCP(*masock, msgLu, sizeof(buffer_t));
+        DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
+		if (lenLu>0)
+		{
+			strTOreq(&req, msgLu);
+			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *masock, msgLu, req.idReq);
+            
+            switch (req.idReq)
+            {
+            case JOIN:
+                printf("SERVER PARTI:on demande à joindre la partie\n");
+                initPartie(*masock);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+*/
 
 void startReq(int sock){
 
@@ -396,60 +507,4 @@ void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
 void stream(){};                                 // publier ma partie
 void afficherStream(int sock, char *myPseudo){}; // voir une partie
-void partieSolo(int sock, char *myPseudo)
-{
-    //init variable globale servant au req
-    int mon_score = 0;
-    int son_score = 0;
-    char **pic = empty_picture(' ');
-    //generation des obsacle et top depart
-    //srand(time);
-    //int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
-	partieGraphique_t partieGraphique;
-	initPartieGraphisme(&partieGraphique);
-    time_t now = time(NULL);
-    //on lence la partie
-    system("./scriptZoom.sh -m");
-    //draw_ascii_score(empty_picture('?'),mon_score,son_score);
-    jouerPartie(&partieGraphique, &mon_score, &son_score, pic, now + 3);
-    system("./scriptZoom.sh -p");
-    //printf("mon score:%d son score:%d\n", mon_score,son_score);
-};
-
-//1 fct de selection traitement selon requete
-//UNUSED
-/*
-void lireReqClient(int *masock)
-{
-    //DEBUG_S1("Serveur Partie: New thread pour socket <%i>\n", *masock);
-    DEBUG_S1("Serveur Partie: Debut lireReqClient pour socket <%i>\n", *masock);
-    
-    buffer_t msgLu;
-    req_t req;
-    int lenLu = 1;
-	
-    // On attend les inputs du Client adverse
-    while (lenLu > 0)
-    {
-		//afficherPartie();
-        lenLu = lireMsgTCP(*masock, msgLu, sizeof(buffer_t));
-        DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
-		if (lenLu>0)
-		{
-			strTOreq(&req, msgLu);
-			DEBUG_S3("Serveur : socket <%i> msg recu <%s> avec idReq <%d>\n", *masock, msgLu, req.idReq);
-            
-            switch (req.idReq)
-            {
-            case JOIN:
-                printf("SERVER PARTI:on demande à joindre la partie\n");
-                initPartie(*masock);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-}
-*/
 #endif

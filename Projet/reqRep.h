@@ -2,7 +2,6 @@
 #define __REQREP_H__
 #include "basic_func.h"
 #define FMT_REQ "%3hd:%hd:%[^n]"
-#define MAX_BUFF 1024
 #define OK 1
 #define NOP 0
 typedef char buffer_t[MAX_BUFF];

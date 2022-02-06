@@ -683,7 +683,9 @@ void initPartieGraphisme(partieGraphique_t *partie)
 		partie->obstacles[i] = rand() % 5;
 		if (partie->obstacles[i] != 0)
 		{
-			i += 3;
+			partie->obstacles[i+1] = 0;
+			partie->obstacles[i+2] = 0;
+			i += 2;
 		}
 	}
 	partie->obstacles[0] = 0;

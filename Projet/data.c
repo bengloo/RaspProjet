@@ -1,5 +1,8 @@
 #include "data.h"
 #include "cltSrv.h"
+#include "basic_func.h"
+
+
 const char *statutPartieTxt[] = {"RUN ", "STOP", "FAIL", "WAIT"};
 
 void adresseTOstr(adresse_t *adr, char *dest)
@@ -72,15 +75,22 @@ void StrTOlistePartie(statPartie_t *listePartie, char *dest)
                 cpt--;
             str++;
         }
-        DEBUG_S1("token <%s>", str);
         nbPartie++;
     }
 }
 
 void reqTOstr(req_t *req, buffer_t buff)
 {
-    sprintf(buff, "%3d:%d:%s", req->idReq, req->lgreq, req->msgReq);
-    DEBUG_S4("reqTOstr str <%s> Id <%d> len <%d> msg <%s>\n", buff, req->idReq, req->lgreq, req->msgReq);
+    sprintf(buff, "%3d:%d:", req->idReq, req->lgreq);
+	char *ch=buff;
+	while ((*ch != '\0') && (*ch != ':')) ch++;
+	ch++;
+	CHECK((*ch != '\0'), "Erreur format de message");
+	while ((*ch != '\0') && (*ch != ':')) ch++;
+	ch++;
+	CHECK((*ch != '\0'), "Erreur format de message");
+	strncpy(ch, req->msgReq, req->lgreq);
+	ch[req->lgreq]='\0';
 }
 void strTOreq(req_t *req, buffer_t buff)
 {
@@ -90,8 +100,16 @@ void strTOreq(req_t *req, buffer_t buff)
 
 void repTOstr(rep_t *rep, buffer_t buff)
 {
-    sprintf(buff, "%d:%hd:%s", rep->idRep, rep->lgrep, rep->msgRep);
-    DEBUG_S4("repTOstr str <%s> Id <%d> len <%d> msg <%s>\n", buff, rep->idRep, rep->lgrep, rep->msgRep);
+    sprintf(buff, "%d:%hd:", rep->idRep, rep->lgrep);
+	char *ch=buff;
+	while ((*ch != '\0') && (*ch != ':')) ch++;
+	ch++;
+	CHECK((*ch != '\0'), "Erreur format de message");
+	while ((*ch != '\0') && (*ch != ':')) ch++;
+	ch++;
+	CHECK((*ch != '\0'), "Erreur format de message");
+	strncpy(ch, rep->msgRep, rep->lgrep);
+	ch[rep->lgrep]='\0';
 }
 void strTOrep(rep_t *rep, buffer_t buff)
 {
@@ -99,6 +117,86 @@ void strTOrep(rep_t *rep, buffer_t buff)
     DEBUG_S4("strTOrep str <%s> Id <%d> len <%d> msg <%s>\n", buff, rep->idRep, rep->lgrep, rep->msgRep);
 }
 
+void timeTostring(char *timeDataRep, time_t temps)
+{
+    sprintf(timeDataRep, "%lu", temps);
+}
+
+void stringToTime(time_t *temps, char *timeDataRep)
+{
+    *temps = atol(timeDataRep);
+}
+void partieTOstring(char *dest, const partieGraphique_t *partie)
+{
+	int i=0;
+	char *ch=dest;
+	for (i = 0; i < NBMAXOBSTACLES; ++i)
+	{
+		sprintf(ch, "%d:", partie->obstacles[i]);
+		//DEBUG_S3("partieTOstring 1 i <%d> ch <%s> len <%d>\n", i, ch, (int)strlen(dest));
+		ch+=strlen(ch);
+	}
+	for (i = 0; i < NBMAXLIGNES; ++i)
+	{
+		sprintf(ch, "%d:%d:", partie->dist[i], partie->turn[i]);
+		//DEBUG_S3("partieTOstring 2 i <%d> ch <%s> len <%d>\n", i, ch, (int)strlen(dest));
+		ch+=strlen(ch);
+	}
+}
+
+void stringTOpartie(partieGraphique_t *partie, const char *partiech)
+{
+	DEBUG_S1("stringTOpartie debut partiech <%s>\n", partiech);
+	int i=0;
+	char *ch=(char *)partiech;
+	DEBUG_S1("stringTOpartie debut ch <%s>\n", ch);
+	for (i = 0; i < NBMAXOBSTACLES; ++i)
+	{
+		sscanf(ch, "%d:", &partie->obstacles[i]);
+		//DEBUG_S2("stringTOpartie 1 obs <%d> ch <%s>\n", partie->obstacles[i], ch);
+		while ((*ch != '\0') && (*ch != ':')) ch++;
+		ch++;
+		CHECK((*ch != '\0'), "Erreur format de message");
+	}
+
+	//DEBUG_S2("stringTOpartie 2 ch <%s> dest <%s>\n", ch, partiech);
+	for (i = 0; i < NBMAXLIGNES; ++i)
+	{
+		sscanf(ch, "%d:%d:", &partie->dist[i], &partie->turn[i]);
+		//DEBUG_S2("stringTOpartie 3 ch <%s> dest <%s>\n", ch, partiech);
+		while ((*ch != '\0') && (*ch != ':')) ch++;
+		ch++;
+		CHECK((*ch != '\0'), "Erreur format de message");
+		while ((*ch != '\0') && (*ch != ':')) ch++;
+		ch++;
+		CHECK((*ch != '\0'), "Erreur format de message");
+	}
+}
+
+void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie)
+{
+    char tmp[MAX_LEN];
+    partieTOstring(tmp, partie);
+    char topdepart[MAX_LEN];
+    timeTostring(topdepart, temps);
+    sprintf(dataTxt, "%s:%s:", topdepart, tmp);
+	DEBUG_S1("initPartiTOString <%s>", dataTxt);
+}
+
+void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt)
+{
+    char topdepart[200];
+    sscanf(dataTxt, "%[^:]:", topdepart);
+    stringToTime(temps, topdepart);
+	char *ch=dataTxt;
+	while ((*ch != '\0') && (*ch != ':')) ch++;
+	ch++;
+	CHECK((*ch != '\0'), "Erreur format de message");
+    stringTOpartie(partie, ch);
+}
+
+
+//UNUSED
 /*fonction caste des data imbriqué*/
 
 void strutToString(statPartie_t *tableau, char ch[NBMAXOBSTACLES])
@@ -265,48 +363,4 @@ void stringToStruct(statPartie_t *tableau2, char ch[NBMAXOBSTACLES])
 
     value = strtol(aux, &str, 10);
     tableau2->scoreAdverse = value;
-}
-
-void timeTostring(char *timeDataRep, time_t temps)
-{
-    sprintf(timeDataRep, "%lu", temps);
-}
-
-void stringToTime(time_t *temps, char *timeDataRep)
-{
-    *temps = atol(timeDataRep);
-}
-void obstTOstring(char *dest, const int *obstacles)
-{
-    for (int i = 0; i < NBMAXOBSTACLES; i++)
-    {
-        dest[i] = obstacles[i] + '0';
-    }
-    dest[NBMAXOBSTACLES] = '\0';
-}
-
-void stringTOobst(int *dest, const char *obstaclesch)
-{
-    for (int i = 0; i < (int)strlen(obstaclesch); i++)
-    {
-        dest[i] = obstaclesch[i] - '0';
-    }
-}
-
-void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie)
-{
-    char obstaclech[NBMAXOBSTACLES + 1];
-    obstTOstring(obstaclech, partie->obstacles);
-    char topdepart[200];
-    timeTostring(topdepart, temps);
-    sprintf(dataTxt, "%s;%s", obstaclech, topdepart);
-}
-
-void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt)
-{
-    char obstaclech[NBMAXOBSTACLES + 1];
-    char topdepart[200];
-    sscanf(dataTxt, "%s;%s", obstaclech, topdepart);
-    stringToTime(temps, topdepart);
-    stringTOobst(partie->obstacles, obstaclech);
 }

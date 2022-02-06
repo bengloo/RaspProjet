@@ -46,14 +46,14 @@
 /* ------------------------------------------------------------------------ */
 #define OK 1
 #define NOT_OK 0
-#define MAX_LEN 255
+#define MAX_LEN 5096
+#define MAX_BUFF 5096
 #define NBMAXCLIENT 100
 #define PORT_SVC 5000    //Unused
 #define PORT_SERVER 8123 //port du server d'enregistrement pour parlé auc client
 // #define PORT_CLIENTMAITRE 8124 //port de n'importe quel client pour parlé au server d'enregistrement
 #define PORT_CLIENTMAITRE_PARTIE 8125 //por du client maitre pour parlé au autre client
 // #define PORT_CLIENTADVERSE_PARTIE 8126 //INUTILE : le client adverse parle au client maitre sur la socket maitre //port du client adverse pour parlé au client maitre
-#define MAX_BUFF 1024
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
 #define ADDRSERVERENR "127.0.0.1"
 
@@ -63,6 +63,7 @@
 #define SIGHT 10 // how far you can see (roughly)
 #define GRAVITY 30
 #define JUMP_SPEED 8
+#define DELAY_START 3
 #define SPEED_INCREASE 0.1
 #define NBMAXLIGNES 100
 #define LENMAXLIGNES 15

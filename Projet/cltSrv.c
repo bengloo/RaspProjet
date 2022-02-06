@@ -38,13 +38,14 @@ int continuer = 1; // inutiliser ?
 #ifdef CLIENT
 void afficherMenu()
 {
-    printf("Menu:\n \
+    printf("Joueur <%s>\n\
+		Menu:\n \
 		1) Se connecter au serveur\n\
 		2) Lister les parties en cours\n\
 		3) Creer une partie\n\
 		4) Voir la partie d'un joueur\n\
 		10) Lancer partie en solo\n\
-		0) Quitter\n");
+		0) Quitter\n", myPseudo);
 }
 
 int main(int argc, char const *argv[])
@@ -150,23 +151,13 @@ int serverPartie()
     installDeroute(SIGINT, deroute);
     */
 
-
-    // On prepar le mutex autorise (permet de refoulé les adverssaire voulant joindre une partie inexsitante ou dejas commencé)
-    /*    CHECK_T(sem_init(&mutexpartie, 0, 1) == 0, "erreur initialisation mutex");
-    CHECK_T(sem_post(&mutexpartie) == 0, "erreur post mutex");
-
-    while (1) // TODO tant que partie en cour ou attente
-    {
-		*/
+	// Attente connexion client adverse
     cltLen = sizeof(clt);
     printf("Attente de connexion d'un client sur port <%d>\n", portClientMaitre);
     CHECK(socketClientPartie[nbClientPartie] = accept(socketEcoutePartie, (struct sockaddr *)&clt, &cltLen), "Can't accept"); // accept de recevoir mess
     DEBUG_S1("Nouvelle connexion <%i>\n", socketClientPartie[nbClientPartie]);
 
-    //CHECK_T(pthread_create(&tid[nbClientPartie], NULL, (pf_t)lireReqClient, (void *)(&socketClientPartie[nbClientPartie])) == 0, "Erreur pthread_create()");
-    //lireReqClient((void *)(&socketClientPartie[nbClientPartie]));
-
-    // On attend que le client adverse demanade le join
+    // Le client adverse demanade le join
     char msgLu[MAX_LEN];
     int lenLu = lireMsgTCP(socketClientPartie[nbClientPartie], msgLu, sizeof(buffer_t));
     DEBUG_S1("Serveur : message reçu len <%d>\n", lenLu);
@@ -208,11 +199,12 @@ void partieMaitre(int masock, char *myPseudo)
 };
 void partieAdverse(int masock, char *myPseudo)
 {
+	DEBUG_S("partieAdverse debut\n");
     if (getPartiesReq(masock))
     {
         int choix = -2;
 		afficherPartie();
-		printf("\n\nSelectionez une partie avec son indices\nToute autre choix=revenir au menu principal");
+		printf("\n\nSelectionez une partie avec son indices\nToute autre choix=revenir au menu principal\n\tchoix:");
 		scanf("%d", &choix);
 		if (choix >= 0 && choix < nbPartie)
 		{
@@ -224,11 +216,6 @@ void partieAdverse(int masock, char *myPseudo)
 				partieGraphique_t partie;
 				if (joinPartieReq(sockPartie, myPseudo, &partie, &top))
 				{
-					DEBUG_S("debut init partie\n");
-					int mon_score = 0;
-					int son_score = 0;
-					char **pic = empty_picture(' ');
-					//partie(obstRecus, &mon_score, &son_score, pic, top);
 				}
 				else
 				{
