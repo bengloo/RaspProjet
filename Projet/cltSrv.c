@@ -170,6 +170,17 @@ int serverPartie()
             adresse_t adversaire;
             strTOadresse(&adversaire, rep.msgRep);
             printf("SERVER PARTI:joueur <%s> demande à joindre la partie\n", adversaire.pseudo);
+            
+            statPartie_t partie;
+            partie.id=0;
+            partie.statut=RUNNING;
+            strcpy(partie.addrAdverse.ip,adversaire.ip);
+            partie.addrAdverse.port=adversaire.port;
+            strcpy(partie.addrAdverse.pseudo,adversaire.pseudo);
+            partie.scoreMaitre=0;
+            partie.scoreAdverse=0;
+
+            updateStatutPartieReq(sock,partie);
             initPartie(socketClientPartie[nbClientPartie], &adversaire);
         }
     }

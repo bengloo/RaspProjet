@@ -73,4 +73,10 @@ void timeTostring(char *timeDataRep, time_t temps);
 void stringToTime(time_t *temps, char *timeDataRep);
 void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie);
 void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt);
+
+void scoreTOstr(char*ch,int monscore,int sonscore);
+void strTOscore(char*dest,int* monscore,int* sonscore);
+
+void partieTOstr(statPartie_t *Listepartie, char *dest);
+void StrTOlistePartie(statPartie_t *listePartie, char *dest);
 #endif

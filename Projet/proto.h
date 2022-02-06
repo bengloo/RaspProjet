@@ -43,15 +43,14 @@ int createPartyReq(int sock, char *pseudo);
 int getPartiesReq(int sock);
 int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *top);
 void joinPartieRep(int sock, partieGraphique_t *partie, time_t topdepart);
-void startReq(int sock);
-void startRep();
-void UpdateStatutPlayerReq();
-void updateStatutPlayerRep();
+void updateStatutPlayerReq(int sock,int*monscore,int*sonscore);
+void updateStatutPlayerRep(int sock,int*monscore,int*sonscore);
+
+void updateStatutPartieReq(int sock,statPartie_t statutpartie);
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 void waitParties();
 void afficherParties();
 void initPartie(int sock, adresse_t *adversaire);
-void getStart();
 void updateStatutPlayerMaitre();
 void updateStatutPlayerInvite();
 void stream();

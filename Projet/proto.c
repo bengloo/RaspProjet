@@ -4,6 +4,8 @@
 #include "basic_func.h"
 #include "data.h"
 #include "graphisme.h"
+int mon_score = 0;
+int son_score = 0;
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR    & CLIENT                                                  */
@@ -149,7 +151,10 @@ void lireReqServ(int *sock)
                 DEBUG_S("Case GetPartie");
                 getParties(*sock);
                 break;
-
+            case STATUTPARTIE:
+                DEBUG_S("Case STATUTPARTIE");
+                StrTOlistePartie(listePartie,req.msgReq);
+                break;
             default:
                 DEBUG_S("Case Default");
                 break;
@@ -331,10 +336,9 @@ int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *t
 	// Pret a jouer
 	DEBUG_S("Pret pour lancer la partie");
 		
-	int mon_score = 0;
-	int son_score = 0;
-	
 	char **pic = empty_picture(' ');
+    pthread_t tidscore;
+    //updateStatutPlayerReq(masock,&mon_score,&son_score);
     jouerPartie(partie, &mon_score, &son_score, pic, *top);
 					//partie(obstRecus, &mon_score, &son_score, pic, top);
 
@@ -349,8 +353,6 @@ void initPartie(int masock, adresse_t *adversaire)
 
     //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
     DEBUG_S("debut initPartie\n");
-    int mon_score = 0;
-    int son_score = 0;
     char **pic = empty_picture(' ');
     //generation des obsacle et top depart
     //srand((unsigned int)time);
@@ -362,7 +364,7 @@ void initPartie(int masock, adresse_t *adversaire)
 
     //caste data
     joinPartieRep(masock, &partie, now + DELAY_START);
-    printf("Pret pour lancer la partie");
+    printf("Pret pour lancer la partie");    
     jouerPartie(&partie, &mon_score, &son_score, pic, now + DELAY_START);
 };
 
@@ -461,50 +463,84 @@ void lireReqClient(int *masock)
 }
 */
 
-void startReq(int sock){
-
-    //Le client adverse prévient le client maitre qu'il est prêt à demarrer
-
-    // On recupere notre adresse IP
-    /*  char hostbuffer[MAX_LEN];
-    char *IPbuffer;
-    struct hostent *host_entry;
-    int hostname;
-    CHECK_T((hostname = gethostname(hostbuffer, sizeof(hostbuffer))) != -1, "Erreur gethostname");
-    CHECK_T((host_entry = gethostbyname(hostbuffer)) != NULL, "Erreur gethostbyname");
-    IPbuffer = inet_ntoa(*((struct in_addr *)
-                               host_entry->h_addr_list[0]));
-
-
+void updateStatutPlayerReq(int sock,int*monscore,int*sonscore){
+    
     // On prepare la requete pour le serveur
     req_t req;
-    req.idReq = START;
-    adresse_t monAdr;
-    strcpy(monAdr.ip, IPbuffer);
-    strcpy(monAdr.pseudo, pseudo);
-    monAdr.port = PORT_CLIENTMAITRE_PARTIE;
-    adresseTOstr(&monAdr, req.msgReq);
+    req.idReq = UPDATESTATUTPLAYER;
+    scoreTOstr(req.msgReq,*monscore,*sonscore);
     req.lgreq = strlen(req.msgReq);
+    
 
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
 
-    ecrireMsgTCP(sock, reqTxt); */
+    ecrireMsgTCP(sock, reqTxt);
+    /*
+    // Attente de la reponse du serveur
+    buffer_t msgLu;
+    int lenLu = 1;
+    rep_t rep;
+    do{
+        lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
+    }while (rep.idRep != UPDATESTATUTPLAYER);
+    
+    
+    DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
+    strTOrep(&rep, msgLu);
+    StrTOscore(monscore,sonscore,rep.msgRep);*/
+};
+void updateStatutPlayerRep(int sock,int*monscore,int*sonscore){
+    /*
+    // Attente de la reponse du serveur
+    buffer_t msgLu;
+    int lenLu = 1;
+    req_t req;
+    do{
+        lenLu = lireMsgTCP(sock, msgLu, sizeof(buffer_t));
+    }while (req.idReq != UPDATESTATUTPLAYER);
+    
+    
+    DEBUG_S2("Client : message reçu len <%d> <%s>\n", lenLu, msgLu);
+    strTOreq(&req, msgLu);
+    StrTOscore(monscore,sonscore,req.msgReq);*/
+    // On prepare la requete pour le serveur
+    rep_t rep;
+    rep.idRep = UPDATESTATUTPLAYER;
+    scoreTOstr(rep.msgRep,*monscore,*sonscore);
+    rep.lgrep = strlen(rep.msgRep);
+    
 
-    // Va ensuite à la fonction partieMaitre
+    // Envoie de la requete au serveur
+    char repTxt[sizeof(rep_t)];
+    repTOstr(&rep, repTxt);
+
+    ecrireMsgTCP(sock, repTxt);
 
 };
-void startRep(){};
-void UpdateStatutPlayerReq(){};
-void updateStatutPlayerRep(){};
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 void waitParties(){};
 void afficherParties(){};
-
-void getStart(){};
 void updateStatutPlayerMaitre(){};
 void updateStatutPlayerInvite(){};
+void updateStatutPartieReq(int masock,statPartie_t statutpartie){
+    DEBUG_S("Debut getParties\n");
+    req_t req;
+    req.idReq = STATUTPARTIE;
+    partieTOstr(&statutpartie,req.msgReq);
+    req.lgreq = strlen(req.msgReq);
+    DEBUG_S1("getParties msgReq=<%s>\n", req.msgReq);
+
+    // Envoie de la requete au serveur
+    char reqTxt[sizeof(req_t)];
+    reqTOstr(&req, reqTxt);
+
+    ecrireMsgTCP(sock, reqTxt);
+
+}
 void stream(){};                                 // publier ma partie
 void afficherStream(int sock, char *myPseudo){}; // voir une partie
+
+
 #endif

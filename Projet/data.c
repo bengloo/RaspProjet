@@ -47,6 +47,42 @@ void listePartieTOStr(statPartie_t *listePartie, char *dest)
     }
     DEBUG_S1("listePartieTOStr : str <%s>\n", dest);
 }
+void PartieTOStr(statPartie_t partie, char *dest)
+{
+    sprintf(dest, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
+                partie.id,
+                partie.statut,
+                partie.addrMaitre.ip,
+                partie.addrMaitre.port,
+                partie.addrMaitre.pseudo,
+                partie.addrAdverse.ip,
+                partie.addrAdverse.port,
+                partie.addrAdverse.pseudo,
+                partie.scoreMaitre,
+                partie.scoreAdverse);
+
+}
+void partieTOstr(statPartie_t *Listepartie, char *dest)
+{
+    statPartie_t partie;
+    sscanf(dest, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
+                &partie.id,//dejas renseigné 
+                (int*)&partie.statut,//dejas renseigné 
+                partie.addrMaitre.ip,//dejas renseigné 
+                &partie.addrMaitre.port,//dejas renseigné 
+                partie.addrMaitre.pseudo,//dejas renseigné 
+                partie.addrAdverse.ip,
+                &partie.addrAdverse.port,
+                partie.addrAdverse.pseudo,
+                &partie.scoreMaitre,
+                &partie.scoreAdverse);
+                Listepartie[partie.id].statut=partie.statut;
+                Listepartie[partie.id].addrAdverse.port=partie.addrAdverse.port;
+                strcpy(partie.addrAdverse.ip,Listepartie[partie.id].addrAdverse.ip);
+                strcpy(partie.addrAdverse.pseudo,Listepartie[partie.id].addrAdverse.pseudo);
+                Listepartie[partie.id].scoreMaitre=partie.scoreMaitre;
+                Listepartie[partie.id].scoreAdverse=partie.scoreAdverse;
+}
 
 void StrTOlistePartie(statPartie_t *listePartie, char *dest)
 {
@@ -364,3 +400,9 @@ void stringToStruct(statPartie_t *tableau2, char ch[NBMAXOBSTACLES])
     value = strtol(aux, &str, 10);
     tableau2->scoreAdverse = value;
 }
+void scoreTOstr(char*dest,int monscore,int sonscore){
+    sprintf(dest, "%d;%d", monscore,sonscore);
+};
+void strTOscore(char*dest,int* monscore,int* sonscore){
+    sscanf(dest, "%d;%d", monscore,sonscore);
+};

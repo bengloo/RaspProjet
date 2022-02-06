@@ -24,7 +24,11 @@ typedef enum
     //Client lecteur vers Client Maitre
     STREAM = 40,
 
-    STARTPARTIE = 50
+    STARTPARTIE = 50,
+
+    UPDATESTATUTPLAYER=60,
+    
+    STATUTPARTIE=70
 
 } idRequeteServeur_t;
 
