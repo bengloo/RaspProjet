@@ -30,6 +30,14 @@ typedef struct Vector2
 	float y;
 } vect2;
 
+typedef struct
+{
+	int obstacles[NBMAXOBSTACLES];
+	int dist[NBMAXLIGNES];
+	int turn[NBMAXLIGNES];
+} partieGraphique_t;
+
+
 vect vect_scale(float s, vect v);
 vect vect_add(vect v1, vect v2);
 vect vect_sub(vect v1, vect v2);
@@ -55,7 +63,7 @@ char **empty_picture(char empty_char);
 
 float random_float();
 int min(int a, int b);
-void partie(int *init_obstacles, int *mon_score, int *son_score, char **pic, time_t top);
-int *init_obstacles(int size);
+void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top);
+void initPartieGraphisme(partieGraphique_t *partie);
 
 #endif

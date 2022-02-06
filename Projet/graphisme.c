@@ -349,7 +349,7 @@ int min(int a, int b)
 	return b;
 }
 
-void partie(int *init_obstacles, int *mon_score, int *son_score, char **pic, time_t top)
+void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top)
 {
 
 	//START:
@@ -361,24 +361,23 @@ void partie(int *init_obstacles, int *mon_score, int *son_score, char **pic, tim
 	vect dir = (vect){1, 0, 0};
 	float speed = 3;
 	float tstep = 0.03;
-	int turn_dist_orig = 5 + rand() % 10;
+
+	// Init premiere ligne droite
+	int turn_dist_orig = partie->dist[0];
 	float turn_dist = turn_dist_orig;
-	int next_turn_dist = 5 + rand() % 10;
-	// next_turn: -1 for right, 1 for left
-	int next_turn = (rand() % 2) * 2 - 1;
+	int next_turn_dist = partie->dist[1];
+	int next_turn = partie->turn[0];
+	int idxLigne=0;
+	int *obstacles = partie->obstacles;
+	int *next_obstacles = &(partie->obstacles[next_turn_dist - 1]);
+	
 	float cam_height = 1;
 	float y_move_speed = 3;
 	float duckspeed = 4;
 	float zpos = 0;
 	float ypos = 0;
 	float zspeed = 0;
-
-	int *obstacles = malloc(sizeof(int) * NBMAXOBSTACLES);
-	for (int i = 0; i < NBMAXOBSTACLES; ++i)
-	{
-		obstacles[i] = 0;
-	}
-	int *next_obstacles = init_obstacles;
+	
 
 	// main game loop
 	int i = 0;
@@ -478,14 +477,23 @@ void partie(int *init_obstacles, int *mon_score, int *son_score, char **pic, tim
 		{
 			if ((next_turn == -1 && key_is_pressed(XK_Right)) || (next_turn == 1 && key_is_pressed(XK_Left)))
 			{
+				idxLigne++;
+				if (idxLigne>=NBMAXLIGNES-1) return; // GAGNER le joueur est aller au bout
 				turn_dist = next_turn_dist;
 				turn_dist_orig = next_turn_dist;
-				next_turn = (rand() % 2) * 2 - 1;
+				next_turn = partie->turn[idxLigne];
 				obstacles = next_obstacles;
+//				obstacles[0] = 0;
+//				obstacles[1] = 0;
+				obstacles[next_turn_dist - 1] = 0;
+				obstacles[next_turn_dist] = 0;
 				next_obstacles = &(next_obstacles[next_turn_dist - 1]);
 				next_obstacles[0] = 0;
 				next_obstacles[1] = 0;
-				next_obstacles[next_turn_dist - 1] = 0;
+//				next_obstacles[next_turn_dist - 1] = 0;
+//				next_obstacles[next_turn_dist] = 0;
+//				next_obstacles[next_turn_dist+1] = 0;
+				next_turn_dist=partie->dist[idxLigne];
 			}
 		}
 		pic = empty_picture(' ');
@@ -667,26 +675,24 @@ void partie(int *init_obstacles, int *mon_score, int *son_score, char **pic, tim
 	// On remet  la resolution cf README
 	system("./scriptZoom.sh -p");
 };
-int *init_obstacles(int size)
+void initPartieGraphisme(partieGraphique_t *partie)
 {
-	/*
-	0 = no obstacle
-	1 = right thing
-	2 = left thing
-	3 = down thing
-	4 = up thing
-	*/
-	int *res = calloc(size, sizeof(int));
-	for (int i = 0; i < size; ++i)
+	int i=0;
+	for (i = 0; i < NBMAXOBSTACLES; ++i)
 	{
-		res[i] = rand() % 5;
-		if (res[i] != 0)
+		partie->obstacles[i] = rand() % 5;
+		if (partie->obstacles[i] != 0)
 		{
-			i += 2;
+			i += 3;
 		}
 	}
-	res[0] = 0;
-	res[1] = 0;
-	res[size - 1] = 0;
-	return res;
+	partie->obstacles[0] = 0;
+	partie->obstacles[1] = 0;
+	partie->obstacles[NBMAXOBSTACLES - 1] = 0;
+	
+	for (i = 0; i < NBMAXLIGNES; ++i)
+	{
+		partie->dist[i] = LENMINLIGNES + rand() % (LENMAXLIGNES-LENMINLIGNES);
+		partie->turn[i] = (rand() % 2) * 2 - 1;
+	}
 }

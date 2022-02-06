@@ -221,14 +221,14 @@ void partieAdverse(int masock, char *myPseudo)
 			{
 				DEBUG_S1("ADVERSE:on s'est conecter au client maitre de partie sockPartie<%d>\n", sockPartie);
 				time_t top;
-				int obstRecus[NBMAXOBSTACLES + 1];
-				if (joinPartieReq(sockPartie, myPseudo, obstRecus, &top))
+				partieGraphique_t partie;
+				if (joinPartieReq(sockPartie, myPseudo, &partie, &top))
 				{
 					DEBUG_S("debut init partie\n");
 					int mon_score = 0;
 					int son_score = 0;
 					char **pic = empty_picture(' ');
-					partie(obstRecus, &mon_score, &son_score, pic, top);
+					//partie(obstRecus, &mon_score, &son_score, pic, top);
 				}
 				else
 				{

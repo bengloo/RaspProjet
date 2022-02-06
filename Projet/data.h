@@ -5,6 +5,9 @@
 #include <arpa/inet.h>
 #include "reqRep.h"
 #include "basic_func.h"
+#include "graphisme.h"
+
+
 //C6-representation data:
 /*
     ->choisir un codage asci/EBCID/...
@@ -68,6 +71,6 @@ void strutToString(statPartie_t *tableau, char ch[300]);
 void stringToStruct(statPartie_t *tableau2, char ch[300]);
 void timeTostring(char *timeDataRep, time_t temps);
 void stringToTime(time_t *temps, char *timeDataRep);
-void initPartiTOString(char *dataTxt, time_t temps, int *obstacle);
-void StringinitTOParti(time_t *temps, int *obstacle, char *dataTxt);
+void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie);
+void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt);
 #endif

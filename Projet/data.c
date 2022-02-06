@@ -293,20 +293,20 @@ void stringTOobst(int *dest, const char *obstaclesch)
     }
 }
 
-void initPartiTOString(char *dataTxt, time_t temps, int *obstacle)
+void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie)
 {
     char obstaclech[NBMAXOBSTACLES + 1];
-    obstTOstring(obstaclech, obstacle);
+    obstTOstring(obstaclech, partie->obstacles);
     char topdepart[200];
     timeTostring(topdepart, temps);
     sprintf(dataTxt, "%s;%s", obstaclech, topdepart);
 }
 
-void StringinitTOParti(time_t *temps, int *obstacle, char *dataTxt)
+void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt)
 {
     char obstaclech[NBMAXOBSTACLES + 1];
     char topdepart[200];
     sscanf(dataTxt, "%s;%s", obstaclech, topdepart);
     stringToTime(temps, topdepart);
-    stringTOobst(obstacle, obstaclech);
+    stringTOobst(partie->obstacles, obstaclech);
 }

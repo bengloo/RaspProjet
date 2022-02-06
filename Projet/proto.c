@@ -269,7 +269,7 @@ int getPartiesReq(int sock)
 };
 
 // Fonction joinPartieReq utilisée par l'adversaire
-int joinPartieReq(int masock, char *pseudo, int *obst, time_t *top)
+int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *top)
 {
 
     // On recupere notre adresse IP
@@ -300,7 +300,7 @@ int joinPartieReq(int masock, char *pseudo, int *obst, time_t *top)
     strTOrep(&rep, repTxt);
     if (rep.idRep = 50)
     {
-        StringinitTOParti(top, obst, rep.msgRep);
+        StringinitTOParti(top, partie, rep.msgRep);
     }
     else
     {
@@ -323,21 +323,23 @@ void initPartie(int masock, adresse_t *adversaire)
     char **pic = empty_picture(' ');
     //generation des obsacle et top depart
     //srand((unsigned int)time);
-    int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
+	
+    partieGraphique_t partie;
+	initPartieGraphisme(&partie);
     time_t now = time(NULL);
 
     //caste data
-    joinPartieRep(masock, obstaclesInitiaux, now + 9); //TODO complété le contenus
+    joinPartieRep(masock, &partie, now + 9); //TODO complété le contenus
     printf("Pret pour lancer la partie");
-    partie(obstaclesInitiaux, &mon_score, &son_score, pic, now + 9);
+    jouerPartie(&partie, &mon_score, &son_score, pic, now + 0); // Remettre  9
 };
 
 // Fonction joinPartieRep utilisée par le client maitre
-void joinPartieRep(int masock, int *obstacle, time_t temps)
+void joinPartieRep(int masock, partieGraphique_t *partie, time_t temps)
 {
     rep_t rep;
     rep.idRep = STARTPARTIE;
-    initPartiTOString(rep.msgRep, temps, obstacle);
+    initPartiTOString(rep.msgRep, temps, partie);
     rep.lgrep = strlen(rep.msgRep);
 
     // Envoie de la requete au serveur
@@ -402,12 +404,14 @@ void partieSolo(int sock, char *myPseudo)
     char **pic = empty_picture(' ');
     //generation des obsacle et top depart
     //srand(time);
-    int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
+    //int *obstaclesInitiaux = init_obstacles(NBMAXOBSTACLES);
+	partieGraphique_t partieGraphique;
+	initPartieGraphisme(&partieGraphique);
     time_t now = time(NULL);
     //on lence la partie
     system("./scriptZoom.sh -m");
     //draw_ascii_score(empty_picture('?'),mon_score,son_score);
-    partie(obstaclesInitiaux, &mon_score, &son_score, pic, now + 3);
+    jouerPartie(&partieGraphique, &mon_score, &son_score, pic, now + 3);
     system("./scriptZoom.sh -p");
     //printf("mon score:%d son score:%d\n", mon_score,son_score);
 };

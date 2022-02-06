@@ -41,8 +41,8 @@ void lireReqServ(int *sock);
 //-fct generation des requétes
 int createPartyReq(int sock, char *pseudo);
 int getPartiesReq(int sock);
-int joinPartieReq(int masock, char *pseudo, int *obst, time_t *top);
-void joinPartieRep(int sock, int *obstacle, time_t topdepart);
+int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *top);
+void joinPartieRep(int sock, partieGraphique_t *partie, time_t topdepart);
 void startReq(int sock);
 void startRep();
 void UpdateStatutPlayerReq();
