@@ -48,34 +48,7 @@
 #define NOT_OK 0
 #define MAX_LEN 5096
 #define MAX_BUFF 5096
-#define NBMAXCLIENT 100
-#define PORT_SVC 5000    //Unused
-#define PORT_SERVER 8123 //port du server d'enregistrement pour parlé auc client
-#define PORT_CLIENTMAITRE_PARTIE 8125 //por du client maitre pour parlé au autre client
-#define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
-#define ADDRSERVER "127.0.0.1"
 
-/*  Parametre graphique */
-#define PATH_WIDTH 1
-#define Y_BORDER 0.7
-#define SIGHT 10 // how far you can see (roughly)
-#define GRAVITY 30
-#define JUMP_SPEED 8
-#define DELAY_START 3
-#define SPEED_INCREASE 0.1
-#define NBMAXLIGNES 100
-#define LENMAXLIGNES 15
-#define LENMINLIGNES 5
-#define NBMAXOBSTACLES NBMAXLIGNES*LENMAXLIGNES
-#define ANSI_RESET "\033[0m"
-#define ANSI_BLACK "\033[30m"
-#define ANSI_RED "\033[31m"
-#define ANSI_GREEN "\033[32m"
-#define ANSI_YELLOW "\033[33m"
-#define ANSI_BLUE "\033[34m"
-#define ANSI_PURPLE "\033[35m"
-#define ANSI_CYAN "\033[36m"
-#define ANSI_WHITE "\033[37m"
 
 /* ------------------------------------------------------------------------ */
 /*      M A C R O - F O N C T I O N S                                       */

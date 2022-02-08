@@ -15,10 +15,52 @@
  *
  */
 #include "data.h"
-#include "cltSrv.h"
 #include "basic_func.h"
 
 const char *statutPartieTxt[] = {"EN COURS", "TERMINEE", "EN ECHEC", "ATTENTE ", "FERMEE  "};
+
+
+void reqTOstr(req_t *req, buffer_t buff)
+{
+    sprintf(buff, FMT_REQSTR, req->idReq, req->lgreq);
+    char *ch = buff;
+    while ((*ch != '\0') && (*ch != ':'))
+        ch++;
+    ch++;
+    CHECK((*ch != '\0'), "Erreur format de message");
+    while ((*ch != '\0') && (*ch != ':'))
+        ch++;
+    ch++;
+    CHECK((*ch != '\0'), "Erreur format de message");
+    strncpy(ch, req->msgReq, req->lgreq);
+    ch[req->lgreq] = '\0';
+}
+void strTOreq(req_t *req, buffer_t buff)
+{
+    sscanf(buff, FMT_REQ, (short int *)&req->idReq, &req->lgreq, req->msgReq);
+}
+
+void repTOstr(rep_t *rep, buffer_t buff)
+{
+    sprintf(buff, FMT_REPSTR, rep->idRep, rep->lgrep);
+    char *ch = buff;
+    while ((*ch != '\0') && (*ch != ':'))
+        ch++;
+    ch++;
+    CHECK((*ch != '\0'), "Erreur format de message");
+    while ((*ch != '\0') && (*ch != ':'))
+        ch++;
+    ch++;
+    CHECK((*ch != '\0'), "Erreur format de message");
+    strncpy(ch, rep->msgRep, rep->lgrep);
+    ch[rep->lgrep] = '\0';
+}
+
+void strTOrep(rep_t *rep, buffer_t buff)
+{
+    sscanf(buff, FMT_REP, (int *)&rep->idRep, &rep->lgrep, rep->msgRep);
+}
+
 
 void adresseTOstr(adresse_t *adr, char *dest)
 {
@@ -123,48 +165,6 @@ int StrTOlistePartie(statPartie_t *listePartie, char *dest)
     return nb;
 }
 
-void reqTOstr(req_t *req, buffer_t buff)
-{
-    sprintf(buff, "%3d:%d:", req->idReq, req->lgreq);
-    char *ch = buff;
-    while ((*ch != '\0') && (*ch != ':'))
-        ch++;
-    ch++;
-    CHECK((*ch != '\0'), "Erreur format de message");
-    while ((*ch != '\0') && (*ch != ':'))
-        ch++;
-    ch++;
-    CHECK((*ch != '\0'), "Erreur format de message");
-    strncpy(ch, req->msgReq, req->lgreq);
-    ch[req->lgreq] = '\0';
-}
-void strTOreq(req_t *req, buffer_t buff)
-{
-    sscanf(buff, FMT_REQ, (short int *)&req->idReq, &req->lgreq, req->msgReq);
-    //DEBUG_S4("strTOreq str <%s> Id <%d> len <%d> msg <%s>\n", buff, req->idReq, req->lgreq, req->msgReq);
-}
-
-void repTOstr(rep_t *rep, buffer_t buff)
-{
-    sprintf(buff, "%d:%hd:", rep->idRep, rep->lgrep);
-    char *ch = buff;
-    while ((*ch != '\0') && (*ch != ':'))
-        ch++;
-    ch++;
-    CHECK((*ch != '\0'), "Erreur format de message");
-    while ((*ch != '\0') && (*ch != ':'))
-        ch++;
-    ch++;
-    CHECK((*ch != '\0'), "Erreur format de message");
-    strncpy(ch, rep->msgRep, rep->lgrep);
-    ch[rep->lgrep] = '\0';
-}
-void strTOrep(rep_t *rep, buffer_t buff)
-{
-    sscanf(buff, "%d:%hd:%s", (int *)&rep->idRep, &rep->lgrep, rep->msgRep);
-    //DEBUG_S4("strTOrep str <%s> Id <%d> len <%d> msg <%s>\n", buff, rep->idRep, rep->lgrep, rep->msgRep);
-}
-
 void timeTostring(char *timeDataRep, time_t temps)
 {
     sprintf(timeDataRep, "%lu", temps);
@@ -181,13 +181,11 @@ void partieTOstring(char *dest, const partieGraphique_t *partie)
     for (i = 0; i < NBMAXOBSTACLES; ++i)
     {
         sprintf(ch, "%d:", partie->obstacles[i]);
-        //DEBUG_S3("partieTOstring 1 i <%d> ch <%s> len <%d>\n", i, ch, (int)strlen(dest));
         ch += strlen(ch);
     }
     for (i = 0; i < NBMAXLIGNES; ++i)
     {
         sprintf(ch, "%d:%d:", partie->dist[i], partie->turn[i]);
-        //DEBUG_S3("partieTOstring 2 i <%d> ch <%s> len <%d>\n", i, ch, (int)strlen(dest));
         ch += strlen(ch);
     }
 }
@@ -231,7 +229,6 @@ void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie)
     char topdepart[MAX_LEN];
     timeTostring(topdepart, temps);
     sprintf(dataTxt, "%s:%s:", topdepart, tmp);
-    //DEBUG_S1("initPartiTOString <%s>", dataTxt);
 }
 
 void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt)

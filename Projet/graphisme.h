@@ -33,18 +33,27 @@
 #define X_SCORE 5
 #define PIX_SCORE 4
 
-typedef struct Vector
-{
-	float x;
-	float y;
-	float z;
-} vect;
-
-typedef struct Vector2
-{
-	float x;
-	float y;
-} vect2;
+/*  Parametre graphique */
+#define PATH_WIDTH 1
+#define Y_BORDER 0.7
+#define SIGHT 10 // how far you can see (roughly)
+#define GRAVITY 30
+#define JUMP_SPEED 8
+#define DELAY_START 3
+#define SPEED_INCREASE 0.1
+#define NBMAXLIGNES 100
+#define LENMAXLIGNES 15
+#define LENMINLIGNES 5
+#define NBMAXOBSTACLES NBMAXLIGNES*LENMAXLIGNES
+#define ANSI_RESET "\033[0m"
+#define ANSI_BLACK "\033[30m"
+#define ANSI_RED "\033[31m"
+#define ANSI_GREEN "\033[32m"
+#define ANSI_YELLOW "\033[33m"
+#define ANSI_BLUE "\033[34m"
+#define ANSI_PURPLE "\033[35m"
+#define ANSI_CYAN "\033[36m"
+#define ANSI_WHITE "\033[37m"
 
 typedef struct
 {
@@ -53,31 +62,8 @@ typedef struct
 	int turn[NBMAXLIGNES];
 } partieGraphique_t;
 
-vect vect_scale(float s, vect v);
-vect vect_add(vect v1, vect v2);
-vect vect_sub(vect v1, vect v2);
-
-float vect_dot(vect v1, vect v2);
-vect vect_cross(vect v1, vect v2);
-void vect_print(vect v);
-vect2 vect2_add(vect2 v1, vect2 v2);
-
-vect2 vect2_sub(vect2 v1, vect2 v2);
-vect2 vect2_scale(float a, vect2 v);
-float vect2_dot(vect2 v1, vect2 v2);
-void vect2_print(vect2 v);
-int key_is_pressed(KeySym ks);
-vect2 project_point(vect dir, vect point);
-void put_point(vect2 projected, char c, char **picture);
-
-void draw_point(vect dir, vect point, char c, char **picture);
-void draw_line(vect dir, vect v_from, vect v_to, char c, char **picture);
 void draw_ascii(char **picture);
-
 char **empty_picture(char empty_char);
-
-float random_float();
-int min(int a, int b);
 void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top, int sock);
 void initPartieGraphisme(partieGraphique_t *partie);
 

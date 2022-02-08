@@ -13,13 +13,14 @@ MAINSOURCE=cltSrv.o#fichier source de l'executable
 LIBFICCLIENT= session.o data.o proto.o graphisme.o#nom des library en .o
 LIBFICSERV= session.o data.o proto.o#nom des library en .o
 LIBSYSTEM= -lpthread 
-HEADERFIC=cltSrv.h#nom des header
+HEADERFIC= basic_func.h  data.h  graphisme.h  proto.h  reqRep.h  session.h#nom des header
+
+#création de l'executable
+all:clean client server
 
 debug: op += -DDEBUG
 debug : all
 
-#création de l'executable
-all:clean client server
 	
 
 

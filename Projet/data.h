@@ -23,40 +23,6 @@
 #include "basic_func.h"
 #include "graphisme.h"
 
-typedef struct
-{
-    char ip[MAX_LEN];
-    int port;
-    char pseudo[MAX_LEN];
-} adresse_t;
-
-typedef struct
-{
-    int statut;
-} statutReq_t;
-
-typedef enum
-{
-    RUNNING = 0,
-    STOPPED = 1,
-    FAILED = 2,
-    WAITTINGADVERSE = 3,
-    CLOSED = 4
-} statutPartie_t;
-
-extern const char *statutPartieTxt[];
-
-typedef struct
-{
-    int id;
-    statutPartie_t statut;
-    adresse_t addrMaitre;
-    adresse_t addrAdverse;
-    int scoreMaitre;
-    int scoreAdverse;
-
-} statPartie_t;
-
 void adresseTOstr(adresse_t *adr, char *dest);
 void strTOadresse(adresse_t *adr, char *dest);
 
