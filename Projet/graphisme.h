@@ -63,7 +63,7 @@ char **empty_picture(char empty_char);
 
 float random_float();
 int min(int a, int b);
-void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top);
+void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top, int sock);
 void initPartieGraphisme(partieGraphique_t *partie);
 
 #endif

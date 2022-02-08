@@ -23,7 +23,9 @@ void terminerProcess(void);
 extern int sock; // Numero Socket client vers serveur
 extern int portClientMaitre; // Port d'écoute
 extern char ipServer[MAX_LEN]; // IP du Server
-
+extern int mon_score;
+extern int son_score;
+extern unsigned idPartie; 
 void partieMaitre(int sock, char *myPseudo);
 void partieAdverse(int sock, char *myPseudo);
 int serverPartie(); //generre le server de partie de la meme manierre que le server d'enregistrement

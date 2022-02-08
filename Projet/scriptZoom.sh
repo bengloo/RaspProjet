@@ -1,7 +1,5 @@
 #!/bin/bash
 
-projet_mid_jeu=2 # A changer si menu different dans gnome profil cf README par shift+F10
-projet_mid_menu=3 # A changer si menu different dans gnome profil cf README par shift+F10
 if [ $1 = "-m" ]; then
 	#xdotool type --clearmodifiers 'io:format("\e[H\e[J").'
     #xdotool key ctrl+l

@@ -26,7 +26,7 @@ typedef enum
 
     STARTPARTIE = 50,
 
-    UPDATESTATUTPLAYER=60,
+    UPDATESCORE = 60,
     
     STATUTPARTIE=70
 

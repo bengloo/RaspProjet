@@ -7,6 +7,8 @@
 #include <unistd.h>*/
 
 #include "graphisme.h"
+#include "proto.h"
+
 const char tabrefnum[10][Y_SCORE][X_SCORE] = {
 	{{' ', ' ', ' ', ' ', ' '},
 	 {' ', ' ', '#', '#', ' '},
@@ -68,6 +70,13 @@ const char tabrefnum[10][Y_SCORE][X_SCORE] = {
 	 {' ', ' ', '#', '#', '#'},
 	 {' ', ' ', ' ', ' ', '#'},
 	 {' ', ' ', '#', '#', ' '}}};
+
+typedef struct
+{
+	int sockAdversaire;
+	int *advScore;
+	int jeuEnCours;
+} threadArg_t;
 
 vect vect_scale(float s, vect v)
 {
@@ -349,7 +358,22 @@ int min(int a, int b)
 	return b;
 }
 
-void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top)
+void majScoreAdverse(void *arg)
+{
+
+	threadArg_t *data=(threadArg_t *) arg;
+	struct timespec tim;
+	tim.tv_sec = 0;
+	tim.tv_nsec = 50000000L;
+	while(data->jeuEnCours)
+	{
+		*(data->advScore)=readScoreReq(data->sockAdversaire);
+		//DEBUG_S1("Thread apres read <%d>\n",a);
+		nanosleep(&tim , NULL);
+	}
+}
+
+void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top, int sock)
 {
 
 	//START:
@@ -414,6 +438,19 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 		diff = top - time(NULL);
 		usleep(1000000 * tstep);
 	}
+	
+	// On se met en ecoute pour le score
+	threadArg_t data;
+	data.sockAdversaire=sock;
+	data.advScore=son_score;
+	data.jeuEnCours=1;
+	pthread_t tid;
+	// Si on a un adversaire on lance la MAJ du score
+	if (sock!=0)	
+		CHECK_T(pthread_create(&tid, NULL, (pf_t)majScoreAdverse,
+                               (void *)&data) == 0,
+                "Erreur pthread_create()");
+	
 	//getchar();
 	/*score i*/
 	i = 0;
@@ -643,6 +680,7 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 		}
 		turn_dist -= tstep * speed;
 		draw_ascii_score(pic, *mon_score, *son_score);
+		updateScoreReq(sock, *mon_score);
 		// printf("%f %d \n", turn_dist, next_turn);
 		// printf("%d\n", key_is_pressed(XK_Right));
 		speed += SPEED_INCREASE * tstep;
@@ -653,6 +691,9 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 		*mon_score = i;
 		usleep(1000000 * tstep);
 	}
+	
+	// Fin update score
+	data.jeuEnCours=0;
 
 	// game finished
 	for (int i = 0; i < 2; ++i)

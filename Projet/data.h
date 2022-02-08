@@ -34,7 +34,8 @@ typedef enum
     RUNNING = 0,
     STOPPED = 1,
     FAILED = 2,
-    WAITTINGADVERSE = 3
+    WAITTINGADVERSE = 3,
+	CLOSED=4
 } statutPartie_t;
 
 extern const char *statutPartieTxt[];
@@ -56,8 +57,8 @@ void strTOadresse(adresse_t *adr, char *dest);
 void statutReqTOstr(statutReq_t *adr, char *dest);
 void strTOstatutReq(statutReq_t *adr, char *dest);
 
-void listePartieTOStr(statPartie_t *listePartie, char *dest);
-void StrTOlistePartie(statPartie_t *listePartie, char *dest);
+void listePartieTOStr(statPartie_t *listePartie, unsigned nbPartie, char *dest);
+int StrTOlistePartie(statPartie_t *listePartie, char *dest);
 
 void reqTOstr(req_t *req, buffer_t buff);
 void strTOreq(req_t *req, buffer_t buff);
@@ -67,16 +68,16 @@ void strTOrep(rep_t *rep, buffer_t buff);
 /*fonction caste des data imbriqué*/
 void obstTOstring(char *dest, const int *obstacles);
 void stringTOobst(int *dest, const char *obstaclesch);
-void strutToString(statPartie_t *tableau, char ch[300]);
-void stringToStruct(statPartie_t *tableau2, char ch[300]);
+//void strutToString(statPartie_t *tableau, char ch[300]);
+//void stringToStruct(statPartie_t *tableau2, char ch[300]);
 void timeTostring(char *timeDataRep, time_t temps);
 void stringToTime(time_t *temps, char *timeDataRep);
 void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie);
 void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt);
 
-void scoreTOstr(char*ch,int monscore,int sonscore);
-void strTOscore(char*dest,int* monscore,int* sonscore);
+void scoreTOstr(char*dest,int score);
+void strTOscore(char*dest,int* score);
 
-void partieTOstr(char *dest,statPartie_t partie);
+void partieTOstr(char *dest,statPartie_t *partie);
 void strTOpartie(statPartie_t *partie, char *datatxt);
 #endif

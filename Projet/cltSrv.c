@@ -2,7 +2,6 @@
 #include "cltSrv.h"
 
 statPartie_t listePartie[NBMAXCLIENT]; // Liste des parties en cours
-unsigned nbPartie = 0;                 // nb de partie en cours
 
 // mutex server enregistrement
 sem_t mutex;
@@ -24,6 +23,9 @@ int nbClientPartie = 0;
 int continuerPartie = 1; // inutiliser ?
 
 char myPseudo[MAX_LEN];
+int mon_score = 0;
+int son_score = 0;
+unsigned idPartie = 0;
 
 #endif
 
@@ -32,6 +34,7 @@ int socketEcoute = 0; // Numero Socket serveur
 int socketClient[NBMAXCLIENT];
 int nbClient = 0;
 int continuer = 1; // inutiliser ?
+unsigned nbPartie = 0;                 // nb de partie en cours nota
 #endif
 
 //#define CLIENT
@@ -57,7 +60,7 @@ int main(int argc, char const *argv[])
 
     // Lecture parametre
     portClientMaitre = PORT_CLIENTMAITRE_PARTIE;
-	strcpy(ipServer, ADDRSERVERENR);
+	strcpy(ipServer, ADDRSERVER);
     readParam(argc, argv, &portClientMaitre, ipServer);
 
     // On ouvre la socket sur le port  du Serveur de partie // a faire une fois pour eviter Already in use à chaque partie
@@ -167,37 +170,38 @@ int serverPartie()
         strTOrep(&rep, msgLu);
         if (rep.idRep == JOIN)
         {
+			statPartie_t partie;
             adresse_t adversaire;
             strTOadresse(&adversaire, rep.msgRep);
             printf("SERVER PARTI:joueur <%s> demande à joindre la partie\n", adversaire.pseudo);
-            
 
-            statPartie_t partie;
-
-            partie.id=0;//TODO 
+            partie.id=idPartie;
             partie.statut=RUNNING;
-            strcpy(partie.addrMaitre.ip,"SAME");
-            partie.addrMaitre.port=-1;
-            strcpy(partie.addrMaitre.pseudo,"SAME");
+			char IPbuffer[MAX_LEN];
+			getMyIp(IPbuffer);
+            strcpy(partie.addrMaitre.ip,IPbuffer);
+            partie.addrMaitre.port=portClientMaitre;
+            strcpy(partie.addrMaitre.pseudo,myPseudo);
             strcpy(partie.addrAdverse.ip,adversaire.ip);
             partie.addrAdverse.port=adversaire.port;
             strcpy(partie.addrAdverse.pseudo,adversaire.pseudo);
             partie.scoreMaitre=0;
             partie.scoreAdverse=0;
-
-            updateStatutPartieReq(sock,partie);
+            updateStatutPartieReq(sock,&partie);
+			
+			
             initPartie(socketClientPartie[nbClientPartie], &adversaire);
 
             partie.statut=STOPPED;
-            strcpy(partie.addrAdverse.ip,"SAME");
-            partie.addrAdverse.port=-1;
-            strcpy(partie.addrAdverse.pseudo,"SAME");
-            partie.scoreMaitre=10;//mon_score;TODO
-            partie.scoreAdverse=10;//son_score;
+            partie.scoreMaitre=mon_score;
+            partie.scoreAdverse=son_score;
+            updateStatutPartieReq(sock,&partie);
         }
     }
+	else
+		printf("Erreur de message\n");
     fermerSocket(socketClientPartie[nbClientPartie]);
-
+	sockPartie=0;
     //nbClientPartie++;
     //}
     return 0;
@@ -222,14 +226,15 @@ void partieMaitre(int masock, char *myPseudo)
 };
 void partieAdverse(int masock, char *myPseudo)
 {
+	unsigned nbPart=0;
 	DEBUG_S("partieAdverse debut\n");
-    if (getPartiesReq(masock))
+    if (nbPart=getPartiesReq(masock))
     {
         int choix = -2;
-		afficherPartie();
+		afficherPartie(nbPart);
 		printf("\n\nSelectionez une partie avec son indices\nToute autre choix=revenir au menu principal\n\tchoix:");
 		scanf("%d", &choix);
-		if (choix >= 0 && choix < nbPartie)
+		if (choix >= 0 && choix < nbPart)
 		{
 			connecterServeurPartie(listePartie[choix].addrMaitre);
 			if (sockPartie != 0)
@@ -237,20 +242,22 @@ void partieAdverse(int masock, char *myPseudo)
 				DEBUG_S1("ADVERSE:on s'est conecter au client maitre de partie sockPartie<%d>\n", sockPartie);
 				time_t top;
 				partieGraphique_t partie;
-				if (joinPartieReq(sockPartie, myPseudo, &partie, &top))
-				{
-				}
-				else
+				if (!joinPartieReq(sockPartie, myPseudo, &partie, &top))
 				{
 					printf("imposible de joindre cette partie\n");
 				}
+				fermerSocket(sockPartie);
+				sockPartie=0;
 			}
 			else
 			{
 				printf("Partie indisponible\n");
 			}
         }
-    };
+    }
+	else
+		printf("Pas de partie disponible\n");
+		
 
     // retour menu
 };

@@ -14,7 +14,7 @@
 /*      FONCTION SERVEUR    & CLIENT                                                  */
 /* ------------------------------------------------------------------------ */
 
-void afficherPartie(void);
+void afficherPartie(unsigned nbPart);
 
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR                                                     */
@@ -24,9 +24,9 @@ void afficherPartie(void);
 void initstatPartie(void);
 
 //-fct generation des requétes
-void createPartieRep(int sock, int status);
+void createPartieRep(int sock, statPartie_t *partie);
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
-int newpartieServ(int sock, req_t *req);
+int newpartieServ(int sock, req_t *req, int *idPart);
 void getParties(int sock);
 void updateStatutPartie(char *txt);
 //1 fct de selection traitement selon requete
@@ -46,8 +46,10 @@ int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *t
 void joinPartieRep(int sock, partieGraphique_t *partie, time_t topdepart);
 void updateStatutPlayerReq(int sock,int*monscore,int*sonscore);
 void updateStatutPlayerRep(int sock,int*monscore,int*sonscore);
+void updateScoreReq(int sock,int score);
+int readScoreReq(int sock);
 
-void updateStatutPartieReq(int sock,statPartie_t statutpartie);
+void updateStatutPartieReq(int sock,statPartie_t *statutpartie);
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 void waitParties();
 void afficherParties();
