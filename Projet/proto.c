@@ -544,14 +544,14 @@ int readScoreReq(int sock)
     if (lenLu <= 0)
     {
         printf("Erreur de message\n");
-        return 0;
+        return -1;
     }
     strTOrep(&rep, msgLu);
 
     if (rep.idRep != UPDATESCORE)
     {
         printf("Erreur de message\n");
-        return 0;
+        return -1;
     }
 
     // On prepare la requete pour le serveur

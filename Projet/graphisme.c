@@ -370,14 +370,16 @@ void majScoreAdverse(void *arg)
 {
 
 	threadArg_t *data = (threadArg_t *)arg;
-	struct timespec tim;
+	/*struct timespec tim;
 	tim.tv_sec = 0;
-	tim.tv_nsec = 50000000L;
-	while (data->jeuEnCours)
+	tim.tv_nsec = 50000000L;*/
+	int score=1;
+	while ((data->jeuEnCours) && (score >=0))
 	{
-		*(data->advScore) = readScoreReq(data->sockAdversaire);
-		//DEBUG_S1("Thread apres read <%d>\n",a);
-		nanosleep(&tim, NULL);
+		score = readScoreReq(data->sockAdversaire);
+		if (score >=0) *(data->advScore) = score;
+		//printf("Thread apres read <%d>\n",score);
+		//nanosleep(&tim, NULL);
 	}
 }
 
@@ -409,6 +411,10 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 	float zpos = 0;
 	float ypos = 0;
 	float zspeed = 0;
+	
+	// Reset score
+	*son_score=0;
+	*mon_score=0;
 
 	// main game loop
 	int i = 0;
@@ -692,6 +698,18 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 		usleep(1000000 * tstep);
 	}
 
+	// On verifie si l'autre joueur continue de jouer en verifiant si le score change, la thread s'occupant des MAJ
+	struct timespec tim;
+	tim.tv_sec = 0;
+	tim.tv_nsec = 100000000L;
+	int score=*son_score-1;
+	while (score < *son_score)
+	{
+		score = *son_score;
+		draw_ascii_score(pic, *mon_score, *son_score);
+		nanosleep(&tim, NULL);
+	}
+	
 	// Fin update score
 	data.jeuEnCours = 0;
 
