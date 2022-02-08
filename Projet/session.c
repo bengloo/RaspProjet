@@ -1,3 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       session.c
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #include <netdb.h>
 #include <ifaddrs.h>
 #include <unistd.h>

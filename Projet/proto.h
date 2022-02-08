@@ -1,3 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       proto.h
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #ifndef __PROTO_H__
 #define __PROTO_H__
 #include <stdio.h>
@@ -44,12 +60,12 @@ int createPartyReq(int sock, char *pseudo);
 int getPartiesReq(int sock);
 int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, time_t *top);
 void joinPartieRep(int sock, partieGraphique_t *partie, time_t topdepart);
-void updateStatutPlayerReq(int sock,int*monscore,int*sonscore);
-void updateStatutPlayerRep(int sock,int*monscore,int*sonscore);
-void updateScoreReq(int sock,int score);
+void updateStatutPlayerReq(int sock, int *monscore, int *sonscore);
+void updateStatutPlayerRep(int sock, int *monscore, int *sonscore);
+void updateScoreReq(int sock, int score);
 int readScoreReq(int sock);
 
-void updateStatutPartieReq(int sock,statPartie_t *statutpartie);
+void updateStatutPartieReq(int sock, statPartie_t *statutpartie);
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 void waitParties();
 void afficherParties();

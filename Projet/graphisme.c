@@ -1,11 +1,19 @@
-/*#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <X11/Xlib.h>
-#include "X11/keysym.h"
-#include <time.h>
-#include <unistd.h>*/
-
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       graphisme.c
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #include "graphisme.h"
 #include "proto.h"
 
@@ -361,15 +369,15 @@ int min(int a, int b)
 void majScoreAdverse(void *arg)
 {
 
-	threadArg_t *data=(threadArg_t *) arg;
+	threadArg_t *data = (threadArg_t *)arg;
 	struct timespec tim;
 	tim.tv_sec = 0;
 	tim.tv_nsec = 50000000L;
-	while(data->jeuEnCours)
+	while (data->jeuEnCours)
 	{
-		*(data->advScore)=readScoreReq(data->sockAdversaire);
+		*(data->advScore) = readScoreReq(data->sockAdversaire);
 		//DEBUG_S1("Thread apres read <%d>\n",a);
-		nanosleep(&tim , NULL);
+		nanosleep(&tim, NULL);
 	}
 }
 
@@ -391,24 +399,20 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 	float turn_dist = turn_dist_orig;
 	int next_turn_dist = partie->dist[1];
 	int next_turn = partie->turn[0];
-	int idxLigne=0;
+	int idxLigne = 0;
 	int *obstacles = partie->obstacles;
 	int *next_obstacles = &(partie->obstacles[next_turn_dist - 1]);
-	
+
 	float cam_height = 1;
 	float y_move_speed = 3;
 	float duckspeed = 4;
 	float zpos = 0;
 	float ypos = 0;
 	float zspeed = 0;
-	
 
 	// main game loop
 	int i = 0;
 	long diff = top - time(NULL);
-	//printf("now:%lu\n",time(NULL));
-	//printf("top:%lu\n",*top);
-	//printf("diff:%lu\n",diff);
 	if (diff > 9)
 		diff = 9;
 	//getchar();
@@ -438,19 +442,19 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 		diff = top - time(NULL);
 		usleep(1000000 * tstep);
 	}
-	
+
 	// On se met en ecoute pour le score
 	threadArg_t data;
-	data.sockAdversaire=sock;
-	data.advScore=son_score;
-	data.jeuEnCours=1;
+	data.sockAdversaire = sock;
+	data.advScore = son_score;
+	data.jeuEnCours = 1;
 	pthread_t tid;
 	// Si on a un adversaire on lance la MAJ du score
-	if (sock!=0)	
+	if (sock != 0)
 		CHECK_T(pthread_create(&tid, NULL, (pf_t)majScoreAdverse,
-                               (void *)&data) == 0,
-                "Erreur pthread_create()");
-	
+							   (void *)&data) == 0,
+				"Erreur pthread_create()");
+
 	//getchar();
 	/*score i*/
 	i = 0;
@@ -515,22 +519,18 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 			if ((next_turn == -1 && key_is_pressed(XK_Right)) || (next_turn == 1 && key_is_pressed(XK_Left)))
 			{
 				idxLigne++;
-				if (idxLigne>=NBMAXLIGNES-1) return; // GAGNER le joueur est aller au bout
+				if (idxLigne >= NBMAXLIGNES - 1)
+					return; // GAGNER le joueur est aller au bout
 				turn_dist = next_turn_dist;
 				turn_dist_orig = next_turn_dist;
 				next_turn = partie->turn[idxLigne];
 				obstacles = next_obstacles;
-//				obstacles[0] = 0;
-//				obstacles[1] = 0;
 				obstacles[next_turn_dist - 1] = 0;
 				obstacles[next_turn_dist] = 0;
 				next_obstacles = &(next_obstacles[next_turn_dist - 1]);
 				next_obstacles[0] = 0;
 				next_obstacles[1] = 0;
-//				next_obstacles[next_turn_dist - 1] = 0;
-//				next_obstacles[next_turn_dist] = 0;
-//				next_obstacles[next_turn_dist+1] = 0;
-				next_turn_dist=partie->dist[idxLigne];
+				next_turn_dist = partie->dist[idxLigne];
 			}
 		}
 		pic = empty_picture(' ');
@@ -691,9 +691,9 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 		*mon_score = i;
 		usleep(1000000 * tstep);
 	}
-	
+
 	// Fin update score
-	data.jeuEnCours=0;
+	data.jeuEnCours = 0;
 
 	// game finished
 	for (int i = 0; i < 2; ++i)
@@ -718,24 +718,24 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 };
 void initPartieGraphisme(partieGraphique_t *partie)
 {
-	int i=0;
+	int i = 0;
 	for (i = 0; i < NBMAXOBSTACLES; ++i)
 	{
 		partie->obstacles[i] = rand() % 5;
 		if (partie->obstacles[i] != 0)
 		{
-			partie->obstacles[i+1] = 0;
-			partie->obstacles[i+2] = 0;
+			partie->obstacles[i + 1] = 0;
+			partie->obstacles[i + 2] = 0;
 			i += 2;
 		}
 	}
 	partie->obstacles[0] = 0;
 	partie->obstacles[1] = 0;
 	partie->obstacles[NBMAXOBSTACLES - 1] = 0;
-	
+
 	for (i = 0; i < NBMAXLIGNES; ++i)
 	{
-		partie->dist[i] = LENMINLIGNES + rand() % (LENMAXLIGNES-LENMINLIGNES);
+		partie->dist[i] = LENMINLIGNES + rand() % (LENMAXLIGNES - LENMINLIGNES);
 		partie->turn[i] = (rand() % 2) * 2 - 1;
 	}
 }

@@ -1,3 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       data.h
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #ifndef __DATA_H__
 #define __DATA_H__
 #include <stdio.h>
@@ -7,16 +23,6 @@
 #include "basic_func.h"
 #include "graphisme.h"
 
-
-//C6-representation data:
-/*
-    ->choisir un codage asci/EBCID/...
-        (implicite)
-    ->serialisation/déserialisation:network Order
-        ntohs();
-        htons();
-        short<->networkOrder
-*/
 typedef struct
 {
     char ip[MAX_LEN];
@@ -35,7 +41,7 @@ typedef enum
     STOPPED = 1,
     FAILED = 2,
     WAITTINGADVERSE = 3,
-	CLOSED=4
+    CLOSED = 4
 } statutPartie_t;
 
 extern const char *statutPartieTxt[];
@@ -68,16 +74,14 @@ void strTOrep(rep_t *rep, buffer_t buff);
 /*fonction caste des data imbriqué*/
 void obstTOstring(char *dest, const int *obstacles);
 void stringTOobst(int *dest, const char *obstaclesch);
-//void strutToString(statPartie_t *tableau, char ch[300]);
-//void stringToStruct(statPartie_t *tableau2, char ch[300]);
 void timeTostring(char *timeDataRep, time_t temps);
 void stringToTime(time_t *temps, char *timeDataRep);
 void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie);
 void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt);
 
-void scoreTOstr(char*dest,int score);
-void strTOscore(char*dest,int* score);
+void scoreTOstr(char *dest, int score);
+void strTOscore(char *dest, int *score);
 
-void partieTOstr(char *dest,statPartie_t *partie);
+void partieTOstr(char *dest, statPartie_t *partie);
 void strTOpartie(statPartie_t *partie, char *datatxt);
 #endif

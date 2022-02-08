@@ -1,3 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       reqRep.h
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #ifndef __REQREP_H__
 #define __REQREP_H__
 #include "basic_func.h"
@@ -27,8 +43,8 @@ typedef enum
     STARTPARTIE = 50,
 
     UPDATESCORE = 60,
-    
-    STATUTPARTIE=70
+
+    STATUTPARTIE = 70
 
 } idRequeteServeur_t;
 

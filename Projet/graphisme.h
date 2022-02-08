@@ -1,3 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       graphisme.h
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #ifndef __GRAPHISME_H__
 #define __GRAPHISME_H__
 #include <stdlib.h>
@@ -36,7 +52,6 @@ typedef struct
 	int dist[NBMAXLIGNES];
 	int turn[NBMAXLIGNES];
 } partieGraphique_t;
-
 
 vect vect_scale(float s, vect v);
 vect vect_add(vect v1, vect v2);

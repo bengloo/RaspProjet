@@ -1,3 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/**
+ *  \file       cltSrv.c
+ *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
+ *              permettant de gerer des parties temple_run multijoueurs 
+ *				table de villes chargée à partir d'un fichier.
+ *
+ *  \author     Morcq Alexandre B2
+ *
+ *  \date       08/02/2022
+ *
+ *	\version    1.0
+ * *
+ *	\remark		fichier contenant nos fonctions, ...
+ *
+ */
 #include <pthread.h>
 #include "cltSrv.h"
 
@@ -10,10 +26,9 @@ sem_t mutexpartie;
 
 #ifdef CLIENT
 // vis à vis du server
-int sock = 0; // Numero Socket client du server  d'enregistrement
+int sock = 0;             // Numero Socket client du server  d'enregistrement
 int portClientMaitre = 0; // Port d'écoute
-char ipServer[MAX_LEN]; // IP du Server
-
+char ipServer[MAX_LEN];   // IP du Server
 
 // vis à vis du client Maitre adverse
 int sockPartie = 0;         // Numero Socket client du server  de partie
@@ -33,8 +48,8 @@ unsigned idPartie = 0;
 int socketEcoute = 0; // Numero Socket serveur
 int socketClient[NBMAXCLIENT];
 int nbClient = 0;
-int continuer = 1; // inutiliser ?
-unsigned nbPartie = 0;                 // nb de partie en cours nota
+int continuer = 1;     // inutiliser ?
+unsigned nbPartie = 0; // nb de partie en cours nota
 #endif
 
 //#define CLIENT
@@ -48,7 +63,8 @@ void afficherMenu()
 		3) Creer une partie\n\
 		4) Voir la partie d'un joueur\n\
 		10) Lancer partie en solo\n\
-		0) Quitter\n", myPseudo);
+		0) Quitter\n",
+           myPseudo);
 }
 
 int main(int argc, char const *argv[])
@@ -60,13 +76,12 @@ int main(int argc, char const *argv[])
 
     // Lecture parametre
     portClientMaitre = PORT_CLIENTMAITRE_PARTIE;
-	strcpy(ipServer, ADDRSERVER);
+    strcpy(ipServer, ADDRSERVER);
     readParam(argc, argv, &portClientMaitre, ipServer);
 
     // On ouvre la socket sur le port  du Serveur de partie // a faire une fois pour eviter Already in use à chaque partie
     socketEcoutePartie = creerSocketEcoute(portClientMaitre);
     DEBUG_S1("Serveur de partie socket <%d> ouverte\n", socketEcoutePartie);
-
 
     draw_ascii(empty_picture(' '));
     printf("veuillez saisir votre pseudo pour vous connecter:\n");
@@ -107,7 +122,6 @@ int main(int argc, char const *argv[])
 
 void connecterServeur(void)
 {
-    req_t req;
     // envois creation party dgram
     DEBUG_S2("Debut connecterServeur IP <%s> port <%d>\n", ipServer, PORT_SERVER);
     if (sock != 0)
@@ -123,7 +137,6 @@ void connecterServeur(void)
 
 void connecterServeurPartie(adresse_t addrServerPartie)
 {
-    req_t req;
     // envois creation party dgram
     DEBUG_S("Debut connecterServeurPartie\n");
     if (sockPartie != 0)
@@ -144,17 +157,13 @@ int serverPartie()
     socklen_t cltLen;
     struct sockaddr_in clt;
 
-    pthread_t tid[NBMAXCLIENT];
-    int idxThread[NBMAXCLIENT];
-    double *status;
-
     // TODO adapté instalderoute pour passé en parametre la socket a fermé que ce soit inter client ou server
     /*
     // On catch le SIGINT pour fermer la socket
     installDeroute(SIGINT, deroute);
     */
 
-	// Attente connexion client adverse
+    // Attente connexion client adverse
     cltLen = sizeof(clt);
     printf("Attente de connexion d'un client sur port <%d>\n", portClientMaitre);
     CHECK(socketClientPartie[nbClientPartie] = accept(socketEcoutePartie, (struct sockaddr *)&clt, &cltLen), "Can't accept"); // accept de recevoir mess
@@ -170,38 +179,37 @@ int serverPartie()
         strTOrep(&rep, msgLu);
         if (rep.idRep == JOIN)
         {
-			statPartie_t partie;
+            statPartie_t partie;
             adresse_t adversaire;
             strTOadresse(&adversaire, rep.msgRep);
             printf("SERVER PARTI:joueur <%s> demande à joindre la partie\n", adversaire.pseudo);
 
-            partie.id=idPartie;
-            partie.statut=RUNNING;
-			char IPbuffer[MAX_LEN];
-			getMyIp(IPbuffer);
-            strcpy(partie.addrMaitre.ip,IPbuffer);
-            partie.addrMaitre.port=portClientMaitre;
-            strcpy(partie.addrMaitre.pseudo,myPseudo);
-            strcpy(partie.addrAdverse.ip,adversaire.ip);
-            partie.addrAdverse.port=adversaire.port;
-            strcpy(partie.addrAdverse.pseudo,adversaire.pseudo);
-            partie.scoreMaitre=0;
-            partie.scoreAdverse=0;
-            updateStatutPartieReq(sock,&partie);
-			
-			
+            partie.id = idPartie;
+            partie.statut = RUNNING;
+            char IPbuffer[MAX_LEN];
+            getMyIp(IPbuffer);
+            strcpy(partie.addrMaitre.ip, IPbuffer);
+            partie.addrMaitre.port = portClientMaitre;
+            strcpy(partie.addrMaitre.pseudo, myPseudo);
+            strcpy(partie.addrAdverse.ip, adversaire.ip);
+            partie.addrAdverse.port = adversaire.port;
+            strcpy(partie.addrAdverse.pseudo, adversaire.pseudo);
+            partie.scoreMaitre = 0;
+            partie.scoreAdverse = 0;
+            updateStatutPartieReq(sock, &partie);
+
             initPartie(socketClientPartie[nbClientPartie], &adversaire);
 
-            partie.statut=STOPPED;
-            partie.scoreMaitre=mon_score;
-            partie.scoreAdverse=son_score;
-            updateStatutPartieReq(sock,&partie);
+            partie.statut = STOPPED;
+            partie.scoreMaitre = mon_score;
+            partie.scoreAdverse = son_score;
+            updateStatutPartieReq(sock, &partie);
         }
     }
-	else
-		printf("Erreur de message\n");
+    else
+        printf("Erreur de message\n");
     fermerSocket(socketClientPartie[nbClientPartie]);
-	sockPartie=0;
+    sockPartie = 0;
     //nbClientPartie++;
     //}
     return 0;
@@ -226,38 +234,37 @@ void partieMaitre(int masock, char *myPseudo)
 };
 void partieAdverse(int masock, char *myPseudo)
 {
-	unsigned nbPart=0;
-	DEBUG_S("partieAdverse debut\n");
-    if (nbPart=getPartiesReq(masock))
+    unsigned nbPart = 0;
+    DEBUG_S("partieAdverse debut\n");
+    if (nbPart = getPartiesReq(masock))
     {
         int choix = -2;
-		afficherPartie(nbPart);
-		printf("\n\nSelectionez une partie avec son indices\nToute autre choix=revenir au menu principal\n\tchoix:");
-		scanf("%d", &choix);
-		if (choix >= 0 && choix < nbPart)
-		{
-			connecterServeurPartie(listePartie[choix].addrMaitre);
-			if (sockPartie != 0)
-			{
-				DEBUG_S1("ADVERSE:on s'est conecter au client maitre de partie sockPartie<%d>\n", sockPartie);
-				time_t top;
-				partieGraphique_t partie;
-				if (!joinPartieReq(sockPartie, myPseudo, &partie, &top))
-				{
-					printf("imposible de joindre cette partie\n");
-				}
-				fermerSocket(sockPartie);
-				sockPartie=0;
-			}
-			else
-			{
-				printf("Partie indisponible\n");
-			}
+        afficherPartie(nbPart);
+        printf("\n\nSelectionez une partie avec son indices\nToute autre choix=revenir au menu principal\n\tchoix:");
+        scanf("%d", &choix);
+        if (choix >= 0 && choix < nbPart)
+        {
+            connecterServeurPartie(listePartie[choix].addrMaitre);
+            if (sockPartie != 0)
+            {
+                DEBUG_S1("ADVERSE:on s'est conecter au client maitre de partie sockPartie<%d>\n", sockPartie);
+                time_t top;
+                partieGraphique_t partie;
+                if (!joinPartieReq(sockPartie, myPseudo, &partie, &top))
+                {
+                    printf("imposible de joindre cette partie\n");
+                }
+                fermerSocket(sockPartie);
+                sockPartie = 0;
+            }
+            else
+            {
+                printf("Partie indisponible\n");
+            }
         }
     }
-	else
-		printf("Pas de partie disponible\n");
-		
+    else
+        printf("Pas de partie disponible\n");
 
     // retour menu
 };
@@ -314,7 +321,8 @@ void usage(const char *prg)
 
 void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer)
 {
-	if (argc == 1) return;
+    if (argc == 1)
+        return;
     if (argc > 1)
     {
         *portClientMaitre = atoi(argv[1]);
@@ -328,11 +336,10 @@ void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServ
     }
     if (argc > 2)
     {
-		strcpy(ipServer, argv[2]);
+        strcpy(ipServer, argv[2]);
     }
-	else
+    else
         usage(argv[0]);
-	
 }
 
 void installDeroute(int numSig, void (*pfct)(int))
@@ -364,8 +371,8 @@ void terminerProcess(void)
 {
 #ifdef CLIENT
     DEBUG_S1("Client fermeture socket <%d>\n", sock);
-    fermerSocket(sock); // Numero Socket serveur
-	fermerSocket(socketEcoutePartie);// Numero Socket Client Maitre
+    fermerSocket(sock);               // Numero Socket serveur
+    fermerSocket(socketEcoutePartie); // Numero Socket Client Maitre
     exit(0);
 #endif
 
