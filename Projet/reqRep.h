@@ -18,14 +18,10 @@
 #define __REQREP_H__
 #include "basic_func.h"
 
-
-
 #define FMT_REQ "%3hd:%hd:%[^n]"
 #define FMT_REQSTR "%3d:%d:"
 #define FMT_REPSTR "%d:%hd:"
 #define FMT_REP "%d:%hd:%s"
-
-
 
 #define OK 1
 #define NOP 0
@@ -116,10 +112,10 @@ typedef enum
 } statutClient_t;
 typedef struct
 {
-	statutClient_t statut;
-	int socket;
-	int idx;
-	char pseudo[MAX_LEN];
+    statutClient_t statut;
+    int socket;
+    int idx;
+    char pseudo[MAX_LEN];
 } listeClient_t;
 
 #endif

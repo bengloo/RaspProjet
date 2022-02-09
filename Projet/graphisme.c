@@ -53,7 +53,6 @@ void draw_line(vect dir, vect v_from, vect v_to, char c, char **picture);
 float random_float();
 int min(int a, int b);
 
-
 const char tabrefnum[10][Y_SCORE][X_SCORE] = {
 	{{' ', ' ', ' ', ' ', ' '},
 	 {' ', ' ', '#', '#', ' '},
@@ -410,11 +409,12 @@ void majScoreAdverse(void *arg)
 	/*struct timespec tim;
 	tim.tv_sec = 0;
 	tim.tv_nsec = 50000000L;*/
-	int score=1;
-	while ((data->jeuEnCours) && (score >=0))
+	int score = 1;
+	while ((data->jeuEnCours) && (score >= 0))
 	{
 		score = readScoreReq(data->sockAdversaire);
-		if (score >=0) *(data->advScore) = score;
+		if (score >= 0)
+			*(data->advScore) = score;
 		//printf("Thread apres read <%d>\n",score);
 		//nanosleep(&tim, NULL);
 	}
@@ -448,10 +448,10 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 	float zpos = 0;
 	float ypos = 0;
 	float zspeed = 0;
-	
+
 	// Reset score
-	*son_score=0;
-	*mon_score=0;
+	*son_score = 0;
+	*mon_score = 0;
 
 	// main game loop
 	int i = 0;
@@ -739,14 +739,14 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 	struct timespec tim;
 	tim.tv_sec = 0;
 	tim.tv_nsec = 100000000L;
-	int score=*son_score-1;
+	int score = *son_score - 1;
 	while (score < *son_score)
 	{
 		score = *son_score;
 		draw_ascii_score(pic, *mon_score, *son_score);
 		nanosleep(&tim, NULL);
 	}
-	
+
 	// Fin update score
 	data.jeuEnCours = 0;
 

@@ -25,8 +25,6 @@
 #include "basic_func.h"
 #include "graphisme.h"
 
-
-
 //-à chaque req ,on associera &fct de traitement qui genere une réponse
 //1 fct de selection traitement selon requete
 

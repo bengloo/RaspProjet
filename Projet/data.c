@@ -19,7 +19,6 @@
 
 const char *statutPartieTxt[] = {"EN COURS", "TERMINEE", "EN ECHEC", "ATTENTE ", "FERMEE  "};
 
-
 void reqTOstr(req_t *req, buffer_t buff)
 {
     sprintf(buff, FMT_REQSTR, req->idReq, req->lgreq);
@@ -60,7 +59,6 @@ void strTOrep(rep_t *rep, buffer_t buff)
 {
     sscanf(buff, FMT_REP, (int *)&rep->idRep, &rep->lgrep, rep->msgRep);
 }
-
 
 void adresseTOstr(adresse_t *adr, char *dest)
 {

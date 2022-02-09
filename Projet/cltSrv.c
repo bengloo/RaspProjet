@@ -24,7 +24,7 @@
 #include "graphisme.h"
 #include "basic_func.h"
 
-#define PORT_SERVER 8123 //port du server d'enregistrement pour parlé auc client
+#define PORT_SERVER 8123              //port du server d'enregistrement pour parlé auc client
 #define PORT_CLIENTMAITRE_PARTIE 8125 //por du client maitre pour parlé au autre client
 #define ADDRSERVER "127.0.0.1"
 
@@ -32,7 +32,7 @@
 statPartie_t listePartie[NBMAXCLIENT]; // Liste des parties en cours
 
 #ifdef CLIENT
-int sockServer = 0;             // Numero Socket client du server  d'enregistrement
+int sockServer = 0;       // Numero Socket client du server  d'enregistrement
 int portClientMaitre = 0; // Port d'écoute
 char ipServer[MAX_LEN];   // IP du Server
 
@@ -50,7 +50,7 @@ int son_score = 0;
 #endif
 
 #ifdef SERVER
-sem_t mutex; // mutex server enregistrement
+sem_t mutex;          // mutex server enregistrement
 int socketEcoute = 0; // Numero Socket serveur
 listeClient_t listeClient[NBMAXCLIENT];
 int nbClient = 0;
@@ -67,7 +67,6 @@ void deroute(int numSig);                           // exemple de fonction qui s
 void terminerProcess(void);
 void afficherPartie(unsigned nbPart);
 
-
 /* ------------------------------------------------------------------------ */
 /*      FONCTION CLIENT                                                     */
 /* ------------------------------------------------------------------------ */
@@ -81,7 +80,12 @@ void partieSolo(int sock, char *myPseudo);
 void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer);
 void connecterServeur(void);
 void connecterServeurPartie(adresse_t serverPartie);
-
+/**
+ *  \fn         int main(int argc, char const *argv[])
+ *  \brief      fonction principale 
+ *  \param      prend en paramètre les paramètres de ligne de commande 
+ *  \return    retourne un int (valeur de retour)
+ */
 int main(int argc, char const *argv[])
 {
     int choix = 4;
@@ -130,7 +134,12 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
-
+/**
+ *  \fn         void afficherMenu()
+ *  \brief      fonction d'affichage du menu  
+ *  \param      void
+ *  \return     void
+ */
 void afficherMenu()
 {
     printf("Joueur <%s>\n\
@@ -144,25 +153,35 @@ void afficherMenu()
 }
 
 // permet de jouer seul
+/**
+ *  \fn         void partieSolo(int sock, char *myPseudo)
+ *  \brief      fonction permettant de lancer une partie solo 
+ *  \param      prend en paramètre une socket et un pseudo
+ *  \return     void
+ */
 void partieSolo(int sock, char *myPseudo)
 {
     //init variable globale servant au req
     int mon_score = 0;
     int son_score = 0;
     char **pic = empty_picture(' ');
-	
+
     //generation des obsacle et top depart
     partieGraphique_t partieGraphique;
     initPartieGraphisme(&partieGraphique);
     time_t now = time(NULL);
-	
+
     //on lence la partie
     system("./scriptZoom.sh -m");
     jouerPartie(&partieGraphique, &mon_score, &son_score, pic, now + DELAY_START, 0);
     system("./scriptZoom.sh -p");
 };
-
-
+/**
+ *  \fn         void connecterServeur(void)
+ *  \brief      fonction permettant de se connecter au serveur d'enregistrement 
+ *  \param      void
+ *  \return     void
+ */
 void connecterServeur(void)
 {
     // envois creation party dgram
@@ -176,18 +195,21 @@ void connecterServeur(void)
     sockServer = creerSocketClient(PORT_SERVER, ipServer);
     if (sockServer == 0)
         printf("Erreur connection serveur\n");
-	
-	if (connecterClientReq(sockServer, myPseudo) != OK)
-	{
-		printf("Erreur de connexion\n");
-		fermerSocket(sockServer);
-		return;
-	}
-	printf("Connexion reussie\n");
-	
-	
-};
 
+    if (connecterClientReq(sockServer, myPseudo) != OK)
+    {
+        printf("Erreur de connexion\n");
+        fermerSocket(sockServer);
+        return;
+    }
+    printf("Connexion reussie\n");
+};
+/**
+ *  \fn         void connecterServeurPartie(adresse_t addrServerPartie)
+ *  \brief      fonction permettant de se connecter au serveur d'une partie créer par un client 
+ *  \param      prend en paramètre une addresse de server de partie de type adresse_t 
+ *  \return     void
+ */
 void connecterServeurPartie(adresse_t addrServerPartie)
 {
     // envois creation party dgram
@@ -202,7 +224,12 @@ void connecterServeurPartie(adresse_t addrServerPartie)
     if (sockPartie == 0)
         printf("Erreur connection serveurPartie\n");
 };
-
+/**
+ *  \fn         int serverPartie(unsigned idPartie)
+ *  \brief      fonction qui permet d'attendre q'un client adverse se connecte, mettre a jour l'etat de la partie sur le server et lancer la partie 
+ *  \param      prend en paramètre un ID de partie (int)
+ *  \return     void
+ */
 int serverPartie(unsigned idPartie)
 {
 
@@ -246,11 +273,10 @@ int serverPartie(unsigned idPartie)
             updateStatutPartieReq(sockServer, &partie);
 
             initPartieRep(socketClientPartie[nbClientPartie], &adversaire, &mon_score, &son_score);
-			if (mon_score>son_score)
-				printf("Vous avez gagné!\n");
-			else
-				printf("Vous ferez mieux la prochaine fois!\n");
-				
+            if (mon_score > son_score)
+                printf("Vous avez gagné!\n");
+            else
+                printf("Vous ferez mieux la prochaine fois!\n");
 
             partie.statut = STOPPED;
             partie.scoreMaitre = mon_score;
@@ -260,22 +286,33 @@ int serverPartie(unsigned idPartie)
     }
     else
         printf("Erreur de message\n");
-	
+
     fermerSocket(socketClientPartie[nbClientPartie]);
     sockPartie = 0;
     return OK;
 }
-
+/**
+ *  \fn         void partieMaitre(int masock, char *myPseudo)
+ *  \brief      fonction qui permet de creer une partie, de l'enregistrer au près du serveur et de lancer la fonction d'attente d'un adversaire 
+ *  \param      prend en paramètre la socket serveur, et le pseudo du client maitre 
+ *  \return     void
+ */
 void partieMaitre(int masock, char *myPseudo)
 {
-	int idPartie;
+    int idPartie;
     if (createPartieReq(masock, myPseudo, portClientMaitre, &idPartie))
     {
         serverPartie(idPartie);
     }
 }
-
-
+/**
+ *  \fn         void partieAdverse(int masock, char *myPseudo)
+ *  \brief      fonction qui permet a un adversaire de recuperer la liste de partie 
+ * sur le serveur d'enregistrement, de se connecter au client Maitre(créateur de la partie)
+ * et de jouer la partie
+ *  \param      prend en paramètre la socket serveur, et le pseudo du client maitre 
+ *  \return     void
+ */
 void partieAdverse(int masock, char *myPseudo)
 {
     unsigned nbPart = 0;
@@ -288,11 +325,11 @@ void partieAdverse(int masock, char *myPseudo)
         scanf("%d", &choix);
         if (choix >= 0 && choix < nbPart)
         {
-			if (listePartie[choix].statut != WAITTINGADVERSE)
-			{
-				printf("Désolé cette partie n'est pas disponible\n");
-				return;
-			}
+            if (listePartie[choix].statut != WAITTINGADVERSE)
+            {
+                printf("Désolé cette partie n'est pas disponible\n");
+                return;
+            }
             connecterServeurPartie(listePartie[choix].addrMaitre);
             if (sockPartie != 0)
             {
@@ -303,10 +340,10 @@ void partieAdverse(int masock, char *myPseudo)
                 {
                     printf("imposible de joindre cette partie\n");
                 }
-				if (mon_score>son_score)
-					printf("Vous avez gagné!\n");
-				else
-					printf("Vous ferez mieux la prochaine fois!\n");
+                if (mon_score > son_score)
+                    printf("Vous avez gagné!\n");
+                else
+                    printf("Vous ferez mieux la prochaine fois!\n");
                 fermerSocket(sockPartie);
                 sockPartie = 0;
             }
@@ -385,15 +422,15 @@ int main(int argc, char const *argv[])
     CHECK_T(sem_init(&mutex, 0, 1) == 0, "erreur initialisation mutex");
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
 
-    while (nbClient<NBMAXCLIENT)
+    while (nbClient < NBMAXCLIENT)
     {
         cltLen = sizeof(clt);
-		int socket=0;
+        int socket = 0;
         CHECK(socket = accept(socketEcoute, (struct sockaddr *)&clt, &cltLen), "Can't accept"); // accept de recevoir mess
-		listeClient[nbClient].statut=OFFLINE;
-		listeClient[nbClient].socket=socket;
-		listeClient[nbClient].idx=nbClient;
-		listeClient[nbClient].pseudo[0]='\0';
+        listeClient[nbClient].statut = OFFLINE;
+        listeClient[nbClient].socket = socket;
+        listeClient[nbClient].idx = nbClient;
+        listeClient[nbClient].pseudo[0] = '\0';
         DEBUG_S2("Nouvelle connexion nbClient <%d> socket <%i>\n", nbClient, socket);
         CHECK_T(pthread_create(&tid[nbClient], NULL, (pf_t)lireReqServ,
                                (void *)(&listeClient[nbClient])) == 0,
@@ -415,7 +452,7 @@ void lireReqServ(listeClient_t *client)
     // On attend les inputs du Client Maitre
     while (lenLu > 0)
     {
-		afficherCLient();
+        afficherCLient();
         afficherPartie(nbPartie);
 
         lenLu = lireMsgTCP(client->socket, msgLu, sizeof(buffer_t));
@@ -427,11 +464,11 @@ void lireReqServ(listeClient_t *client)
 
             switch (req.idReq)
             {
-             case CONNECTERCLIENT:
+            case CONNECTERCLIENT:
                 DEBUG_S("Case ConnecterClient");
                 serveurConnecterClientRep(client->socket, &req, client);
                 break;
-			case CREERPARTIE:
+            case CREERPARTIE:
                 DEBUG_S("Case CreerPartie");
                 partieEnCours = serveurCreatePartieRep(client->socket, &req, &idPartieEnCours, listePartie, &nbPartie, &mutex);
                 break;
@@ -452,17 +489,17 @@ void lireReqServ(listeClient_t *client)
 
     DEBUG_S2("Serveur : le client idx <%d> avec la socket <%d> a quitté la connexion\n", client->idx, client->socket);
     if ((listePartie[idPartieEnCours].statut == RUNNING) ||
-		(listePartie[idPartieEnCours].statut == WAITTINGADVERSE))
+        (listePartie[idPartieEnCours].statut == WAITTINGADVERSE))
         listePartie[idPartieEnCours].statut = CLOSED;
 
     // Le Client a fermé on cloture la socket client
     fermerSocket(client->socket);
-	client->statut=OFFLINE; 
-	afficherCLient();
+    client->statut = OFFLINE;
+    afficherCLient();
     afficherPartie(nbPartie);
 }
 
-// initialisation 
+// initialisation
 void initstatPartie(void)
 {
     nbPartie = 0;
@@ -476,12 +513,10 @@ void afficherCLient()
     for (i = 0; i < nbClient; i++)
     {
         if (listeClient[i].statut == ONLINE)
-	        printf("%s\n", listeClient[i].pseudo);
+            printf("%s\n", listeClient[i].pseudo);
     }
     CHECK_T(sem_post(&mutex) == 0, "erreur post mutex");
 }
-
-
 
 #endif
 
@@ -547,7 +582,7 @@ void terminerProcess(void)
 {
 #ifdef CLIENT
     DEBUG_S1("Client fermeture socket <%d>\n", sockServer);
-    fermerSocket(sockServer);               // Numero Socket serveur
+    fermerSocket(sockServer);         // Numero Socket serveur
     fermerSocket(socketEcoutePartie); // Numero Socket Client Maitre
     exit(0);
 #endif
@@ -556,7 +591,7 @@ void terminerProcess(void)
     DEBUG_S1("Serveur fermeture socket <%d>\n", socketEcoute);
     fermerSocket(socketEcoute); // Numero Socket serveur
     CHECK_T(sem_destroy(&mutex) == 0, "erreur destroy mutex");
-	
+
     // On force la fermeture des socket
     DEBUG_S("Serveur fermeture des sockets clientes\n");
     for (int i = 0; i < nbClient; i++)

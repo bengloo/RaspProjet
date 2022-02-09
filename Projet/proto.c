@@ -19,7 +19,6 @@
 #include "session.h"
 #include "data.h"
 
-
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR                                                     */
 /* ------------------------------------------------------------------------ */
@@ -42,13 +41,13 @@ void createPartieRep(int sock, statPartie_t *partie)
 
 void serveurConnecterClientRep(int sock, req_t *req, listeClient_t *client)
 {
-	// Enregistrement du client
-	client->statut=ONLINE;
-	strcpy(client->pseudo, req->msgReq);
-	
-	// Envoi du statut OK
-	char repTxt[MAX_LEN];
-	rep_t rep;
+    // Enregistrement du client
+    client->statut = ONLINE;
+    strcpy(client->pseudo, req->msgReq);
+
+    // Envoi du statut OK
+    char repTxt[MAX_LEN];
+    rep_t rep;
     rep.idRep = CONNECTERCLIENT;
     statutReq_t statut;
     statut.statut = OK;
@@ -175,7 +174,6 @@ void updateStatutPartieRep(char *txt, statPartie_t *listePartie, unsigned nbPart
     }
 }
 
-
 #endif
 /* ------------------------------------------------------------------------ */
 /*      FONCTION CLIENT                                                     */
@@ -183,24 +181,23 @@ void updateStatutPartieRep(char *txt, statPartie_t *listePartie, unsigned nbPart
 #ifdef CLIENT
 //-fct generation des requétes
 
-
 int connecterClientReq(int sock, char *pseudo)
 {
-	DEBUG_S1("Debut connecterClientReq <%s>\n", pseudo);
-	req_t req;
-	req.idReq=CONNECTERCLIENT;
-	strcpy(req.msgReq, pseudo);
-	req.lgreq=strlen(req.msgReq);
+    DEBUG_S1("Debut connecterClientReq <%s>\n", pseudo);
+    req_t req;
+    req.idReq = CONNECTERCLIENT;
+    strcpy(req.msgReq, pseudo);
+    req.lgreq = strlen(req.msgReq);
 
     // Envoie de la requete au serveur
     char reqTxt[sizeof(req_t)];
     reqTOstr(&req, reqTxt);
     ecrireMsgTCP(sock, reqTxt);
 
-	// lecture reponse
-	rep_t rep;
+    // lecture reponse
+    rep_t rep;
     char msgLu[MAX_LEN];
-	statutReq_t statut;
+    statutReq_t statut;
 
     DEBUG_S("Client : Attente du OK du serveur\n");
     int lenLu = lireMsgTCP(sock, msgLu, MAX_LEN);
@@ -393,7 +390,7 @@ void initPartieRep(int masock, adresse_t *adversaire, int *mon_score, int *son_s
     //init variable globale servant au req //TODO les rendre global pour qui soivent accesible à la rep de streaming et la rep de statpartie de l'adversaire
     DEBUG_S("debut initPartie\n");
     char **pic = empty_picture(' ');
-	
+
     //generation des obsacle et top depart
     partieGraphique_t partie;
     initPartieGraphisme(&partie);
@@ -447,8 +444,6 @@ void joinPartieRep(int masock, partieGraphique_t *partie, time_t temps)
     else
         printf("Echec envoi partie à client adverse\n");
 };
-
-
 
 void updateScoreReq(int sock, int score)
 {

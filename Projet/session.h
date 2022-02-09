@@ -28,9 +28,8 @@
 #include "reqRep.h"
 #include "basic_func.h"
 
-#define PORT_SVC 5000    //Unused
+#define PORT_SVC 5000      //Unused
 #define MAX_SOCK_BACKLOG 5 // Nb de connexion en attente possible pendant le listen
-
 
 void getMyIp(char *str);
 
