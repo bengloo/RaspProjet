@@ -320,7 +320,7 @@ void draw_ascii_score(char **picture, int s1, int s2)
 			printf("%c", picture[i][j]);
 		}
 		printf("%s", ANSI_BLUE);
-		printf("####");
+		printf("####     ");
 		printf("%s", ANSI_GREEN);
 		//on affiche mon score
 		if (i >= 60 && i < 60 + Y_SCORE * PIX_SCORE)
@@ -370,7 +370,7 @@ void draw_ascii_score(char **picture, int s1, int s2)
 			}
 		}
 		printf("%s", ANSI_RESET);
-		printf("\n");
+		printf("     \n");
 	}
 }
 
@@ -478,6 +478,11 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 					{
 						printf("%c", tabrefnum[diff][yscore][l]);
 					}
+				}
+			}else{
+				for (int m = 0; m < 200; m++)
+				{
+					printf(" ");
 				}
 			}
 			printf("\n");
