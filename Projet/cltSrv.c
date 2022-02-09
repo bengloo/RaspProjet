@@ -207,7 +207,7 @@ void connecterServeur(void)
 /**
  *  \fn         void connecterServeurPartie(adresse_t addrServerPartie)
  *  \brief      fonction permettant de se connecter au serveur d'une partie créer par un client 
- *  \param      prend en paramètre une addresse de server de partie de type adresse_t 
+ *  \param      addrServerPartie une addresse de server de partie de type adresse_t 
  *  \return     void
  */
 void connecterServeurPartie(adresse_t addrServerPartie)
@@ -226,8 +226,9 @@ void connecterServeurPartie(adresse_t addrServerPartie)
 };
 /**
  *  \fn         int serverPartie(unsigned idPartie)
- *  \brief      fonction qui permet d'attendre q'un client adverse se connecte, mettre a jour l'etat de la partie sur le server et lancer la partie 
- *  \param      prend en paramètre un ID de partie (int)
+ *  \brief      fonction qui permet d'attendre q'un client adverse se connecte, 
+ * mettre a jour l'etat de la partie sur le server et lancer la partie 
+ *  \param      ipPartie ID de partie
  *  \return     void
  */
 int serverPartie(unsigned idPartie)
@@ -293,8 +294,10 @@ int serverPartie(unsigned idPartie)
 }
 /**
  *  \fn         void partieMaitre(int masock, char *myPseudo)
- *  \brief      fonction qui permet de creer une partie, de l'enregistrer au près du serveur et de lancer la fonction d'attente d'un adversaire 
- *  \param      prend en paramètre la socket serveur, et le pseudo du client maitre 
+ *  \brief      fonction qui permet de creer une partie, de l'enregistrer au près du
+ *  serveur et de lancer la fonction d'attente d'un adversaire 
+ *  \param      masock socket serveur 
+ *  \param      myPseudo pseudo du client maitre
  *  \return     void
  */
 void partieMaitre(int masock, char *myPseudo)
@@ -310,7 +313,8 @@ void partieMaitre(int masock, char *myPseudo)
  *  \brief      fonction qui permet a un adversaire de recuperer la liste de partie 
  * sur le serveur d'enregistrement, de se connecter au client Maitre(créateur de la partie)
  * et de jouer la partie
- *  \param      prend en paramètre la socket serveur, et le pseudo du client maitre 
+ *  \param      masock socket serveur 
+ *  \param      myPseudo pseudo du client maitre
  *  \return     void
  */
 void partieAdverse(int masock, char *myPseudo)
@@ -356,12 +360,26 @@ void partieAdverse(int masock, char *myPseudo)
     else
         printf("Pas de partie disponible\n");
 }
-
+/**
+ *  \fn         void usage(const char *prg)
+ *  \brief      fonction qui permet d'afficher l'usage des paramètres des paramètres possible pour 
+ * lancer le programme
+ *  \param      prg nom d'executable
+ *  \return     void
+ */
 void usage(const char *prg)
 {
     printf("usage :%s <portClientMaitre> <ipServeur>\n", prg);
 }
-
+/**
+ *  \fn         void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer)
+ *  \brief      fonction qui permet de faire la lecture des paramètres passer en arguments au lancement de l'executable
+ *  \param      argc nombre de paramètre 
+ *  \param      argv liste des chaines de paramètre 
+ *  \param      portClientMaitre variable dans laquelle il faut stocker le paramètre portClientMaitre passé
+ *  \param      ipServer variable dans laquelle il faut stocker le paramètre ipServer passé
+ *  \return     void
+ */
 void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer)
 {
     if (argc == 1)

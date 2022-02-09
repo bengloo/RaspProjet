@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: /home/rexasso/Documents/Projet_MID/MidlewareProjetLe3/Projet/cltSrv.c File Reference</title>
+<title>Temple_Run_Multijoueurs: /home/rexasso/Documents/Projet_MID/MidlewareProjetLe3/Projet/cltSrv.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">My Project
+   <div id="projectname">Temple_Run_Multijoueurs
    </div>
   </td>
  </tr>
@@ -98,6 +98,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:adb6f52a5d91a8dfdb3d3456caafcc82d"><td class="mdescLeft">&#160;</td><td class="mdescRight">fonction permettant de lancer une partie solo  <a href="clt_srv_8c.html#adb6f52a5d91a8dfdb3d3456caafcc82d">More...</a><br /></td></tr>
 <tr class="separator:adb6f52a5d91a8dfdb3d3456caafcc82d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbc80f2459e6a99f0f61f972da7c228d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clt_srv_8c.html#adbc80f2459e6a99f0f61f972da7c228d">readParam</a> (int argc, char const *argv[], int *<a class="el" href="clt_srv_8c.html#a1c3417f8f17add5356b3262f22f2b628">portClientMaitre</a>, char *<a class="el" href="clt_srv_8c.html#ab6e4fc58bf576776c3e91805ceaa55af">ipServer</a>)</td></tr>
+<tr class="memdesc:adbc80f2459e6a99f0f61f972da7c228d"><td class="mdescLeft">&#160;</td><td class="mdescRight">fonction qui permet de faire la lecture des paramètres passer en arguments au lancement de l'executable  <a href="clt_srv_8c.html#adbc80f2459e6a99f0f61f972da7c228d">More...</a><br /></td></tr>
 <tr class="separator:adbc80f2459e6a99f0f61f972da7c228d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e6ecae6463fae3407deed02b7c850bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clt_srv_8c.html#a2e6ecae6463fae3407deed02b7c850bd">connecterServeur</a> (void)</td></tr>
 <tr class="memdesc:a2e6ecae6463fae3407deed02b7c850bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">fonction permettant de se connecter au serveur d'enregistrement  <a href="clt_srv_8c.html#a2e6ecae6463fae3407deed02b7c850bd">More...</a><br /></td></tr>
@@ -112,6 +113,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a399f686683cbe99ab091ab681fb959d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">fonction qui permet d'attendre q'un client adverse se connecte, mettre a jour l'etat de la partie sur le server et lancer la partie  <a href="clt_srv_8c.html#a399f686683cbe99ab091ab681fb959d4">More...</a><br /></td></tr>
 <tr class="separator:a399f686683cbe99ab091ab681fb959d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa60a807a3953ba5019a75324abded508"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clt_srv_8c.html#aa60a807a3953ba5019a75324abded508">usage</a> (const char *prg)</td></tr>
+<tr class="memdesc:aa60a807a3953ba5019a75324abded508"><td class="mdescLeft">&#160;</td><td class="mdescRight">fonction qui permet d'afficher l'usage des paramètres des paramètres possible pour lancer le programme  <a href="clt_srv_8c.html#aa60a807a3953ba5019a75324abded508">More...</a><br /></td></tr>
 <tr class="separator:aa60a807a3953ba5019a75324abded508"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f7f438969080e756f67e48355bbe64f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clt_srv_8c.html#a6f7f438969080e756f67e48355bbe64f">initstatPartie</a> (void)</td></tr>
 <tr class="separator:a6f7f438969080e756f67e48355bbe64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -553,6 +555,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>fonction qui permet de faire la lecture des paramètres passer en arguments au lancement de l'executable </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>nombre de paramètre </td></tr>
+    <tr><td class="paramname">argv</td><td>liste des chaines de paramètre </td></tr>
+    <tr><td class="paramname">portClientMaitre</td><td>variable dans laquelle il faut stocker le paramètre portClientMaitre passé </td></tr>
+    <tr><td class="paramname">ipServer</td><td>variable dans laquelle il faut stocker le paramètre ipServer passé </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a0eb7352a429b1ab5f1598f50ce632367" name="a0eb7352a429b1ab5f1598f50ce632367"></a>
@@ -632,6 +646,15 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>fonction qui permet d'afficher l'usage des paramètres des paramètres possible pour lancer le programme </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prend</td><td>en paramètre le nom d'executable </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
