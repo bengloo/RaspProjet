@@ -26,6 +26,14 @@
 
 ///-à chaque req ,on associera &fct de traitement qui genere une réponse
 //-fct generation des requétes
+//1 fct de selection traitement selon requete
+/**
+ *  \brief Envoie de la reponse serveur => client pour validation creation partie
+ *  
+ *  \param [in] sock socket d'echange
+ *  \param [in] partie partie cree
+ *  \return void
+ */
 void createPartieRep(int sock, statPartie_t *partie)
 {
     rep_t rep;
@@ -39,6 +47,14 @@ void createPartieRep(int sock, statPartie_t *partie)
     ecrireMsgTCP(sock, repTxt);
 };
 
+/**
+ *  \brief Traite et envoie de la reponse serveur => client pour validation connexion client
+ *  
+ *  \param [in] sock socket d'echange
+ *  \param [in] req requete reçu
+ *  \param [in] client liste des clients actuels
+ *  \return void
+ */
 void serveurConnecterClientRep(int sock, req_t *req, listeClient_t *client)
 {
     // Enregistrement du client
@@ -57,6 +73,17 @@ void serveurConnecterClientRep(int sock, req_t *req, listeClient_t *client)
     ecrireMsgTCP(sock, repTxt);
 }
 
+/**
+ *  \brief Traite et envoie de la reponse serveur => client pour validation creation partie
+ *  
+ *  \param [in] sock socket d'echange
+ *  \param [in] req requete reçu
+ *  \param [in] idPart Id de la partie creee
+ *  \param [in] listePartie liste parties actuelles
+ *  \param [in] nbPartie nombre de parties actuelles
+ *  \param [in] mutex mutex pour multithread
+ *  \return void
+ */
 int serveurCreatePartieRep(int sock, req_t *req, int *idPart, statPartie_t *listePartie, unsigned *nbPartie, sem_t *mutex)
 {
     // Peut on encore accueillir des clients
@@ -107,6 +134,15 @@ int serveurCreatePartieRep(int sock, req_t *req, int *idPart, statPartie_t *list
     return OK;
 }
 
+/**
+ *  \brief Traite et envoie de la reponse serveur => client pour lister les parties disponibles
+ *  
+ *  \param [in] sock socket d'echange
+ *  \param [in] listePartie liste parties actuelles
+ *  \param [in] nbPartie nombre de parties actuelles
+ *  \param [in] mutex mutex pour multithread
+ *  \return void
+ */
 void serveurGetPartiesRep(int sock, statPartie_t *listePartie, unsigned nbPartie, sem_t *mutex)
 {
     DEBUG_S("Debut getParties\n");
@@ -126,7 +162,15 @@ void serveurGetPartiesRep(int sock, statPartie_t *listePartie, unsigned nbPartie
     ecrireMsgTCP(sock, repTxt);
 };
 
-//1 fct de selection traitement selon requete
+/**
+ *  \brief Met a jour l'état d'une partie
+ *  
+ *  \param [in] txt texte reçu dans la socket
+ *  \param [in] listePartie liste parties actuelles
+ *  \param [in] nbPartie nombre de parties actuelles
+ *  \param [in] mutex mutex pour multithread
+ *  \return void
+ */
 void updateStatutPartieRep(char *txt, statPartie_t *listePartie, unsigned nbPartie, sem_t *mutex)
 {
     statPartie_t statePartie;
@@ -181,6 +225,13 @@ void updateStatutPartieRep(char *txt, statPartie_t *listePartie, unsigned nbPart
 #ifdef CLIENT
 //-fct generation des requétes
 
+/**
+ *  \brief Envoie une requete de connexion client => serveur
+ *  
+ *  \param [in] sock socket a utiliser
+ *  \param [in] pseudo pseudo du joueur
+ *  \return OK/NOT_OK
+ */
 int connecterClientReq(int sock, char *pseudo)
 {
     DEBUG_S1("Debut connecterClientReq <%s>\n", pseudo);
@@ -217,6 +268,15 @@ int connecterClientReq(int sock, char *pseudo)
     return statut.statut;
 }
 
+/**
+ *  \brief Envoie une requete de creation de partie client => serveur
+ *  
+ *  \param [in] sock socket a utiliser
+ *  \param [in] pseudo pseudo du joueur
+ *  \param [in] portClientMaitre port du client maitre
+ *  \param [in] idPartie Id de la partie a creer
+ *  \return OK/NOT_OK
+ */
 int createPartieReq(int sock, char *pseudo, int portClientMaitre, unsigned *idPartie)
 {
     // Verification on est connecte
@@ -277,7 +337,13 @@ int createPartieReq(int sock, char *pseudo, int portClientMaitre, unsigned *idPa
     return OK;
 }
 
-int getPartiesReq(int sock, statPartie_t *listePartie)
+/**
+ *  \brief Envoie une requete de demande de liste des parties disponibles client => serveur
+ *  
+ *  \param [in] sock socket a utiliser
+ *  \param [out] listePartie liste des parties reçues
+ *  \return OK/NOT_OK
+ */int getPartiesReq(int sock, statPartie_t *listePartie)
 {
     DEBUG_S("getPartiesReq debut");
     // Verification on est connecte
@@ -319,7 +385,17 @@ int getPartiesReq(int sock, statPartie_t *listePartie)
     return StrTOlistePartie(listePartie, rep.msgRep);
 };
 
-// Fonction joinPartieReq utilisée par l'adversaire
+/**
+ *  \brief Envoie de requete d'un client vers un autre client maitre (donc serveur) pour joindre sa partie
+ *  
+ *  \param [in] masock socket a utiliser
+ *  \param [in] pseudo pseudo du joueur
+ *  \param [out] partie Description de la partie a jouer (obstacle, longeuruy, ...)
+ *  \param [out] mon_score score du joueur en fin de partie
+ *  \param [out] son_score score de l'adversaire en fin de partie
+ *  \param [out] top top depart
+ *  \return OK/NOT_OK
+ */
 int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, int *mon_score, int *son_score, time_t *top)
 {
 
@@ -383,7 +459,15 @@ int joinPartieReq(int masock, char *pseudo, partieGraphique_t *partie, int *mon_
     return 1;
 };
 
-// Utilise par client maitre
+/**
+ *  \brief Envoie de reponse d'un client maitre (donc serveur) vers un autre client pour initialiser une partie
+ *  
+ *  \param [in] masock socket a utiliser
+ *  \param [in] adversaire adresse de l'adversaire
+ *  \param [out] mon_score score du joueur en fin de partie
+ *  \param [out] son_score score de l'adversaire en fin de partie
+ *  \return void
+ */
 void initPartieRep(int masock, adresse_t *adversaire, int *mon_score, int *son_score)
 {
 
@@ -403,7 +487,14 @@ void initPartieRep(int masock, adresse_t *adversaire, int *mon_score, int *son_s
     jouerPartie(&partie, mon_score, son_score, pic, now + DELAY_START, masock);
 };
 
-// Fonction joinPartieRep utilisée par le client maitre
+/**
+ *  \brief Envoie de reponse d'un client maitre (donc serveur) vers un autre client pour joindre une partie
+ *  
+ *  \param [in] masock socket a utiliser
+ *  \param [in] partie partie graphique a utliser
+ *  \param [out] temps temps avant le top depart
+ *  \return void
+ */
 void joinPartieRep(int masock, partieGraphique_t *partie, time_t temps)
 {
     DEBUG_S("debut joinPartieRep\n");
@@ -443,8 +534,15 @@ void joinPartieRep(int masock, partieGraphique_t *partie, time_t temps)
         printf("Le client adverse a bien reçu la partie\n");
     else
         printf("Echec envoi partie à client adverse\n");
-};
+}
 
+/**
+ *  \brief Envoie la mise à jour du score d'un client vers un autre client pendant une partie
+ *  
+ *  \param [in] sock socket a utiliser
+ *  \param [in] score score du joueur
+ *  \return void
+ */
 void updateScoreReq(int sock, int score)
 {
     // On prepare la requete pour le serveur
@@ -458,7 +556,12 @@ void updateScoreReq(int sock, int score)
     reqTOstr(&req, reqTxt);
     ecrireMsgTCP(sock, reqTxt);
 };
-
+/**
+ *  \brief Reçoit la mise à jour du score d'un client vers un autre client pendant une partie
+ *  
+ *  \param [in] sock socket a utiliser
+ *  \return nouveau score
+ */
 int readScoreReq(int sock)
 {
     int lenLu = 1;
@@ -483,8 +586,15 @@ int readScoreReq(int sock)
     // On prepare la requete pour le serveur
     strTOscore(rep.msgRep, &score);
     return score;
-};
+}
 
+/**
+ *  \brief Envoie la requete de mise a jour de l'état d'une partie client => serveur
+ *  
+ *  \param [in] masock socket a utiliser
+ *  \param [in] statutpartie etat de la partie
+ *  \return void
+ */
 void updateStatutPartieReq(int masock, statPartie_t *statutpartie)
 {
     DEBUG_S("Debut updateStatutPartieReq\n");

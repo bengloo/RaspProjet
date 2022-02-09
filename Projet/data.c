@@ -19,6 +19,13 @@
 
 const char *statutPartieTxt[] = {"EN COURS", "TERMINEE", "EN ECHEC", "ATTENTE ", "FERMEE  "};
 
+/**
+ *  \brief Transforme requete en string 
+ *  
+ *  \param [in] req requete
+ *  \param [out] buff buffer de destination
+ *  \return void
+ */
 void reqTOstr(req_t *req, buffer_t buff)
 {
     sprintf(buff, FMT_REQSTR, req->idReq, req->lgreq);
@@ -34,11 +41,26 @@ void reqTOstr(req_t *req, buffer_t buff)
     strncpy(ch, req->msgReq, req->lgreq);
     ch[req->lgreq] = '\0';
 }
+
+/**
+ *  \brief Transforme string en requete
+ *  
+ *  \param [out] req requete
+ *  \param [in] buff buffer
+ *  \return void
+ */
 void strTOreq(req_t *req, buffer_t buff)
 {
     sscanf(buff, FMT_REQ, (short int *)&req->idReq, &req->lgreq, req->msgReq);
 }
 
+/**
+ *  \brief Transforme reponse en string 
+ *  
+ *  \param [in] rep reponse
+ *  \param [out] buff buffer de destination
+ *  \return void
+ */
 void repTOstr(rep_t *rep, buffer_t buff)
 {
     sprintf(buff, FMT_REPSTR, rep->idRep, rep->lgrep);
@@ -55,31 +77,74 @@ void repTOstr(rep_t *rep, buffer_t buff)
     ch[rep->lgrep] = '\0';
 }
 
+/**
+ *  \brief Transforme string en reponse
+ *  
+ *  \param [out] rep reponse recuperee
+ *  \param [in] buff string initiale
+ *  \return void
+ */
 void strTOrep(rep_t *rep, buffer_t buff)
 {
     sscanf(buff, FMT_REP, (int *)&rep->idRep, &rep->lgrep, rep->msgRep);
 }
 
+/**
+ *  \brief Transforme adresse en string 
+ *  
+ *  \param [in] adr adresse
+ *  \param [out] dest buffer de destination
+ *  \return void
+ */
 void adresseTOstr(adresse_t *adr, char *dest)
 {
     sprintf(dest, "%s:%d:%s", adr->ip, adr->port, adr->pseudo);
 }
 
+/**
+ *  \brief Transforme string en adresse
+ *  
+ *  \param [out] adr adresse
+ *  \param [in] dest string initiale
+ *  \return void
+ */
 void strTOadresse(adresse_t *adr, char *dest)
 {
     sscanf(dest, "%[^:]:%d:%[^:]", adr->ip, &adr->port, adr->pseudo);
 }
 
+/**
+ *  \brief Transforme statutReq en string 
+ *  
+ *  \param [in] adr statutReq
+ *  \param [out] dest buffer de destination
+ *  \return void
+ */
 void statutReqTOstr(statutReq_t *adr, char *dest)
 {
     sprintf(dest, "%d", adr->statut);
 }
 
+/**
+ *  \brief Transforme string en statut requete
+ *  
+ *  \param [out] adr statut requete
+ *  \param [in] dest string initiale
+ *  \return void
+ */
 void strTOstatutReq(statutReq_t *adr, char *dest)
 {
     sscanf(dest, "%d", &adr->statut);
 }
 
+/**
+ *  \brief Transforme liste de partie en string 
+ *  
+ *  \param [in] listePartie liste de partie
+ *  \param [in] nbPartie nombre de partie
+ *  \param [out] dest buffer de destination
+ *  \return void
+ */
 void listePartieTOStr(statPartie_t *listePartie, unsigned nbPartie, char *dest)
 {
     char *str = dest;
@@ -102,6 +167,14 @@ void listePartieTOStr(statPartie_t *listePartie, unsigned nbPartie, char *dest)
     }
     //DEBUG_S1("listePartieTOStr : str <%s>\n", dest);
 }
+
+/**
+ *  \brief Transforme partie en string 
+ *  
+ *  \param [out] dest buffer de destination
+ *  \param [in] partie partie
+ *  \return void
+ */
 void partieTOstr(char *dest, statPartie_t *partie)
 {
     sprintf(dest, "%d:%d:%s:%d:%s:%s:%d:%s:%d:%d:",
@@ -116,6 +189,14 @@ void partieTOstr(char *dest, statPartie_t *partie)
             partie->scoreMaitre,
             partie->scoreAdverse);
 }
+
+/**
+ *  \brief Transforme string en stat partie
+ *  
+ *  \param [out] partie stat partie
+ *  \param [in] dataTxt string initiale
+ *  \return void
+ */
 void strTOpartie(statPartie_t *partie, char *dataTxt)
 {
     sscanf(dataTxt, "%d:%d:%[^:]:%d:%[^:]:%[^:]:%d:%[^:]:%d:%d:",
@@ -131,6 +212,13 @@ void strTOpartie(statPartie_t *partie, char *dataTxt)
            &partie->scoreAdverse);
 }
 
+/**
+ *  \brief Transforme string en liste partie
+ *  
+ *  \param [out] listePartie liste partie recupere
+ *  \param [in] dest string initiale
+ *  \return void
+ */
 int StrTOlistePartie(statPartie_t *listePartie, char *dest)
 {
     char *str = dest;
@@ -163,15 +251,37 @@ int StrTOlistePartie(statPartie_t *listePartie, char *dest)
     return nb;
 }
 
+/**
+ *  \brief Transforme temps en string 
+ *  
+ *  \param [out] timeDataRep buffer de destination
+ *  \param [in] temps temps
+ *  \return void
+ */
 void timeTostring(char *timeDataRep, time_t temps)
 {
     sprintf(timeDataRep, "%lu", temps);
 }
 
+/**
+ *  \brief Transforme string en temps
+ *  
+ *  \param [out] temps temps recupere
+ *  \param [in] timeDataRep string initiale
+ *  \return void
+ */
 void stringToTime(time_t *temps, char *timeDataRep)
 {
     *temps = atol(timeDataRep);
 }
+
+/**
+ *  \brief Transforme partie graphique en string 
+ *  
+ *  \param [out] dest buffer de destination
+ *  \param [in] partie partie graphique
+ *  \return void
+ */
 void partieTOstring(char *dest, const partieGraphique_t *partie)
 {
     int i = 0;
@@ -188,6 +298,13 @@ void partieTOstring(char *dest, const partieGraphique_t *partie)
     }
 }
 
+/**
+ *  \brief Transforme string en partie graphique
+ *  
+ *  \param [out] partie partie graphique
+ *  \param [in] partiech string initiale
+ *  \return void
+ */
 void stringTOpartie(partieGraphique_t *partie, const char *partiech)
 {
     //DEBUG_S1("stringTOpartie debut partiech <%s>\n", partiech);
@@ -220,6 +337,14 @@ void stringTOpartie(partieGraphique_t *partie, const char *partiech)
     }
 }
 
+/**
+ *  \brief Transforme requete en string 
+ *  
+ *  \param [out] dataTxt buffer de destination
+ *  \param [in] temps temps de debut de partie
+ *  \param [in] partie partie graphique
+ *  \return void
+ */
 void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie)
 {
     char tmp[MAX_LEN];
@@ -229,6 +354,14 @@ void initPartiTOString(char *dataTxt, time_t temps, partieGraphique_t *partie)
     sprintf(dataTxt, "%s:%s:", topdepart, tmp);
 }
 
+/**
+ *  \brief Transforme string en partie
+ *  
+ *  \param [out] temps temps de debut de partie
+ *  \param [out] partie partie graphique
+ *  \param [in] dataTxt string initiale
+ *  \return void
+ */
 void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt)
 {
     char topdepart[200];
@@ -242,11 +375,26 @@ void StringinitTOParti(time_t *temps, partieGraphique_t *partie, char *dataTxt)
     stringTOpartie(partie, ch);
 }
 
+/**
+ *  \brief Transforme score en string 
+ *  
+ *  \param [out] dest buffer de destination
+ *  \param [in] score score joueur
+ *  \return void
+ */
 void scoreTOstr(char *dest, int score)
 {
     sprintf(dest, "%d:", score);
-};
+}
+
+/**
+ *  \brief Transforme string en score
+ *  
+ *  \param [in] dest string initiale
+ *  \param [out] score score de destination
+ *  \return void
+ */
 void strTOscore(char *dest, int *score)
 {
     sscanf(dest, "%d:", score);
-};
+}

@@ -81,8 +81,8 @@ void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServ
 void connecterServeur(void);
 void connecterServeurPartie(adresse_t serverPartie);
 /**
- *  \fn         int main(int argc, char const *argv[])
- *  \brief      fonction principale 
+ *  \fn main_client
+ *  \brief      fonction principale du client
  *  \param      prend en paramètre les paramètres de ligne de commande 
  *  \return    retourne un int (valeur de retour)
  */
@@ -135,7 +135,6 @@ int main(int argc, char const *argv[])
     return 0;
 }
 /**
- *  \fn         void afficherMenu()
  *  \brief      fonction d'affichage du menu  
  *  \param      void
  *  \return     void
@@ -152,11 +151,10 @@ void afficherMenu()
            myPseudo);
 }
 
-// permet de jouer seul
 /**
- *  \fn         void partieSolo(int sock, char *myPseudo)
  *  \brief      fonction permettant de lancer une partie solo 
- *  \param      prend en paramètre une socket et un pseudo
+ *  \param [in] sock socket a utiliser (unused)
+ *  \param [in] myPseudo pseudo du joueur (unused)
  *  \return     void
  */
 void partieSolo(int sock, char *myPseudo)
@@ -176,8 +174,8 @@ void partieSolo(int sock, char *myPseudo)
     jouerPartie(&partieGraphique, &mon_score, &son_score, pic, now + DELAY_START, 0);
     system("./scriptZoom.sh -p");
 };
+
 /**
- *  \fn         void connecterServeur(void)
  *  \brief      fonction permettant de se connecter au serveur d'enregistrement 
  *  \param      void
  *  \return     void
@@ -205,9 +203,8 @@ void connecterServeur(void)
     printf("Connexion reussie\n");
 };
 /**
- *  \fn         void connecterServeurPartie(adresse_t addrServerPartie)
  *  \brief      fonction permettant de se connecter au serveur d'une partie créer par un client 
- *  \param      addrServerPartie une addresse de server de partie de type adresse_t 
+ *  \param [in] addrServerPartie adresse du client serveur de partie
  *  \return     void
  */
 void connecterServeurPartie(adresse_t addrServerPartie)
@@ -223,13 +220,13 @@ void connecterServeurPartie(adresse_t addrServerPartie)
     sockPartie = creerSocketClient(addrServerPartie.port, addrServerPartie.ip);
     if (sockPartie == 0)
         printf("Erreur connection serveurPartie\n");
-};
+}
+
 /**
- *  \fn         int serverPartie(unsigned idPartie)
  *  \brief      fonction qui permet d'attendre q'un client adverse se connecte, 
  * mettre a jour l'etat de la partie sur le server et lancer la partie 
- *  \param      ipPartie ID de partie
- *  \return     void
+ *  \param [in] ipPartie ID de partie
+ *  \return     OK/NOT_OK
  */
 int serverPartie(unsigned idPartie)
 {
@@ -293,11 +290,10 @@ int serverPartie(unsigned idPartie)
     return OK;
 }
 /**
- *  \fn         void partieMaitre(int masock, char *myPseudo)
  *  \brief      fonction qui permet de creer une partie, de l'enregistrer au près du
  *  serveur et de lancer la fonction d'attente d'un adversaire 
- *  \param      masock socket serveur 
- *  \param      myPseudo pseudo du client maitre
+ *  \param [in] masock socket serveur 
+ *  \param [in] myPseudo pseudo du client maitre
  *  \return     void
  */
 void partieMaitre(int masock, char *myPseudo)
@@ -309,12 +305,11 @@ void partieMaitre(int masock, char *myPseudo)
     }
 }
 /**
- *  \fn         void partieAdverse(int masock, char *myPseudo)
  *  \brief      fonction qui permet a un adversaire de recuperer la liste de partie 
  * sur le serveur d'enregistrement, de se connecter au client Maitre(créateur de la partie)
  * et de jouer la partie
- *  \param      masock socket serveur 
- *  \param      myPseudo pseudo du client maitre
+ *  \param [in] masock socket serveur 
+ *  \param [in] myPseudo pseudo du client maitre
  *  \return     void
  */
 void partieAdverse(int masock, char *myPseudo)
@@ -361,23 +356,22 @@ void partieAdverse(int masock, char *myPseudo)
         printf("Pas de partie disponible\n");
 }
 /**
- *  \fn         void usage(const char *prg)
  *  \brief      fonction qui permet d'afficher l'usage des paramètres des paramètres possible pour 
  * lancer le programme
- *  \param      prg nom d'executable
+ *  \param [in] prg nom d'executable
  *  \return     void
  */
 void usage(const char *prg)
 {
     printf("usage :%s <portClientMaitre> <ipServeur>\n", prg);
 }
+
 /**
- *  \fn         void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer)
  *  \brief      fonction qui permet de faire la lecture des paramètres passer en arguments au lancement de l'executable
- *  \param      argc nombre de paramètre 
- *  \param      argv liste des chaines de paramètre 
- *  \param      portClientMaitre variable dans laquelle il faut stocker le paramètre portClientMaitre passé
- *  \param      ipServer variable dans laquelle il faut stocker le paramètre ipServer passé
+ *  \param [in] argc nombre de paramètre 
+ *  \param [in] argv liste des chaines de paramètre 
+ *  \param [out] portClientMaitre variable dans laquelle il faut stocker le paramètre portClientMaitre passé
+ *  \param [out] ipServer variable dans laquelle il faut stocker le paramètre ipServer passé
  *  \return     void
  */
 void readParam(int argc, char const *argv[], int *portClientMaitre, char *ipServer)
@@ -414,6 +408,13 @@ void initstatPartie(void);
 void lireReqServ(listeClient_t *client);
 void afficherCLient();
 
+/**
+ *  \fn main_serveur
+ *  \brief      fonction principale du serveur
+ *  \param [in] argc nombre d'argument
+ *  \param [in] argv liste d'argument
+ *  \return    retourne un int (valeur de retour)
+ */
 int main(int argc, char const *argv[])
 {
     socklen_t cltLen;
@@ -458,6 +459,12 @@ int main(int argc, char const *argv[])
     }
 }
 
+/**
+ *  \brief Lit et analyse les requetes envoyées par le client : fonction lancee dans une thread
+ *  
+ *  \param [in] client client qui a ouvert la connexion
+ *  \return void
+ */
 void lireReqServ(listeClient_t *client)
 {
     DEBUG_S3("Debut lireReqServ : New thread pour idxClient <%d> socket <%d> pseudo <%s>\n", client->idx, client->socket, client->pseudo);
@@ -517,12 +524,21 @@ void lireReqServ(listeClient_t *client)
     afficherPartie(nbPartie);
 }
 
-// initialisation
+/**
+ *  \brief Initialise les parties
+ *  
+ *  \return void
+ */
 void initstatPartie(void)
 {
     nbPartie = 0;
 }
 
+/**
+ *  \brief Affiche la liste des clients
+ *  
+ *  \return void
+ */
 void afficherCLient()
 {
     int i = 0;
@@ -541,6 +557,12 @@ void afficherCLient()
 /* ------------------------------------------------------------------------ */
 /*      FONCTION SERVEUR    & CLIENT                                        */
 /* ------------------------------------------------------------------------ */
+/**
+ *  \brief Affiche la liste des parties
+ *  \param [in] nombre de partie
+ *  
+ *  \return void
+ */
 void afficherPartie(unsigned nbPart)
 {
     int i = 0;
@@ -571,6 +593,13 @@ void afficherPartie(unsigned nbPart)
 #endif
 }
 
+/**
+ *  \brief Installe la deroute des signaux
+ *  
+ *  \param [in] numSig numero du signal
+ *  \param [in] pfct fonction à associer
+ *  \return void
+ */
 void installDeroute(int numSig, void (*pfct)(int))
 {
     struct sigaction newAction;
@@ -582,6 +611,12 @@ void installDeroute(int numSig, void (*pfct)(int))
     CHECK_T(sigaction(numSig, &newAction, NULL) == 0, "--sigaction--");
 }
 
+/**
+ *  \brief Fonction de traitement des signaux
+ *  
+ *  \param [in] numSig numero signal recu
+ *  \return void
+ */
 void deroute(int numSig)
 {
     switch (numSig)
@@ -596,6 +631,11 @@ void deroute(int numSig)
     }
 }
 
+/**
+ *  \brief Termine proprement le process en fermant les sockets
+ *  
+ *  \return void
+ */
 void terminerProcess(void)
 {
 #ifdef CLIENT

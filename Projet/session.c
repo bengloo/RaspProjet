@@ -151,11 +151,12 @@ void fermerSocket(int sock)
  *  \param [in] sock socket
  *  \return void
  */
- void etablirConexion(struct sockaddr_in clt, int sock)
+void etablirConexion(struct sockaddr_in clt, int sock)
 {
 
     CHECK(connect(sock, (struct sockaddr *)&clt, sizeof clt), "Can't connect");
-};
+}
+
 /**
  *  \brief Envoyer un message sur une socket
  *  
@@ -170,13 +171,28 @@ void ecrireMsgTCP(int sock, char *msg)
     write(sock, msg, strlen(msg) + 1);
 }
 
+/**
+ *  \brief Lire un message sur une socket
+ *  
+ *  \param [in] sock socket a utliser pour la lecture
+ *  \param [in] reponse chaine ou stocker le message reçu
+ *  \param [in] taille_max taille maximum de la chaine ou stocker le message reçu
+ *  \return void
+ */
 ssize_t lireMsgTCP(int sock, char *reponse, int taille_max)
 {
     // Réception d’un message
     return read(sock, reponse, taille_max);
 };
 
-//UDP
+/**
+ *  \brief Creer une socket UDP
+ *  
+ *  \param [in] addrdest adresse IP de destination
+ *  \param [in] port port de destination
+ *  \param [in] serv structure socket
+ *  \return socket creee
+ */
 int creerSocketUDP(char *addrdest, int port, struct sockaddr_in *serv)
 {
     int sock;
@@ -190,8 +206,14 @@ int creerSocketUDP(char *addrdest, int port, struct sockaddr_in *serv)
     memset(&(serv->sin_zero), 0, 8);
     printf("Client installé avec l'addr %s:%d\n", inet_ntoa(serv->sin_addr), ntohs(serv->sin_port));
     return sock;
-};
+}
 
+/**
+ *  \brief Creer une socket UDP avec adresse default
+ *  
+ *  \param [in] serv structure socket
+ *  \return socket creee
+ */
 int creerSocketUDPAdr(struct sockaddr_in *serv)
 {
     int sock;
@@ -210,8 +232,16 @@ int creerSocketUDPAdr(struct sockaddr_in *serv)
     CHECK(bind(sock, (struct sockaddr *)serv, sizeof *serv), "Can't bind UDP");
 
     return sock;
-};
+}
 
+/**
+ *  \brief Envoyer un message sur une socket UDP
+ *  
+ *  \param [in] clt client de destination
+ *  \param [in] sock socket a utliser pour l'envoi
+ *  \param [in] msg message à envoyer
+ *  \return void
+ */
 void ecrireMsgUDP(struct sockaddr_in clt, int sock, char *msg)
 {
     struct sockaddr_in moi;
@@ -221,8 +251,15 @@ void ecrireMsgUDP(struct sockaddr_in clt, int sock, char *msg)
     CHECK(sendto(sock, msg, strlen(msg) + 1, 0, (struct sockaddr *)&clt, sizeof clt), "Can't send");
     CHECK(getsockname(sock, (struct sockaddr *)&moi, &LenMoi), "--getsockname()--");
     printf("j'ai envoyé le message \"%s\" à %s:%d, via %s :%d\n", msg, inet_ntoa(clt.sin_addr), ntohs(clt.sin_port), inet_ntoa(moi.sin_addr), ntohs(moi.sin_port));
-};
+}
 
+/**
+ *  \brief Lire un message sur une socket
+ *  
+ *  \param [in] sock socket a utliser pour la lecture
+ *  \param [in] clt client de reception
+ *  \return requete
+ */
 req_t lireMsgUDP(int sock, struct sockaddr_in *clt)
 {
 

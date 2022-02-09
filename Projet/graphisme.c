@@ -122,12 +122,18 @@ typedef struct
 	int jeuEnCours;
 } threadArg_t;
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect vect_scale(float s, vect v)
 {
 	vect res = {s * v.x, s * v.y, s * v.z};
 	return res;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect vect_add(vect v1, vect v2)
 {
 	vect res;
@@ -137,12 +143,18 @@ vect vect_add(vect v1, vect v2)
 	return res;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect vect_sub(vect v1, vect v2)
 {
 	vect v3 = vect_scale(-1, v2);
 	return vect_add(v1, v3);
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect vect_normalize(vect v)
 {
 	float len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -152,46 +164,73 @@ vect vect_normalize(vect v)
 	return v;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 float vect_dot(vect v1, vect v2)
 {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect vect_cross(vect v1, vect v2)
 {
 	return (vect){v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x};
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void vect_print(vect v)
 {
 	printf("x=%f, y=%f, z=%f\n", v.x, v.y, v.z);
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect2 vect2_add(vect2 v1, vect2 v2)
 {
 	return (vect2){v1.x + v2.x, v1.y + v2.y};
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect2 vect2_sub(vect2 v1, vect2 v2)
 {
 	return (vect2){v1.x - v2.x, v1.y - v2.y};
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect2 vect2_scale(float a, vect2 v)
 {
 	return (vect2){a * v.x, a * v.y};
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 float vect2_dot(vect2 v1, vect2 v2)
 {
 	return v1.x * v2.x + v1.y * v2.y;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void vect2_print(vect2 v)
 {
 	printf("%f %f\n", v.x, v.y);
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 int key_is_pressed(KeySym ks)
 {
 	Display *dpy = XOpenDisplay(0);
@@ -203,6 +242,9 @@ int key_is_pressed(KeySym ks)
 	return isPressed;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 vect2 project_point(vect dir, vect point)
 {
 	float alpha = vect_dot(point, dir) / (1 + vect_dot(point, dir));
@@ -216,6 +258,9 @@ vect2 project_point(vect dir, vect point)
 	return (vect2){x_coord, y_coord};
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void put_point(vect2 projected, char c, char **picture)
 {
 	int x_coord = (int)((-projected.x + WIDTH) / (2 * WIDTH) * X_PIX);
@@ -230,6 +275,9 @@ void put_point(vect2 projected, char c, char **picture)
 	}
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void draw_point(vect dir, vect point, char c, char **picture)
 {
 	// can't see points behind you
@@ -241,6 +289,9 @@ void draw_point(vect dir, vect point, char c, char **picture)
 	put_point(projected, c, picture);
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void draw_line(vect dir, vect v_from, vect v_to, char c, char **picture)
 {
 	// remove the part of the line that is behind the viewer
@@ -273,6 +324,9 @@ void draw_line(vect dir, vect v_from, vect v_to, char c, char **picture)
 	}
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void draw_ascii(char **picture)
 {
 	printf("\033[0;0H"); // jump to position 0 0 to overwrite current picture
@@ -286,6 +340,9 @@ void draw_ascii(char **picture)
 	}
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 void draw_ascii_score(char **picture, int s1, int s2)
 {
 	int s1chiffre[4];
@@ -373,6 +430,12 @@ void draw_ascii_score(char **picture, int s1, int s2)
 	}
 }
 
+/**
+ *  \brief Remplit l'ecran avec un caractere
+ *  
+ *  \param [in] empty_char Description for empty_char
+ *  \return dernier caractere
+ */
 char **empty_picture(char empty_char)
 {
 	char **pic;
@@ -388,11 +451,18 @@ char **empty_picture(char empty_char)
 	return pic;
 }
 
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 float random_float()
 {
 	float r = (float)rand() / (float)RAND_MAX;
 	return r;
 }
+
+/**
+ *  \brief fonction privee specifique du jeu temple_run
+ */
 int min(int a, int b)
 {
 	if (a < b)
@@ -402,6 +472,12 @@ int min(int a, int b)
 	return b;
 }
 
+/**
+ *  \brief FOnction quo est lancé dans un thread pour recupérer les mise à jour de score
+ *  
+ *  \param [in] arg argument de la thread de type threadArg_t
+ *  \return void
+ */
 void majScoreAdverse(void *arg)
 {
 
@@ -420,6 +496,17 @@ void majScoreAdverse(void *arg)
 	}
 }
 
+/**
+ *  \brief Fonction principale du jeu temple run
+ *  
+ *  \param [in] partie description de la partie graphique
+ *  \param [out] mon_score score du joueur
+ *  \param [out] son_score score adversaire
+ *  \param [in] pic zone d'affichage
+ *  \param [in] top top depart
+ *  \param [in] sock scoket entre les deux clients
+ *  \return void
+ */
 void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char **pic, time_t top, int sock)
 {
 
@@ -775,7 +862,14 @@ void jouerPartie(partieGraphique_t *partie, int *mon_score, int *son_score, char
 
 	// On remet  la resolution cf README
 	system("./scriptZoom.sh -p");
-};
+}
+
+/**
+ *  \brief Initialise une partie en generant les obstacles et longueurs
+ *  
+ *  \param [out] partie nouvelle partie creee
+ *  \return void
+ */
 void initPartieGraphisme(partieGraphique_t *partie)
 {
 	int i = 0;
