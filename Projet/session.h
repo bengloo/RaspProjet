@@ -1,9 +1,7 @@
 /* ------------------------------------------------------------------------ */
 /**
  *  \file       session.h
- *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
- *              permettant de gerer des parties temple_run multijoueurs 
- *				table de villes chargée à partir d'un fichier.
+ *  \brief      fichier description de la gestion session socket
  *
  *  \author     Morcq Alexandre B2
  *

@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------------ */
 /**
  *  \file       basic_func.h
- *  \brief      
+ *  \brief      Fichier description des fonctions basiques et generiques
  *
  *  \date       28 Novembre 2021
  *  \author     Morcq Alexandre

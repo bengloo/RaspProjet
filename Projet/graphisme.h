@@ -1,9 +1,7 @@
 /* ------------------------------------------------------------------------ */
 /**
  *  \file       graphisme.h
- *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
- *              permettant de gerer des parties temple_run multijoueurs 
- *				table de villes chargée à partir d'un fichier.
+ *  \brief      Fichier description des fonctions de gestion du jeu graphique
  *
  *  \author     Morcq Alexandre B2
  *

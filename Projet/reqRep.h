@@ -1,9 +1,7 @@
 /* ------------------------------------------------------------------------ */
 /**
  *  \file       reqRep.h
- *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
- *              permettant de gerer des parties temple_run multijoueurs 
- *				table de villes chargée à partir d'un fichier.
+ *  \brief      Fichier description de l'ensemble des strcutures requetes et reponses
  *
  *  \author     Morcq Alexandre B2
  *

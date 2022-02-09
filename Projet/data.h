@@ -1,9 +1,7 @@
 /* ------------------------------------------------------------------------ */
 /**
  *  \file       data.h
- *  \brief      Programme réalisant un executable serveur d'enregistrement et un executable client
- *              permettant de gerer des parties temple_run multijoueurs 
- *				table de villes chargée à partir d'un fichier.
+ *  \brief      Fichier description des fonctions de transcription/serialisation des données en string et vice versa
  *
  *  \author     Morcq Alexandre B2
  *
