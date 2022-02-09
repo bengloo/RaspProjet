@@ -20,6 +20,12 @@
 #include <arpa/inet.h>
 #include "session.h"
 
+/**
+ *  \brief recupere adresse IP
+ *  
+ *  \param [in] str chaine pour stocker l'IP
+ *  \return void
+ */
 void getMyIp(char *str)
 {
     struct ifaddrs *addr, *intf;
@@ -55,7 +61,12 @@ void getMyIp(char *str)
     }
 }
 
-//TCP
+/**
+ *  \brief Permet de creer une socket en ecoute
+ *  
+ *  \param [in] port numero de port d'ecoute
+ *  \return numero de socket creee
+ */
 int creerSocketEcoute(unsigned int port)
 {
 
@@ -80,7 +91,13 @@ int creerSocketEcoute(unsigned int port)
     return sock;
 };
 
-// Unsued
+/**
+ *  \brief accepter les connexions sur une socket
+ *  
+ *  \param [in] clt structure du client qui se connecte
+ *  \param [in] sock socket
+ *  \return void
+ */
 void accepterConnexion(struct sockaddr_in clt, int sock)
 {
 
@@ -90,7 +107,13 @@ void accepterConnexion(struct sockaddr_in clt, int sock)
 
     CHECK(sd = accept(sock, (struct sockaddr *)&clt, &cltLen), "Can't connect");
 };
-
+/**
+ *  \brief Permet de se connecter à une socket à distance
+ *  
+ *  \param [in] port port de connexion à utliser
+ *  \param [in] addrIp adresse ip de connexion à utliliser 
+ *  \return numero de socket connectee
+ */
 int creerSocketClient(unsigned int port, char *addrIp)
 {
     int masock;
@@ -109,20 +132,37 @@ int creerSocketClient(unsigned int port, char *addrIp)
     CHECK(connect(masock, (struct sockaddr *)&svc, sizeof svc), "Can't connect");
     return masock;
 };
-
+/**
+ *  \brief Fermer une socket
+ *  
+ *  \param [in] sock numero de socket a fermer
+ *  \return void
+ */
 void fermerSocket(int sock)
 {
     if (sock != 0)
         close(sock);
 }
 
-// Unsued
-void etablirConexion(struct sockaddr_in clt, int sock)
+/**
+ *  \brief Permet d'etablir une connexion
+ *  
+ *  \param [in] clt structure du client qui se connecte
+ *  \param [in] sock socket
+ *  \return void
+ */
+ void etablirConexion(struct sockaddr_in clt, int sock)
 {
 
     CHECK(connect(sock, (struct sockaddr *)&clt, sizeof clt), "Can't connect");
 };
-
+/**
+ *  \brief Envoyer un message sur une socket
+ *  
+ *  \param [in] sock socket a utliser pour l'envoi
+ *  \param [in] msg message à envoyer
+ *  \return void
+ */
 void ecrireMsgTCP(int sock, char *msg)
 {
     // Ecriture du message
