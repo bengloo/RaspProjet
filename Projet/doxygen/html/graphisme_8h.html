@@ -69,7 +69,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Programme réalisant un executable serveur d'enregistrement et un executable client permettant de gerer des parties temple_run multijoueurs table de villes chargée à partir d'un fichier.  
+<p>Fichier description des fonctions de gestion du jeu graphique.  
 <a href="#details">More...</a></p>
 
 <p><a href="graphisme_8h_source.html">Go to the source code of this file.</a></p>
@@ -82,16 +82,20 @@ Data Structures</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ab9e3c46ba802bb9ccb3bc2ccc9d77f6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="graphisme_8h.html#ab9e3c46ba802bb9ccb3bc2ccc9d77f6f">draw_ascii</a> (char **picture)</td></tr>
+<tr class="memdesc:ab9e3c46ba802bb9ccb3bc2ccc9d77f6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">fonction privee specifique du jeu temple_run  <a href="graphisme_8h.html#ab9e3c46ba802bb9ccb3bc2ccc9d77f6f">More...</a><br /></td></tr>
 <tr class="separator:ab9e3c46ba802bb9ccb3bc2ccc9d77f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc43f648d73391c981e23cbfbebef81f"><td class="memItemLeft" align="right" valign="top">char **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="graphisme_8h.html#acc43f648d73391c981e23cbfbebef81f">empty_picture</a> (char empty_char)</td></tr>
+<tr class="memdesc:acc43f648d73391c981e23cbfbebef81f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remplit l'ecran avec un caractere.  <a href="graphisme_8h.html#acc43f648d73391c981e23cbfbebef81f">More...</a><br /></td></tr>
 <tr class="separator:acc43f648d73391c981e23cbfbebef81f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe4cf911352ccb3fc2ef432fbc9b1492"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="graphisme_8h.html#abe4cf911352ccb3fc2ef432fbc9b1492">jouerPartie</a> (<a class="el" href="structpartie_graphique__t.html">partieGraphique_t</a> *partie, int *<a class="el" href="clt_srv_8c.html#aea3ecb94506e25fef0f1139b5443dc7f">mon_score</a>, int *<a class="el" href="clt_srv_8c.html#a47ed4efd358e6429481fcf7ccf49074a">son_score</a>, char **pic, time_t top, int <a class="el" href="_todo_8txt.html#aacebfa6447f6ea2f42cc62da2dddd716">sock</a>)</td></tr>
+<tr class="memdesc:abe4cf911352ccb3fc2ef432fbc9b1492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fonction principale du jeu temple run.  <a href="graphisme_8h.html#abe4cf911352ccb3fc2ef432fbc9b1492">More...</a><br /></td></tr>
 <tr class="separator:abe4cf911352ccb3fc2ef432fbc9b1492"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8879d22dfa39563d0fadcc2f27f4a3bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="graphisme_8h.html#a8879d22dfa39563d0fadcc2f27f4a3bc">initPartieGraphisme</a> (<a class="el" href="structpartie_graphique__t.html">partieGraphique_t</a> *partie)</td></tr>
+<tr class="memdesc:a8879d22dfa39563d0fadcc2f27f4a3bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise une partie en generant les obstacles et longueurs.  <a href="graphisme_8h.html#a8879d22dfa39563d0fadcc2f27f4a3bc">More...</a><br /></td></tr>
 <tr class="separator:a8879d22dfa39563d0fadcc2f27f4a3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Programme réalisant un executable serveur d'enregistrement et un executable client permettant de gerer des parties temple_run multijoueurs table de villes chargée à partir d'un fichier. </p>
+<div class="textblock"><p >Fichier description des fonctions de gestion du jeu graphique. </p>
 <dl class="section author"><dt>Author</dt><dd>Morcq Alexandre B2</dd></dl>
 <dl class="section date"><dt>Date</dt><dd>08/02/2022</dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0<ul>
@@ -116,6 +120,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>fonction privee specifique du jeu temple_run </p>
+
 </div>
 </div>
 <a id="acc43f648d73391c981e23cbfbebef81f" name="acc43f648d73391c981e23cbfbebef81f"></a>
@@ -134,6 +140,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Remplit l'ecran avec un caractere. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">empty_char</td><td>Description for empty_char </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>dernier caractere </dd></dl>
+
 </div>
 </div>
 <a id="a8879d22dfa39563d0fadcc2f27f4a3bc" name="a8879d22dfa39563d0fadcc2f27f4a3bc"></a>
@@ -151,6 +166,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initialise une partie en generant les obstacles et longueurs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">partie</td><td>nouvelle partie creee </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -203,6 +227,20 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Fonction principale du jeu temple run. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">partie</td><td>description de la partie graphique </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mon_score</td><td>score du joueur </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">son_score</td><td>score adversaire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pic</td><td>zone d'affichage </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">top</td><td>top depart </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sock</td><td>scoket entre les deux clients </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>

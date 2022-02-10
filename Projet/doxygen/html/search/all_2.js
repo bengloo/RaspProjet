@@ -6,7 +6,7 @@ var searchData=
   ['connecterclient_3',['CONNECTERCLIENT',['../req_rep_8h.html#a0d6a1384d22fb240db2cf4d96aced69aa9ce4fd858d490ac434b3f5e7be510af8',1,'reqRep.h']]],
   ['connecterclientreq_4',['connecterClientReq',['../proto_8c.html#a7590d689a2b6e52b0ce54286919b41f7',1,'connecterClientReq(int sock, char *pseudo):&#160;proto.c'],['../proto_8h.html#a7590d689a2b6e52b0ce54286919b41f7',1,'connecterClientReq(int sock, char *pseudo):&#160;proto.c']]],
   ['connecterserveur_5',['connecterServeur',['../clt_srv_8c.html#a2e6ecae6463fae3407deed02b7c850bd',1,'cltSrv.c']]],
-  ['connecterserveurpartie_6',['connecterServeurPartie',['../clt_srv_8c.html#ab6094779c5837ce191a576bf0f2facf1',1,'cltSrv.c']]],
+  ['connecterserveurpartie_6',['connecterServeurPartie',['../clt_srv_8c.html#a00b74a582b8b7caf5ce5fb15b643d323',1,'cltSrv.c']]],
   ['continuer_7',['continuer',['../clt_srv_8c.html#a0599f90eb1f98c616ae323715c561fe9',1,'cltSrv.c']]],
   ['continuerpartie_8',['continuerPartie',['../clt_srv_8c.html#a473af2541e77cc63d5ef723c39c0d3a2',1,'cltSrv.c']]],
   ['createpartierep_9',['createPartieRep',['../proto_8c.html#ac978265661e3e5404c841bd2aa5aacaf',1,'proto.c']]],

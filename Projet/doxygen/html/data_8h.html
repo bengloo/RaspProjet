@@ -68,7 +68,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Programme réalisant un executable serveur d'enregistrement et un executable client permettant de gerer des parties temple_run multijoueurs table de villes chargée à partir d'un fichier.  
+<p>Fichier description des fonctions de transcription/serialisation des données en string et vice versa.  
 <a href="#details">More...</a></p>
 
 <p><a href="data_8h_source.html">Go to the source code of this file.</a></p>
@@ -76,48 +76,66 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a9d8b8e00f107053ad40f9c09df5f3aa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a9d8b8e00f107053ad40f9c09df5f3aa5">adresseTOstr</a> (<a class="el" href="structadresse__t.html">adresse_t</a> *adr, char *dest)</td></tr>
+<tr class="memdesc:a9d8b8e00f107053ad40f9c09df5f3aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme adresse en string.  <a href="data_8h.html#a9d8b8e00f107053ad40f9c09df5f3aa5">More...</a><br /></td></tr>
 <tr class="separator:a9d8b8e00f107053ad40f9c09df5f3aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3583a44eaba251a05e18a54c27157e78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a3583a44eaba251a05e18a54c27157e78">strTOadresse</a> (<a class="el" href="structadresse__t.html">adresse_t</a> *adr, char *dest)</td></tr>
+<tr class="memdesc:a3583a44eaba251a05e18a54c27157e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en adresse.  <a href="data_8h.html#a3583a44eaba251a05e18a54c27157e78">More...</a><br /></td></tr>
 <tr class="separator:a3583a44eaba251a05e18a54c27157e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c18a12464f9bb0fbdc453b92b21360"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#ae6c18a12464f9bb0fbdc453b92b21360">statutReqTOstr</a> (<a class="el" href="structstatut_req__t.html">statutReq_t</a> *adr, char *dest)</td></tr>
+<tr class="memdesc:ae6c18a12464f9bb0fbdc453b92b21360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme statutReq en string.  <a href="data_8h.html#ae6c18a12464f9bb0fbdc453b92b21360">More...</a><br /></td></tr>
 <tr class="separator:ae6c18a12464f9bb0fbdc453b92b21360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58a17523140f2600913e9a3ff5bc3686"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a58a17523140f2600913e9a3ff5bc3686">strTOstatutReq</a> (<a class="el" href="structstatut_req__t.html">statutReq_t</a> *adr, char *dest)</td></tr>
+<tr class="memdesc:a58a17523140f2600913e9a3ff5bc3686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en statut requete.  <a href="data_8h.html#a58a17523140f2600913e9a3ff5bc3686">More...</a><br /></td></tr>
 <tr class="separator:a58a17523140f2600913e9a3ff5bc3686"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64ae080f394fb51ef9f25f33dbf0c360"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a64ae080f394fb51ef9f25f33dbf0c360">listePartieTOStr</a> (<a class="el" href="structstat_partie__t.html">statPartie_t</a> *<a class="el" href="clt_srv_8c.html#a77d9472a90695125eae56601661a934c">listePartie</a>, unsigned <a class="el" href="clt_srv_8c.html#a06dcb35020d6a818c296600bb7cd7b26">nbPartie</a>, char *dest)</td></tr>
+<tr class="memdesc:a64ae080f394fb51ef9f25f33dbf0c360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme liste de partie en string.  <a href="data_8h.html#a64ae080f394fb51ef9f25f33dbf0c360">More...</a><br /></td></tr>
 <tr class="separator:a64ae080f394fb51ef9f25f33dbf0c360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20d25358ed89cec13e15bb080fbc9169"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a20d25358ed89cec13e15bb080fbc9169">StrTOlistePartie</a> (<a class="el" href="structstat_partie__t.html">statPartie_t</a> *<a class="el" href="clt_srv_8c.html#a77d9472a90695125eae56601661a934c">listePartie</a>, char *dest)</td></tr>
+<tr class="memdesc:a20d25358ed89cec13e15bb080fbc9169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en liste partie.  <a href="data_8h.html#a20d25358ed89cec13e15bb080fbc9169">More...</a><br /></td></tr>
 <tr class="separator:a20d25358ed89cec13e15bb080fbc9169"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3482a77f6c242056831df09b362f5669"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a3482a77f6c242056831df09b362f5669">reqTOstr</a> (<a class="el" href="structreq__t.html">req_t</a> *req, <a class="el" href="req_rep_8h.html#af3c9c9e648eb422e8a1a08a2bba7e108">buffer_t</a> buff)</td></tr>
+<tr class="memdesc:a3482a77f6c242056831df09b362f5669"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme requete en string.  <a href="data_8h.html#a3482a77f6c242056831df09b362f5669">More...</a><br /></td></tr>
 <tr class="separator:a3482a77f6c242056831df09b362f5669"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a638eaabc3fa822210a9a70416efca96f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a638eaabc3fa822210a9a70416efca96f">strTOreq</a> (<a class="el" href="structreq__t.html">req_t</a> *req, <a class="el" href="req_rep_8h.html#af3c9c9e648eb422e8a1a08a2bba7e108">buffer_t</a> buff)</td></tr>
+<tr class="memdesc:a638eaabc3fa822210a9a70416efca96f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en requete.  <a href="data_8h.html#a638eaabc3fa822210a9a70416efca96f">More...</a><br /></td></tr>
 <tr class="separator:a638eaabc3fa822210a9a70416efca96f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b3853c4ea85d9df09847d1df87779fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a9b3853c4ea85d9df09847d1df87779fc">repTOstr</a> (<a class="el" href="structrep__t.html">rep_t</a> *<a class="el" href="_todo_8txt.html#a8200cda9df51d70f489fba342fe1bcfb">rep</a>, <a class="el" href="req_rep_8h.html#af3c9c9e648eb422e8a1a08a2bba7e108">buffer_t</a> buff)</td></tr>
+<tr class="memdesc:a9b3853c4ea85d9df09847d1df87779fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme reponse en string.  <a href="data_8h.html#a9b3853c4ea85d9df09847d1df87779fc">More...</a><br /></td></tr>
 <tr class="separator:a9b3853c4ea85d9df09847d1df87779fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78680b0e3b3b131ae1134bf62be996ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a78680b0e3b3b131ae1134bf62be996ac">strTOrep</a> (<a class="el" href="structrep__t.html">rep_t</a> *<a class="el" href="_todo_8txt.html#a8200cda9df51d70f489fba342fe1bcfb">rep</a>, <a class="el" href="req_rep_8h.html#af3c9c9e648eb422e8a1a08a2bba7e108">buffer_t</a> buff)</td></tr>
+<tr class="memdesc:a78680b0e3b3b131ae1134bf62be996ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en reponse.  <a href="data_8h.html#a78680b0e3b3b131ae1134bf62be996ac">More...</a><br /></td></tr>
 <tr class="separator:a78680b0e3b3b131ae1134bf62be996ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74ab4789362259aa499a5b04bff85e08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a74ab4789362259aa499a5b04bff85e08">obstTOstring</a> (char *dest, const int *obstacles)</td></tr>
 <tr class="separator:a74ab4789362259aa499a5b04bff85e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fa42a6bc32baa77ad4da592177733cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a5fa42a6bc32baa77ad4da592177733cd">stringTOobst</a> (int *dest, const char *obstaclesch)</td></tr>
 <tr class="separator:a5fa42a6bc32baa77ad4da592177733cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaaf7890870cad1c32f889fe5b3439691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#aaaf7890870cad1c32f889fe5b3439691">timeTostring</a> (char *timeDataRep, time_t temps)</td></tr>
+<tr class="memdesc:aaaf7890870cad1c32f889fe5b3439691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme temps en string.  <a href="data_8h.html#aaaf7890870cad1c32f889fe5b3439691">More...</a><br /></td></tr>
 <tr class="separator:aaaf7890870cad1c32f889fe5b3439691"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdcfbaac7d88800970cfe6c5ca5d4cc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#abdcfbaac7d88800970cfe6c5ca5d4cc6">stringToTime</a> (time_t *temps, char *timeDataRep)</td></tr>
+<tr class="memdesc:abdcfbaac7d88800970cfe6c5ca5d4cc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en temps.  <a href="data_8h.html#abdcfbaac7d88800970cfe6c5ca5d4cc6">More...</a><br /></td></tr>
 <tr class="separator:abdcfbaac7d88800970cfe6c5ca5d4cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e9d8201e8495df909cb4162de2f9607"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a5e9d8201e8495df909cb4162de2f9607">initPartiTOString</a> (char *dataTxt, time_t temps, <a class="el" href="structpartie_graphique__t.html">partieGraphique_t</a> *partie)</td></tr>
+<tr class="memdesc:a5e9d8201e8495df909cb4162de2f9607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme requete en string.  <a href="data_8h.html#a5e9d8201e8495df909cb4162de2f9607">More...</a><br /></td></tr>
 <tr class="separator:a5e9d8201e8495df909cb4162de2f9607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3544af30211afb4aedfb1f9a2d75deea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a3544af30211afb4aedfb1f9a2d75deea">StringinitTOParti</a> (time_t *temps, <a class="el" href="structpartie_graphique__t.html">partieGraphique_t</a> *partie, char *dataTxt)</td></tr>
+<tr class="memdesc:a3544af30211afb4aedfb1f9a2d75deea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en partie.  <a href="data_8h.html#a3544af30211afb4aedfb1f9a2d75deea">More...</a><br /></td></tr>
 <tr class="separator:a3544af30211afb4aedfb1f9a2d75deea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2d411cab2506717fd3a095086a85331"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#ab2d411cab2506717fd3a095086a85331">scoreTOstr</a> (char *dest, int score)</td></tr>
+<tr class="memdesc:ab2d411cab2506717fd3a095086a85331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme score en string.  <a href="data_8h.html#ab2d411cab2506717fd3a095086a85331">More...</a><br /></td></tr>
 <tr class="separator:ab2d411cab2506717fd3a095086a85331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab770f8580fda3ff3c07462d9d9d7b83c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#ab770f8580fda3ff3c07462d9d9d7b83c">strTOscore</a> (char *dest, int *score)</td></tr>
+<tr class="memdesc:ab770f8580fda3ff3c07462d9d9d7b83c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en score.  <a href="data_8h.html#ab770f8580fda3ff3c07462d9d9d7b83c">More...</a><br /></td></tr>
 <tr class="separator:ab770f8580fda3ff3c07462d9d9d7b83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30aaf2fcc7d42defe1629b0495db19be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a30aaf2fcc7d42defe1629b0495db19be">partieTOstr</a> (char *dest, <a class="el" href="structstat_partie__t.html">statPartie_t</a> *partie)</td></tr>
+<tr class="memdesc:a30aaf2fcc7d42defe1629b0495db19be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme partie en string.  <a href="data_8h.html#a30aaf2fcc7d42defe1629b0495db19be">More...</a><br /></td></tr>
 <tr class="separator:a30aaf2fcc7d42defe1629b0495db19be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5edecc165a2fab9f3f67430fb46aa967"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data_8h.html#a5edecc165a2fab9f3f67430fb46aa967">strTOpartie</a> (<a class="el" href="structstat_partie__t.html">statPartie_t</a> *partie, char *datatxt)</td></tr>
+<tr class="memdesc:a5edecc165a2fab9f3f67430fb46aa967"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforme string en stat partie.  <a href="data_8h.html#a5edecc165a2fab9f3f67430fb46aa967">More...</a><br /></td></tr>
 <tr class="separator:a5edecc165a2fab9f3f67430fb46aa967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Programme réalisant un executable serveur d'enregistrement et un executable client permettant de gerer des parties temple_run multijoueurs table de villes chargée à partir d'un fichier. </p>
+<div class="textblock"><p >Fichier description des fonctions de transcription/serialisation des données en string et vice versa. </p>
 <dl class="section author"><dt>Author</dt><dd>Morcq Alexandre B2</dd></dl>
 <dl class="section date"><dt>Date</dt><dd>08/02/2022</dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0<ul>
@@ -151,6 +169,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme adresse en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">adr</td><td>adresse </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dest</td><td>buffer de destination </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -186,6 +214,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme requete en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">dataTxt</td><td>buffer de destination </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">temps</td><td>temps de debut de partie </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">partie</td><td>partie graphique </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a64ae080f394fb51ef9f25f33dbf0c360" name="a64ae080f394fb51ef9f25f33dbf0c360"></a>
@@ -219,6 +258,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme liste de partie en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">listePartie</td><td>liste de partie </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nbPartie</td><td>nombre de partie </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dest</td><td>buffer de destination </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -276,6 +326,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme partie en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">dest</td><td>buffer de destination </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">partie</td><td>partie </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a9b3853c4ea85d9df09847d1df87779fc" name="a9b3853c4ea85d9df09847d1df87779fc"></a>
@@ -303,6 +363,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme reponse en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rep</td><td>reponse </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buff</td><td>buffer de destination </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -332,6 +402,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme requete en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">req</td><td>requete </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buff</td><td>buffer de destination </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="ab2d411cab2506717fd3a095086a85331" name="ab2d411cab2506717fd3a095086a85331"></a>
@@ -360,6 +440,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme score en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">dest</td><td>buffer de destination </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">score</td><td>score joueur </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="ae6c18a12464f9bb0fbdc453b92b21360" name="ae6c18a12464f9bb0fbdc453b92b21360"></a>
@@ -387,6 +477,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme statutReq en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">adr</td><td>statutReq </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dest</td><td>buffer de destination </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -421,6 +521,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme string en partie. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">temps</td><td>temps de debut de partie </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">partie</td><td>partie graphique </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dataTxt</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -478,6 +589,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme string en temps. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">temps</td><td>temps recupere </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeDataRep</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a3583a44eaba251a05e18a54c27157e78" name="a3583a44eaba251a05e18a54c27157e78"></a>
@@ -505,6 +626,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme string en adresse. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">adr</td><td>adresse </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dest</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -534,6 +665,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme string en liste partie. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">listePartie</td><td>liste partie recupere </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dest</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a5edecc165a2fab9f3f67430fb46aa967" name="a5edecc165a2fab9f3f67430fb46aa967"></a>
@@ -552,7 +693,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>datatxt</em>&#160;</td>
+          <td class="paramname"><em>dataTxt</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -561,6 +702,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme string en stat partie. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">partie</td><td>stat partie </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dataTxt</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -590,6 +741,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme string en reponse. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">rep</td><td>reponse recuperee </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">buff</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a638eaabc3fa822210a9a70416efca96f" name="a638eaabc3fa822210a9a70416efca96f"></a>
@@ -617,6 +778,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme string en requete. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">req</td><td>requete </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">buff</td><td>buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
@@ -646,6 +817,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme string en score. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dest</td><td>string initiale </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">score</td><td>score de destination </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="a58a17523140f2600913e9a3ff5bc3686" name="a58a17523140f2600913e9a3ff5bc3686"></a>
@@ -674,6 +855,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Transforme string en statut requete. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">adr</td><td>statut requete </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dest</td><td>string initiale </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
+
 </div>
 </div>
 <a id="aaaf7890870cad1c32f889fe5b3439691" name="aaaf7890870cad1c32f889fe5b3439691"></a>
@@ -701,6 +892,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transforme temps en string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">timeDataRep</td><td>buffer de destination </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">temps</td><td>temps </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void </dd></dl>
 
 </div>
 </div>
