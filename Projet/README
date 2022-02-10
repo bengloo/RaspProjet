@@ -1,21 +1,38 @@
 # MidlewareProjetLe3
 
+# commande make 
 make client #pour generer l'executable client 
 make server #pour generer l'executable serverEnregistrement
 make cleanlib #pour enlever les .o
 make clean #pour enlever les executable
 make zip #genere un zip avec les .c .h et readme
 
-# Afin de pouvoir gerer automatiquement le zoom dans le schelle
-instaler xdottool via sudo apt-get install xdotool
-doné les droit au scriptZoom.sh 
-importer les profiles gnpoes par : dconf load /org/gnome/terminal/ < ./profile_gnome.txt
-verifier l'ordre des profiles en faisant shift+F10 puis Profiles et regarder le numero du profile projet_mid_jeu (par defaut devrait etre 2) et projet_mid_menu (par defaut devrait etre 3)
-Si ce n'est pas 2 et 3 dans cet ordre alors modifier le script scriptZoom.sh en reportant les bons numeros
-
-
-en cas de problemme d'installation il est toujour posible de zommer et dezomer manuelment durant l'execution du code 
+# prés requis.
 
 # installé la lib X11 permettant la gestion des entré clavier pour le jeux. 
+sudo apt install libx11-dev
+
+# zoom automatique
+Afin de pouvoir gerer automatiquement le zoom dans le schelle
+doné les droit d'execution au scriptZoom.sh 
+Donné les permission au ficher scriptZoom.sh afin qui puissent gérer automatiquement les la taille du shell
+vous pouvez tester séparément sont fonctionnement vias 
+./scriptZoom.sh -m  pour que le shell prenne les dimensions du menu.
+et
+./scriptZoom.sh -p pour que le shell prenne les dimensions de jeux.
+
+en cas de problemme d'installation il est toujour posible de zommer et dezomer rapidement manuelment durant l'execution du code 
+
+# executable
+
+./serveurEnregistrement pour lancer le serveur avant toute connexion client
+
+./client <port client> <ip server>
+
+<port client>: facultatif un port par défaut existe néanmoins nécessaire si plusieur client son lancé sur la même machine 
+
+<ip server> : ip du serveur d’enregistrement facultatif si le server sur la même machine que le client, peut être renseigné en utilisant ifconfig sur la machine hébergeant le serveur d’enregistrement
+
+
 
 
