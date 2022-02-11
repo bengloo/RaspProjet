@@ -1,6 +1,8 @@
 # MidlewareProjetLe3
 
 # commande make 
+make #pour generer l'ensemble du projet executable client et serveur
+make debug #pour generer l'ensemble du projet en mode debug executable client et serveur
 make client #pour generer l'executable client 
 make server #pour generer l'executable serverEnregistrement
 make cleanlib #pour enlever les .o
@@ -8,30 +10,27 @@ make clean #pour enlever les executable
 make zip #genere un zip avec les .c .h et readme
 
 # prés requis.
-
-# installé la lib X11 permettant la gestion des entré clavier pour le jeux. 
+# installer la lib X11 permettant la gestion des entrées clavier pour le jeu 
 sudo apt install libx11-dev
 
 # zoom automatique
-Afin de pouvoir gerer automatiquement le zoom dans le schelle
-doné les droit d'execution au scriptZoom.sh 
-Donné les permission au ficher scriptZoom.sh afin qui puissent gérer automatiquement les la taille du shell
-vous pouvez tester séparément sont fonctionnement vias 
+Afin de pouvoir gerer automatiquement le zoom dans le shell
+Donner les droits d'execution au scriptZoom.sh (chmod 755 scriptZoom.sh) 
+vous pouvez tester séparément son fonctionnement vias 
 ./scriptZoom.sh -m  pour que le shell prenne les dimensions du menu.
 et
-./scriptZoom.sh -p pour que le shell prenne les dimensions de jeux.
+./scriptZoom.sh -p pour que le shell prenne les dimensions de jeu.
 
-en cas de problemme d'installation il est toujour posible de zommer et dezomer rapidement manuelment durant l'execution du code 
+En cas de problemme d'installation il est toujours posible de zommer et dezomer rapidement manuelment durant l'execution du code 
 
 # executable
-
 ./serveurEnregistrement pour lancer le serveur avant toute connexion client
 
 ./client <port client> <ip server>
 
-<port client>: facultatif un port par défaut existe néanmoins nécessaire si plusieur client son lancé sur la même machine 
+<port client>: (facultatif) un port par défaut existe néanmoins nécessaire si plusieurs clients sont lancer sur la même machine 
 
-<ip server> : ip du serveur d’enregistrement facultatif si le server sur la même machine que le client, peut être renseigné en utilisant ifconfig sur la machine hébergeant le serveur d’enregistrement
+<ip server> : (facultatif) ip du serveur d’enregistrement. Si le client est lancé sur la même machine que le serveur, cet argument n'est pas obligatoire
 
 
 
