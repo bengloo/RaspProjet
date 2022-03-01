@@ -1,9 +1,8 @@
 # lib compilateur croisé
  target_pc/* 
  target_pi/*
- 
- ncurses/ncurses_programs
- ncurses/ncurses
+
+ ncurses/ncurses-6.3
 
 
 # Prerequisites
