@@ -5,7 +5,8 @@
         "graphisme.h": "c",
         "unistd.h": "c",
         "proto.h": "c",
-        "data.h": "c"
+        "data.h": "c",
+        "stdio.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }

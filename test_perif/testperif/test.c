@@ -1,5 +1,5 @@
-#include "/home/bengloo/Documents/LE3/rasp/wiringpi/wiringPi-36fb7f1/wiringPi/wiringPi.h"
-
+//#include "/home/bengloo/Documents/LE3/rasp/wiringpi/wiringPi-36fb7f1/wiringPi/wiringPi.h"
+#include <wiringPi.h>
 #define BTN 6
 #define BUZZER 1
 
