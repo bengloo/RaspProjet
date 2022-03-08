@@ -12,17 +12,18 @@ all:PC PI
 debug: op += -DDEBUG
 debug: all
 
-#compilation de la verssion PC
+#compilation de la verssion PC.
 PC:
 	gcc $(MAIN).c -o $(EXEC)pc $(op) -lX11 -lm
 
-#compilation de la version PI compilé en croisé
+#compilation de la version PI compilé en croisé.
 PI:
 	$(GCC_PI) $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(op) -D'PI' $(EXEC)pi -lX11 -lm -lwinringPi
 
 #compilation de la version PI non croisé
 PI_sur_PI:
 	gcc $(MAIN).c -o $(EXEC)pi $(op) -DPI -lX11 -lm -lwinringPi
+
 
 clean:
 	rm $(EXEC)*
