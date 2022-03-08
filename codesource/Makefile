@@ -22,7 +22,7 @@ PI:
 
 #compilation de la version PI non croisé
 PI_sur_PI:
-	gcc $(MAIN).c -o $(EXEC)pi $(op) -D'PI' -lX11 -lm -lwinringPi
+	gcc $(MAIN).c -o $(EXEC)pi $(op) -DPI -lX11 -lm -lwinringPi
 
 clean:
 	rm $(EXEC)*
