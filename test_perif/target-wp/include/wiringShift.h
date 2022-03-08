@@ -1,9 +1,8 @@
 /*
- * blink.c:
- *	Standard "blink" program in wiringPi. Blinks an LED connected
- *	to the first GPIO pin.
+ * wiringShift.h:
+ *	Emulate some of the Arduino wiring functionality. 
  *
- * Copyright (c) 2012-2013 Gordon Henderson. <projects@drogon.net>
+ * Copyright (c) 2009-2012 Gordon Henderson.
  ***********************************************************************
  * This file is part of wiringPi:
  *	https://projects.drogon.net/raspberry-pi/wiringpi/
@@ -22,51 +21,21 @@
  *    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
  ***********************************************************************
  */
-//#include "/home/bengloo/Documents/LE3/rasp/wiringpi/wiringPi-36fb7f1/wiringPi/wiringPi.h"
-#include <stdio.h>
-#include <wiringPi.h>
 
-// LED Pin - wiringPi pin 0 is BCM_GPIO 17.
+#define	LSBFIRST	0
+#define	MSBFIRST	1
 
-#define	BTN 6 
-#define	BUZZER 1
-#define appuyer LOW
- 
+#ifndef	_STDINT_H
+#  include <stdint.h>
+#endif
 
-int main (int argc, int **argv)
-{
-  
-	int ledPin=0;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-	if(argc!=1){
-	ledPin=atoi(argv[1]);
-	}
+extern uint8_t shiftIn      (uint8_t dPin, uint8_t cPin, uint8_t order) ;
+extern void    shiftOut     (uint8_t dPin, uint8_t cPin, uint8_t order, uint8_t val) ;
 
-printf ("inesblink pin %d\n,ledPin") ;
-
-  wiringPiSetup () ;
-pinMode (ledPin, OUTPUT) ;
-pinMode (BTN, OUTPUT) ;
-pinMode (BUZZER, OUTPUT) ;
-
-pullUpDnControl(BTN,PUD_UP);
-
-  while(1)
-  {  
-	if(digitalRead==appuyer){
-    	digitalWrite (ledPin, HIGH) ;	// On
-      	digitalWrite (BUZZER, HIGH) ;
-	}
-	else{
-	digitalWrite (ledPin, LOW) ;	// On
-      	digitalWrite (BUZZER, LOW) ;	
-	}
-
-  }
-	
-  return 0 ;
+#ifdef __cplusplus
 }
-
-
-
-
+#endif

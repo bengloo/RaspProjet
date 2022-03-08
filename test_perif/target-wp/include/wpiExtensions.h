@@ -1,9 +1,8 @@
 /*
- * blink.c:
- *	Standard "blink" program in wiringPi. Blinks an LED connected
- *	to the first GPIO pin.
- *
- * Copyright (c) 2012-2013 Gordon Henderson. <projects@drogon.net>
+ * extensions.h:
+ *	Part of the GPIO program to test, peek, poke and otherwise
+ *	noodle with the GPIO hardware on the Raspberry Pi.
+ *	Copyright (c) 2012-2015 Gordon Henderson
  ***********************************************************************
  * This file is part of wiringPi:
  *	https://projects.drogon.net/raspberry-pi/wiringpi/
@@ -22,51 +21,6 @@
  *    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
  ***********************************************************************
  */
-//#include "/home/bengloo/Documents/LE3/rasp/wiringpi/wiringPi-36fb7f1/wiringPi/wiringPi.h"
-#include <stdio.h>
-#include <wiringPi.h>
-
-// LED Pin - wiringPi pin 0 is BCM_GPIO 17.
-
-#define	BTN 6 
-#define	BUZZER 1
-#define appuyer LOW
- 
-
-int main (int argc, int **argv)
-{
-  
-	int ledPin=0;
-
-	if(argc!=1){
-	ledPin=atoi(argv[1]);
-	}
-
-printf ("inesblink pin %d\n,ledPin") ;
-
-  wiringPiSetup () ;
-pinMode (ledPin, OUTPUT) ;
-pinMode (BTN, OUTPUT) ;
-pinMode (BUZZER, OUTPUT) ;
-
-pullUpDnControl(BTN,PUD_UP);
-
-  while(1)
-  {  
-	if(digitalRead==appuyer){
-    	digitalWrite (ledPin, HIGH) ;	// On
-      	digitalWrite (BUZZER, HIGH) ;
-	}
-	else{
-	digitalWrite (ledPin, LOW) ;	// On
-      	digitalWrite (BUZZER, LOW) ;	
-	}
-
-  }
-	
-  return 0 ;
-}
 
 
-
-
+extern int loadWPiExtension (char *progName, char *extensionData, int verbose) ;

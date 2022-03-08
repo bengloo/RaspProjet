@@ -1,9 +1,6 @@
 /*
- * blink.c:
- *	Standard "blink" program in wiringPi. Blinks an LED connected
- *	to the first GPIO pin.
- *
- * Copyright (c) 2012-2013 Gordon Henderson. <projects@drogon.net>
+ * wiringSerial.h:
+ *	Handle a serial port
  ***********************************************************************
  * This file is part of wiringPi:
  *	https://projects.drogon.net/raspberry-pi/wiringpi/
@@ -22,51 +19,20 @@
  *    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
  ***********************************************************************
  */
-//#include "/home/bengloo/Documents/LE3/rasp/wiringpi/wiringPi-36fb7f1/wiringPi/wiringPi.h"
-#include <stdio.h>
-#include <wiringPi.h>
 
-// LED Pin - wiringPi pin 0 is BCM_GPIO 17.
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define	BTN 6 
-#define	BUZZER 1
-#define appuyer LOW
- 
+extern int   serialOpen      (const char *device, const int baud) ;
+extern void  serialClose     (const int fd) ;
+extern void  serialFlush     (const int fd) ;
+extern void  serialPutchar   (const int fd, const unsigned char c) ;
+extern void  serialPuts      (const int fd, const char *s) ;
+extern void  serialPrintf    (const int fd, const char *message, ...) ;
+extern int   serialDataAvail (const int fd) ;
+extern int   serialGetchar   (const int fd) ;
 
-int main (int argc, int **argv)
-{
-  
-	int ledPin=0;
-
-	if(argc!=1){
-	ledPin=atoi(argv[1]);
-	}
-
-printf ("inesblink pin %d\n,ledPin") ;
-
-  wiringPiSetup () ;
-pinMode (ledPin, OUTPUT) ;
-pinMode (BTN, OUTPUT) ;
-pinMode (BUZZER, OUTPUT) ;
-
-pullUpDnControl(BTN,PUD_UP);
-
-  while(1)
-  {  
-	if(digitalRead==appuyer){
-    	digitalWrite (ledPin, HIGH) ;	// On
-      	digitalWrite (BUZZER, HIGH) ;
-	}
-	else{
-	digitalWrite (ledPin, LOW) ;	// On
-      	digitalWrite (BUZZER, LOW) ;	
-	}
-
-  }
-	
-  return 0 ;
+#ifdef __cplusplus
 }
-
-
-
-
+#endif
