@@ -5,7 +5,7 @@ ifneq ($V,1)
 Q ?= @
 endif
 
-TARGET_CC=../../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin
+TARGET_CC=../../../../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin
 CC=$(TARGET_CC)/arm-linux-gnueabihf-gcc
 TARGET_WP=target-wp
 

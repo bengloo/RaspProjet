@@ -1,5 +1,0 @@
-[/]
-default-size-columns=110
-default-size-rows=30
-font='Ubuntu Mono Italic 12'
-visible-name='projetmid_menu'

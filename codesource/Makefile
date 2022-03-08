@@ -1,69 +1,25 @@
-#Makfile conçus le 29/6/2020 par benjamin engloo 
-#a pour bute de simplifier la gestion des library et la compilation."
-# all: mkpile par defaut
-# Debug: active les printf spécifique au mod debug
-# clean: retire les.o du dossier
+MAIN=temple_run
+EXEC=$(MAIN)_
 
-#////////recette par defaut//////////
-c=gcc #type de compilation
-op=#-Wall -Wextra #opertion et retoure de la compilation
-EXECCLIENT=client #nom de l'executable final
-EXECSERVER=serverEnregistrement #nom de l'executable final2
-MAINSOURCE=cltSrv.o#fichier source de l'executable
-LIBFICCLIENT= session.o data.o proto.o graphisme.o#nom des library en .o
-LIBFICSERV= session.o data.o proto.o#nom des library en .o
-LIBSYSTEM= -lpthread 
-HEADERFIC= basic_func.h  data.h  graphisme.h  proto.h  reqRep.h  session.h#nom des header
+TARGET_PI=../target_pi
+CFLAGS_PI=-I$(TARGET_PI)/include
+LDFLAGS_PI=-L$(TARGET_PI)/lib
+GCC_PI=../../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-gcc
 
-#création de l'executable
-all:clean client server
+all:PC PI
 
-debug: op += -DDEBUG
-debug : all
+#compilation de la verssion PC
+PC:
+	gcc $(MAIN).c -o $(EXEC)pc -lX11 -lm
 
-	
+#compilation de la version PI compilé en croisé
+PI:
+	$(GCC_PI) $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(EXEC)pi -lX11 -lm -l
 
+#compilation de la version PI non croisé
+PI_sur_PI:
+	gcc $(MAIN).c -o $(EXEC)pi -lX11 -lm
 
-#activer mode client server défini 
-client:CLTSERV= -D'CLIENT'
-client:cleanlib comp1 
-
-server:CLTSERV= -D'SERVER'
-server:cleanlib comp2 
-
-
-comp1: $(MAINSOURCE) $(LIBFICCLIENT)
-	rm -f cltSrv.o
-	rm -f proto.o
-	$(c) -c cltSrv.c -o cltSrv.o $(op) $(CLTSERV)
-	$(c) -c proto.c -o proto.o $(op) $(CLTSERV) $(LIBSYSTEM)
-	$(c) $(MAINSOURCE) $(LIBFICCLIENT) -o $(EXECCLIENT) $(LIBSYSTEM) -lX11 -lm 
-
-comp2: $(MAINSOURCE) $(LIBFICSERV)
-	rm -f cltSrv.o
-	rm -f proto.o
-	$(c) -c cltSrv.c -o cltSrv.o $(op) $(CLTSERV)
-	$(c) -c proto.c -o proto.o $(op) $(CLTSERV)
-	$(c) $(MAINSOURCE) $(LIBFICSERV) -o $(EXECSERVER) $(LIBSYSTEM) 
-
-#inclusion des headers
-$(MAINSOURCE): $(HEADERFIC)
-
-#compilation des library
-%.o: %.c
-	$(c) -c $< -o $@ $(op) $(CLTSERV)
-
-# suppression des fichiers temporaires
-cleanlib: 
-	rm -f *.o
-	rm -f *.bak
- 
-# suppression de tous les fichiers, sauf les sources,
-# en vue d'une reconstruction complète
-clean: cleanlib
-	rm -f $(EXECCLIENT)
-	rm -f $(EXECSERVER)
-
-zip: clean
-	zip ProjetLE3MW_ENGLOO_MORCQ_LUX_MARQUILLY.zip *.c *.h makefile README*
-
+clean:
+	rm $(EXEC)*
+	rm *.o

@@ -1,6 +1,0 @@
-[/]
-default-size-columns=700
-default-size-rows=200
-font='FreeMono Bold 2'
-use-system-font=false
-visible-name='projet_mid_jeu'
