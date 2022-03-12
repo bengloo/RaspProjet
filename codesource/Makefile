@@ -14,17 +14,30 @@ debug: all
 
 #compilation de la verssion PC.
 PC:
+	@echo "Generation de l'executable pc"
 	gcc $(MAIN).c -o $(EXEC)pc $(op) -lX11 -lm
+	@echo ""
 
 #compilation de la version PI compilé en croisé.
 PI:
-	$(GCC_PI) $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(op) -D'PI' $(EXEC)pi -lX11 -lm -lwinringPi
+	@echo "generation de l'executable pour le raspberriPi en cross compilation depuis le pc"
+	$(GCC_PI) $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(op) $(EXEC)pi -DPI -lm -lwinringPi -std=c99
+	@echo ""
 
 #compilation de la version PI non croisé
 PI_sur_PI:
-	gcc $(MAIN).c -o $(EXEC)pi $(op) -DPI -lX11 -lm -lwinringPi
-
+	@echo "generation de l'executable pour le raspberriPi sur le raspberriPi"
+	gcc $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(EXEC)pi $(op) -DPI -lm -lwiringPi
+	@echo ""
 
 clean:
-	rm $(EXEC)*
-	rm *.o
+	rm -f $(EXEC)*
+	rm -f *.o
+
+import:importCode importTarg
+	
+importCode:clean
+	scp -r ../codesource pi@172.24.1.1:Documents
+	
+importTarg:
+	scp -r ../target_pi pi@172.24.1.1:Documents

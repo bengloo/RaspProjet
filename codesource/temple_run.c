@@ -2,10 +2,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <X11/Xlib.h>
-#include "X11/keysym.h"
 #include <time.h>
 #include <unistd.h>
+
+#ifndef PI
+	#include <X11/Xlib.h>
+	#include "X11/keysym.h"
+#else
+	#include <wiringPi.h>
+	#define XK_Left 6
+	#define XK_Right 19
+	#define XK_Up 26
+	#define XK_Down 13
+
+	#define APPUYE LOW
+	#define	BUZZER	1
+
+#endif 
 
 
 #define X_PIX 500
@@ -84,16 +97,21 @@ void vect2_print(vect2 v) {
 	printf("%f %f\n", v.x, v.y);
 }
 
-
-int key_is_pressed(KeySym ks) {
-    Display *dpy = XOpenDisplay(0);
-    char keys_return[32];
-    XQueryKeymap(dpy, keys_return);
-    KeyCode kc2 = XKeysymToKeycode(dpy, ks);
-    int isPressed = !!(keys_return[kc2 >> 3] & (1 << (kc2 & 7)));
-    XCloseDisplay(dpy);
-    return isPressed;
-}
+#ifndef PI
+	int key_is_pressed(KeySym ks) {
+		Display *dpy = XOpenDisplay(0);
+		char keys_return[32];
+		XQueryKeymap(dpy, keys_return);
+		KeyCode kc2 = XKeysymToKeycode(dpy, ks);
+		int isPressed = !!(keys_return[kc2 >> 3] & (1 << (kc2 & 7)));
+		XCloseDisplay(dpy);
+		return isPressed;
+	}
+#else
+	int key_is_pressed(int btn){
+		return (digitalRead(btn) == APPUYE);
+	}
+#endif
 
 
 vect2 project_point(vect dir, vect point) {
@@ -245,6 +263,19 @@ int main(void) {
 		obstacles[i] = 0;
 	}
 	int *next_obstacles = init_obstacles(next_turn_dist+1);
+
+	#ifdef PI
+		wiringPiSetup () ;
+		pinMode (BUZZER, OUTPUT) ;
+		pinMode (XK_Down, INPUT) ;
+		pinMode (XK_Up, INPUT) ;
+		pinMode (XK_Left, INPUT) ;
+		pinMode (XK_Right, INPUT) ;
+		pullUpDnControl (XK_Down,PUD_UP);
+		pullUpDnControl (XK_Left,PUD_UP);
+		pullUpDnControl (XK_Right,PUD_UP);
+		pullUpDnControl (XK_Up,PUD_UP);
+	#endif
 
 	// main game loop
 	int i = 0;
@@ -445,11 +476,12 @@ int main(void) {
 		draw_ascii(empty_picture('X'));
 		usleep(150000);
 	}
-	for (int i = 0; i < 200; ++i) {
+	//redemarage automatique si clé préssé
+	/*for (int i = 0; i < 200; ++i) {
 		if (key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right)) {
 			goto START;
 		}
 		usleep(10000);
-	}
+	}*/
 	draw_ascii(empty_picture(' '));
 }
