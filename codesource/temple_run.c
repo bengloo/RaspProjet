@@ -503,11 +503,11 @@ int main(void) {
 		usleep(150000);
 	}
 	//redemarage automatique si clé préssé
-	/*for (int i = 0; i < 200; ++i) {
+	for (int i = 0; i < 200; ++i) {
 		if (key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right)) {
 			goto START;
 		}
 		usleep(10000);
-	}*/
+	}
 	draw_ascii(empty_picture(' '));
 }
