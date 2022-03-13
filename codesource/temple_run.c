@@ -11,15 +11,30 @@
 #else
 	#include <wiringPi.h>
 	#define XK_Left 6
-	#define XK_Right 19
-	#define XK_Up 26
-	#define XK_Down 13
+	#define XK_Right 24
+	#define XK_Up 25
+	#define XK_Down 23
 
 	#define APPUYE LOW
 	#define	BUZZER	1
 
 #endif 
 
+#ifdef DEBUG
+	#define DEBUG_I(i) printf("%d\n", i);
+	#define DEBUG_S(s) printf("%s\n", s);
+	#define DEBUG_S1(s, p1) printf(s, p1);
+	#define DEBUG_S2(s, p1, p2) printf(s, p1, p2);
+	#define DEBUG_S3(s, p1, p2, p3) printf(s, p1, p2, p3);
+	#define DEBUG_S4(s, p1, p2, p3, p4) printf(s, p1, p2, p3, p4);
+#else
+	#define DEBUG_I(i)
+	#define DEBUG_S(s) (void)0;
+	#define DEBUG_S1(s, p1) (void)0;
+	#define DEBUG_S2(s, p1, p2) (void)0;
+	#define DEBUG_S3(s, p1, p2, p3) (void)0;
+	#define DEBUG_S4(s, p1, p2, p3, p4) (void)0;
+#endif
 
 #define X_PIX 500
 #define Y_PIX 200
@@ -176,13 +191,18 @@ void draw_line(vect dir, vect v_from, vect v_to, char c, char **picture) {
 
 
 void draw_ascii(char **picture) {
+	#ifndef UNDRAW
 	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
 	for (int i = 0; i < Y_PIX; ++i) {
 		for (int j = 0; j < X_PIX; ++j) {
 			printf("%c", picture[i][j]);
 		}
 		printf("\n");
-	}	
+	}
+	#else
+		//printf("\033[0;0H");
+		printf("appel de la fonction draw_ascci\n");
+	#endif	
 }
 
 char **empty_picture(char empty_char) {
@@ -284,9 +304,12 @@ int main(void) {
 		// move left/right
 		if (key_is_pressed(XK_Right)) {
 			ypos = fmax(ypos-y_move_speed*tstep, -Y_BORDER);
+			DEBUG_S("Right pressed");
+
 		}
 		else if (key_is_pressed(XK_Left)) {
 			ypos = fmin(ypos + y_move_speed*tstep, Y_BORDER);
+			DEBUG_S("Left pressed");
 		}
 		else {
 			if (ypos > 0) {
@@ -300,6 +323,7 @@ int main(void) {
 		if (zpos == 0 && key_is_pressed(XK_Up)) {
 			// initiate jump
 			zspeed = JUMP_SPEED;
+			DEBUG_S("up pressed");
 		}
 		zpos += zspeed*tstep;
 		zspeed -= GRAVITY*tstep;
@@ -310,6 +334,7 @@ int main(void) {
 		if (key_is_pressed(XK_Down)) {
 			zpos -= duckspeed*tstep;
 			zpos = fmax(zpos, -0.5);
+			DEBUG_S("Down pressed");
 		}
 		else if (zpos < 0) {
 			zpos += duckspeed*tstep;
@@ -325,6 +350,7 @@ int main(void) {
 		// turn
 		else if (turn_dist < 0) {
 			if ((next_turn == -1 && key_is_pressed(XK_Right)) || (next_turn == 1 && key_is_pressed(XK_Left))) {
+				DEBUG_S("Right or left pressed");
 				turn_dist = next_turn_dist;
 				turn_dist_orig = next_turn_dist;
 				next_turn_dist = 5 + rand()%10;

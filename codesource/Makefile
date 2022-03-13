@@ -12,6 +12,10 @@ all:PC PI
 debug: op += -DDEBUG
 debug: all
 
+undraw: op += -DUNDRAW
+undraw: op += -DDEBUG
+undraw: PI_sur_PI
+
 #compilation de la verssion PC.
 PC:
 	@echo "Generation de l'executable pc"
