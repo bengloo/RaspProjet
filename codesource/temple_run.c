@@ -8,9 +8,9 @@
 #ifndef PI
 	#include <X11/Xlib.h>
 	#include "X11/keysym.h"
-	//#include "7seg_bp_ada.h"
 #else
 	#include <wiringPi.h>
+	#include "7seg_bp_ada.h"
 	#define XK_Left 6
 	#define XK_Right 24
 	#define XK_Up 25
@@ -37,7 +37,7 @@
 	#define DEBUG_S4(s, p1, p2, p3, p4) (void)0;
 #endif
 
-#define X_PIX 500
+#define X_PIX 700
 #define Y_PIX 200
 #define WIDTH 1
 #define HEIGHT 0.7
@@ -262,6 +262,7 @@ int min(int a, int b) {
 	#define JUMP_SPEED 8
 	#define SPEED_INCREASE 0.1
 	#define TEMPO_END 150000
+	#define TEMPO_FRAME 1000000
 #else
 	#define PATH_WIDTH 1
 	#define Y_BORDER 0.7
@@ -270,6 +271,7 @@ int min(int a, int b) {
 	#define JUMP_SPEED 8
 	#define SPEED_INCREASE 0.1
 	#define TEMPO_END 150000
+	#define TEMPO_FRAME 1000000
 #endif
 
 int main(void) {
@@ -306,6 +308,7 @@ int main(void) {
 		float ypos = 0;
 		float zspeed = 0;
 
+		//init  pin
 		wiringPiSetup () ;
 		pinMode (BUZZER, OUTPUT) ;
 		pinMode (XK_Down, INPUT) ;
@@ -316,6 +319,30 @@ int main(void) {
 		pullUpDnControl (XK_Left,PUD_UP);
 		pullUpDnControl (XK_Right,PUD_UP);
 		pullUpDnControl (XK_Up,PUD_UP);
+
+		//init 7segment
+		int chiffre[4];
+		int rc;
+		HT16K33 led_backpack1 = HT16K33_INIT(1, HT16K33_ADDR_01);
+		rc = HT16K33_OPEN(&led_backpack1);
+		if(rc != 0) {
+			fprintf(stderr, "Error initializing HT16K33 led backpack (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
+			HT16K33_CLOSE(&led_backpack1);
+			return 1;
+		}	
+		rc = HT16K33_ON(&led_backpack1);
+		if(rc != 0) {
+			fprintf(stderr, "Error putting the HT16K33 led backpack ON (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
+			HT16K33_OFF(&led_backpack1);
+			HT16K33_CLOSE(&led_backpack1);
+			return 1;
+		}
+		// make it shining bright
+		HT16K33_BRIGHTNESS(&led_backpack1, 0x0F);	
+		// make it not blinking
+		HT16K33_BLINK(&led_backpack1, HT16K33_BLINK_OFF);
+		// power on the display
+		HT16K33_DISPLAY(&led_backpack1, HT16K33_DISPLAY_ON);
 	#endif
 
 	int *obstacles = malloc(sizeof(int)*100);
@@ -518,8 +545,21 @@ int main(void) {
 		speed += SPEED_INCREASE*tstep;
 		y_move_speed += SPEED_INCREASE*tstep*0.5;
 		duckspeed += SPEED_INCREASE*tstep*0.5;
-		printf("%d\n", i++);
-		usleep(1000000*tstep);
+		#ifndef PI
+			printf("%d\n", i++);
+		#else
+			chiffre[3] = i / 1000;
+			chiffre[2] = (i - chiffre[3] * 1000) / 100;
+			chiffre[1] = (i - chiffre[3] * 1000 - chiffre[2] * 100) / 10;
+			chiffre[0] = (i - chiffre[3] * 1000 - chiffre[2] * 100 - chiffre[1] * 10);
+			HT16K33_UPDATE_DIGIT(&led_backpack1, 0, 48+chiffre[3], 0);
+			HT16K33_UPDATE_DIGIT(&led_backpack1, 1, 48+chiffre[2], 0);
+			HT16K33_UPDATE_DIGIT(&led_backpack1, 2, 48+chiffre[1], 0);
+			HT16K33_UPDATE_DIGIT(&led_backpack1, 3, 48+chiffre[0], 0);
+			HT16K33_UPDATE_DIGIT(&led_backpack1, 4, 48+chiffre[3], 0);
+			HT16K33_COMMIT(&led_backpack1);
+		#endif
+		usleep(TEMPO_FRAME*tstep);
 	}
 
 	// game finished
@@ -544,4 +584,7 @@ int main(void) {
 		usleep(10000);
 	}
 	draw_ascii(empty_picture(' '));
+	#ifdef PI
+		HT16K33_CLOSE(&led_backpack1);
+	#endif
 }
