@@ -10,7 +10,7 @@
 	#include "X11/keysym.h"
 #else
 	#include <wiringPi.h>
-	#include "7seg_bp_ada.h"
+	//#include "7seg_bp_ada.h"
 	#define XK_Left 6
 	#define XK_Right 24
 	#define XK_Up 25
@@ -319,20 +319,20 @@ int main(void) {
 		pullUpDnControl (XK_Left,PUD_UP);
 		pullUpDnControl (XK_Right,PUD_UP);
 		pullUpDnControl (XK_Up,PUD_UP);
-
+		/*
 		//init 7segment
 		int chiffre[4];
 		int rc;
 		HT16K33 led_backpack1 = HT16K33_INIT(1, HT16K33_ADDR_01);
 		rc = HT16K33_OPEN(&led_backpack1);
 		if(rc != 0) {
-			fprintf(stderr, "Error initializing HT16K33 led backpack (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
+			//fprintf(stderr, "Error initializing HT16K33 led backpack (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
 			HT16K33_CLOSE(&led_backpack1);
 			return 1;
 		}	
 		rc = HT16K33_ON(&led_backpack1);
 		if(rc != 0) {
-			fprintf(stderr, "Error putting the HT16K33 led backpack ON (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
+			//fprintf(stderr, "Error putting the HT16K33 led backpack ON (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
 			HT16K33_OFF(&led_backpack1);
 			HT16K33_CLOSE(&led_backpack1);
 			return 1;
@@ -342,7 +342,7 @@ int main(void) {
 		// make it not blinking
 		HT16K33_BLINK(&led_backpack1, HT16K33_BLINK_OFF);
 		// power on the display
-		HT16K33_DISPLAY(&led_backpack1, HT16K33_DISPLAY_ON);
+		HT16K33_DISPLAY(&led_backpack1, HT16K33_DISPLAY_ON);*/
 	#endif
 
 	int *obstacles = malloc(sizeof(int)*100);
@@ -548,7 +548,7 @@ int main(void) {
 		#ifndef PI
 			printf("%d\n", i++);
 		#else
-			chiffre[3] = i / 1000;
+			/*chiffre[3] = i / 1000;
 			chiffre[2] = (i - chiffre[3] * 1000) / 100;
 			chiffre[1] = (i - chiffre[3] * 1000 - chiffre[2] * 100) / 10;
 			chiffre[0] = (i - chiffre[3] * 1000 - chiffre[2] * 100 - chiffre[1] * 10);
@@ -557,7 +557,7 @@ int main(void) {
 			HT16K33_UPDATE_DIGIT(&led_backpack1, 2, 48+chiffre[1], 0);
 			HT16K33_UPDATE_DIGIT(&led_backpack1, 3, 48+chiffre[0], 0);
 			HT16K33_UPDATE_DIGIT(&led_backpack1, 4, 48+chiffre[3], 0);
-			HT16K33_COMMIT(&led_backpack1);
+			HT16K33_COMMIT(&led_backpack1);*/
 		#endif
 		usleep(TEMPO_FRAME*tstep);
 	}
@@ -585,6 +585,6 @@ int main(void) {
 	}
 	draw_ascii(empty_picture(' '));
 	#ifdef PI
-		HT16K33_CLOSE(&led_backpack1);
+		//HT16K33_CLOSE(&led_backpack1);
 	#endif
 }
