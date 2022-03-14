@@ -195,10 +195,12 @@ void draw_ascii(char **picture) {
 	#ifndef UNDRAW
 	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
 	for (int i = 0; i < Y_PIX; ++i) {
-		for (int j = 0; j < X_PIX; ++j) {
+		
+		/*for (int j = 0; j < X_PIX; ++j) {
 			printf("%c", picture[i][j]);
 		}
-		printf("\n");
+		printf("\n");*/
+		printf("%s\n",picture[i]);
 	}
 	#else
 		//printf("\033[0;0H");
@@ -252,40 +254,58 @@ int min(int a, int b) {
 	return b;
 }
 
-
-#define PATH_WIDTH 1
-#define Y_BORDER 0.7
-#define SIGHT 10	// how far you can see (roughly)
-#define GRAVITY 60 //30
-#define JUMP_SPEED 16 //8
-#define SPEED_INCREASE 0.2//0.1
+#ifndef PI
+	#define PATH_WIDTH 1
+	#define Y_BORDER 0.7
+	#define SIGHT 10	// how far you can see (roughly)
+	#define GRAVITY 30
+	#define JUMP_SPEED 8
+	#define SPEED_INCREASE 0.1
+	#define TEMPO_END 150000
+#else
+	#define PATH_WIDTH 1
+	#define Y_BORDER 0.7
+	#define SIGHT 10	// how far you can see (roughly)
+	#define GRAVITY 30
+	#define JUMP_SPEED 8
+	#define SPEED_INCREASE 0.1
+	#define TEMPO_END 150000
+#endif
 
 int main(void) {
 	START:
 	srand(time(NULL));
+	#ifndef PI
+		vect dir = (vect) {1, 0, 0};
+		float speed = 3;
+		float tstep = 0.03;
+		int turn_dist_orig = 5 + rand()%10;
+		float turn_dist = turn_dist_orig;
+		int next_turn_dist = 5 + rand()%10;
+		// next_turn: -1 for right, 1 for left
+		int next_turn = (rand()%2)*2 - 1;
+		float cam_height = 1;
+		float y_move_speed = 3;
+		float duckspeed = 4;
+		float zpos = 0;
+		float ypos = 0;
+		float zspeed = 0;
+	#else
+		vect dir = (vect) {1, 0, 0};
+		float speed = 3;//3
+		float tstep = 0.03;//0.03
+		int turn_dist_orig = 5 + rand()%10;
+		float turn_dist = turn_dist_orig;
+		int next_turn_dist = 5 + rand()%10;
+		// next_turn: -1 for right, 1 for left
+		int next_turn = (rand()%2)*2 - 1;
+		float cam_height = 1;
+		float y_move_speed = 3;//3
+		float duckspeed = 4;//4
+		float zpos = 0;
+		float ypos = 0;
+		float zspeed = 0;
 
-	vect dir = (vect) {1, 0, 0};
-	float speed = 6;//3
-	float tstep = 0.03;
-	int turn_dist_orig = 5 + rand()%10;
-	float turn_dist = turn_dist_orig;
-	int next_turn_dist = 5 + rand()%10;
-	// next_turn: -1 for right, 1 for left
-	int next_turn = (rand()%2)*2 - 1;
-	float cam_height = 1;
-	float y_move_speed = 6;//3
-	float duckspeed = 8;//4
-	float zpos = 0;
-	float ypos = 0;
-	float zspeed = 0;//0
-
-	int *obstacles = malloc(sizeof(int)*100);
-	for (int i = 0; i < 100; ++i) {
-		obstacles[i] = 0;
-	}
-	int *next_obstacles = init_obstacles(next_turn_dist+1);
-
-	#ifdef PI
 		wiringPiSetup () ;
 		pinMode (BUZZER, OUTPUT) ;
 		pinMode (XK_Down, INPUT) ;
@@ -297,6 +317,12 @@ int main(void) {
 		pullUpDnControl (XK_Right,PUD_UP);
 		pullUpDnControl (XK_Up,PUD_UP);
 	#endif
+
+	int *obstacles = malloc(sizeof(int)*100);
+	for (int i = 0; i < 100; ++i) {
+		obstacles[i] = 0;
+	}
+	int *next_obstacles = init_obstacles(next_turn_dist+1);
 
 	// main game loop
 	int i = 0;
@@ -502,9 +528,9 @@ int main(void) {
 	#endif
 	for (int i = 0; i < 2; ++i) {
 		draw_ascii(empty_picture(' '));
-		usleep(150000);
+		usleep(TEMPO_END);
 		draw_ascii(empty_picture('X'));
-		usleep(150000);
+		usleep(TEMPO_END);
 
 	}
 	#ifdef PI
