@@ -8,6 +8,7 @@
 #ifndef PI
 	#include <X11/Xlib.h>
 	#include "X11/keysym.h"
+	//#include "7seg_bp_ada.h"
 #else
 	#include <wiringPi.h>
 	#define XK_Left 6
@@ -255,16 +256,16 @@ int min(int a, int b) {
 #define PATH_WIDTH 1
 #define Y_BORDER 0.7
 #define SIGHT 10	// how far you can see (roughly)
-#define GRAVITY 30
-#define JUMP_SPEED 8
-#define SPEED_INCREASE 0.1
+#define GRAVITY 60 //30
+#define JUMP_SPEED 16 //8
+#define SPEED_INCREASE 0.2//0.1
 
 int main(void) {
 	START:
 	srand(time(NULL));
 
 	vect dir = (vect) {1, 0, 0};
-	float speed = 3;
+	float speed = 6;//3
 	float tstep = 0.03;
 	int turn_dist_orig = 5 + rand()%10;
 	float turn_dist = turn_dist_orig;
@@ -272,11 +273,11 @@ int main(void) {
 	// next_turn: -1 for right, 1 for left
 	int next_turn = (rand()%2)*2 - 1;
 	float cam_height = 1;
-	float y_move_speed = 3;
-	float duckspeed = 4;
+	float y_move_speed = 6;//3
+	float duckspeed = 8;//4
 	float zpos = 0;
 	float ypos = 0;
-	float zspeed = 0;
+	float zspeed = 0;//0
 
 	int *obstacles = malloc(sizeof(int)*100);
 	for (int i = 0; i < 100; ++i) {
@@ -496,12 +497,19 @@ int main(void) {
 	}
 
 	// game finished
+	#ifdef PI
+		digitalWrite (BUZZER, HIGH) ;
+	#endif
 	for (int i = 0; i < 2; ++i) {
 		draw_ascii(empty_picture(' '));
 		usleep(150000);
 		draw_ascii(empty_picture('X'));
 		usleep(150000);
+
 	}
+	#ifdef PI
+		digitalWrite (BUZZER, LOW) ;
+	#endif
 	//redemarage automatique si clé préssé
 	for (int i = 0; i < 200; ++i) {
 		if (key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right)) {
