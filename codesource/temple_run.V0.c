@@ -1,17 +1,16 @@
+#include <unistd.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
-#include <unistd.h>
+
 
 #ifndef PI
 	#include <X11/Xlib.h>
 	#include "X11/keysym.h"
 #else
-	extern int usleep (__useconds_t __useconds);
 	#include <wiringPi.h>
-	//#include "7seg_bp_ada.h"
 	#define XK_Left 6
 	#define XK_Right 24
 	#define XK_Up 25
@@ -19,7 +18,6 @@
 
 	#define APPUYE LOW
 	#define	BUZZER	1
-	#define VIBRER 	2
 
 #endif 
 
@@ -39,14 +37,8 @@
 	#define DEBUG_S4(s, p1, p2, p3, p4) (void)0;
 #endif
 
-#ifdef PI
-	#define X_PIX 250
-	#define Y_PIX 100
-#else 
-	#define X_PIX 500
-	#define Y_PIX 200	
-#endif
-
+#define X_PIX 500
+#define Y_PIX 200
 #define WIDTH 1
 #define HEIGHT 0.7
 
@@ -203,12 +195,10 @@ void draw_ascii(char **picture) {
 	#ifndef UNDRAW
 	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
 	for (int i = 0; i < Y_PIX; ++i) {
-		
-		/*for (int j = 0; j < X_PIX; ++j) {
+		for (int j = 0; j < X_PIX; ++j) {
 			printf("%c", picture[i][j]);
 		}
-		printf("\n");*/
-		printf("%s\n",picture[i]);
+		printf("\n");
 	}
 	#else
 		//printf("\033[0;0H");
@@ -262,63 +252,42 @@ int min(int a, int b) {
 	return b;
 }
 
-#ifndef PI
-	#define PATH_WIDTH 1
-	#define Y_BORDER 0.7
-	#define SIGHT 10	// how far you can see (roughly)
-	#define GRAVITY 30
-	#define JUMP_SPEED 8
-	#define SPEED_INCREASE 0.1
-	#define TEMPO_END 150000
-	#define TEMPO_FRAME 1000000
-#else
-	#define PATH_WIDTH 1
-	#define Y_BORDER 0.7
-	#define SIGHT 10	// how far you can see (roughly)
-	#define GRAVITY 30
-	#define JUMP_SPEED 8
-	#define SPEED_INCREASE 0.1
-	#define TEMPO_END 50000
-	#define TEMPO_FRAME 1000000
-#endif
+
+#define PATH_WIDTH 1
+#define Y_BORDER 0.7
+#define SIGHT 10	// how far you can see (roughly)
+#define GRAVITY 30
+#define JUMP_SPEED 8
+#define SPEED_INCREASE 0.1
 
 int main(void) {
 	START:
 	srand(time(NULL));
-	#ifndef PI
-		vect dir = (vect) {1, 0, 0};
-		float speed = 3;
-		float tstep = 0.03;
-		int turn_dist_orig = 5 + rand()%10;
-		float turn_dist = turn_dist_orig;
-		int next_turn_dist = 5 + rand()%10;
-		// next_turn: -1 for right, 1 for left
-		int next_turn = (rand()%2)*2 - 1;
-		float cam_height = 1;
-		float y_move_speed = 3;
-		float duckspeed = 4;
-		float zpos = 0;
-		float ypos = 0;
-		float zspeed = 0;
-	#else
-		vect dir = (vect) {1, 0, 0};
-		float speed = 3;//3
-		float tstep = 0.03;//0.03
-		int turn_dist_orig = 5 + rand()%10;
-		float turn_dist = turn_dist_orig;
-		int next_turn_dist = 5 + rand()%10;
-		// next_turn: -1 for right, 1 for left
-		int next_turn = (rand()%2)*2 - 1;
-		float cam_height = 1;
-		float y_move_speed = 3;//3
-		float duckspeed = 4;//4
-		float zpos = 0;
-		float ypos = 0;
-		float zspeed = 0;
 
-		//init  pin
+	vect dir = (vect) {1, 0, 0};
+	float speed = 3;
+	float tstep = 0.03;
+	int turn_dist_orig = 5 + rand()%10;
+	float turn_dist = turn_dist_orig;
+	int next_turn_dist = 5 + rand()%10;
+	// next_turn: -1 for right, 1 for left
+	int next_turn = (rand()%2)*2 - 1;
+	float cam_height = 1;
+	float y_move_speed = 3;
+	float duckspeed = 4;
+	float zpos = 0;
+	float ypos = 0;
+	float zspeed = 0;
+
+	int *obstacles = malloc(sizeof(int)*100);
+	for (int i = 0; i < 100; ++i) {
+		obstacles[i] = 0;
+	}
+	int *next_obstacles = init_obstacles(next_turn_dist+1);
+
+	#ifdef PI
 		wiringPiSetup () ;
-		pinMode (VIBRER, OUTPUT) ;
+		pinMode (BUZZER, OUTPUT) ;
 		pinMode (XK_Down, INPUT) ;
 		pinMode (XK_Up, INPUT) ;
 		pinMode (XK_Left, INPUT) ;
@@ -327,37 +296,7 @@ int main(void) {
 		pullUpDnControl (XK_Left,PUD_UP);
 		pullUpDnControl (XK_Right,PUD_UP);
 		pullUpDnControl (XK_Up,PUD_UP);
-		/*
-		//init 7segment
-		int chiffre[4];
-		int rc;
-		HT16K33 led_backpack1 = HT16K33_INIT(1, HT16K33_ADDR_01);
-		rc = HT16K33_OPEN(&led_backpack1);
-		if(rc != 0) {
-			//fprintf(stderr, "Error initializing HT16K33 led backpack (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
-			HT16K33_CLOSE(&led_backpack1);
-			return 1;
-		}	
-		rc = HT16K33_ON(&led_backpack1);
-		if(rc != 0) {
-			//fprintf(stderr, "Error putting the HT16K33 led backpack ON (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
-			HT16K33_OFF(&led_backpack1);
-			HT16K33_CLOSE(&led_backpack1);
-			return 1;
-		}
-		// make it shining bright
-		HT16K33_BRIGHTNESS(&led_backpack1, 0x0F);	
-		// make it not blinking
-		HT16K33_BLINK(&led_backpack1, HT16K33_BLINK_OFF);
-		// power on the display
-		HT16K33_DISPLAY(&led_backpack1, HT16K33_DISPLAY_ON);*/
 	#endif
-
-	int *obstacles = malloc(sizeof(int)*100);
-	for (int i = 0; i < 100; ++i) {
-		obstacles[i] = 0;
-	}
-	int *next_obstacles = init_obstacles(next_turn_dist+1);
 
 	// main game loop
 	int i = 0;
@@ -553,38 +492,17 @@ int main(void) {
 		speed += SPEED_INCREASE*tstep;
 		y_move_speed += SPEED_INCREASE*tstep*0.5;
 		duckspeed += SPEED_INCREASE*tstep*0.5;
-		#ifndef PI
-			printf("%d\n", i++);
-		#else
-			i++;
-			/*chiffre[3] = i / 1000;
-			chiffre[2] = (i - chiffre[3] * 1000) / 100;
-			chiffre[1] = (i - chiffre[3] * 1000 - chiffre[2] * 100) / 10;
-			chiffre[0] = (i - chiffre[3] * 1000 - chiffre[2] * 100 - chiffre[1] * 10);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 0, 48+chiffre[3], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 1, 48+chiffre[2], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 2, 48+chiffre[1], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 3, 48+chiffre[0], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 4, 48+chiffre[3], 0);
-			HT16K33_COMMIT(&led_backpack1);*/
-		#endif
-		usleep(TEMPO_FRAME*tstep);
+		printf("%d\n", i++);
+		usleep(1000000*tstep);
 	}
 
 	// game finished
-	#ifdef PI
-		digitalWrite (VIBRER, HIGH) ;
-	#endif
 	for (int i = 0; i < 2; ++i) {
 		draw_ascii(empty_picture(' '));
-		usleep(TEMPO_END);
+		usleep(150000);
 		draw_ascii(empty_picture('X'));
-		usleep(TEMPO_END);
-
+		usleep(150000);
 	}
-	#ifdef PI
-		digitalWrite (VIBRER, LOW) ;
-	#endif
 	//redemarage automatique si clé préssé
 	for (int i = 0; i < 200; ++i) {
 		if (key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right)) {
@@ -593,7 +511,4 @@ int main(void) {
 		usleep(10000);
 	}
 	draw_ascii(empty_picture(' '));
-	#ifdef PI
-		//HT16K33_CLOSE(&led_backpack1);
-	#endif
 }

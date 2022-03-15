@@ -26,8 +26,17 @@ PC:
 PI: op += -DPI
 PI:
 	@echo "generation de l'executable pour le raspberriPi en cross compilation depuis le pc"
-	$(GCC_PI) $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(EXEC)pi $(op) -lm -lwinringPi -std=c99
+	$(GCC_PI) $(CFLAGS_PI) $(LDFLAGS_PI) $(MAIN).c -o $(EXEC)pi $(op) -lm -lwiringPi -std=c99
 	@echo ""
+
+PI.e: op += -DPI
+PI.e:
+	@echo "generation de l'executable pour le raspberriPi en cross compilation depuis le pc"
+	$(GCC_PI) $(CFLAGS_PI) -E $(MAIN).c -o $(EXEC)pi.e $(op) -std=c99
+	@echo ""
+
+test_unistd.e : test_unistd.c
+	$(GCC_PI) $(CFLAGS_PI) -E $< -o $@ $(op) -std=c99
 
 #compilation de la version PI non croisé
 PI_sur_PI: op += -DPI
@@ -42,8 +51,8 @@ clean:
 
 import:importCode importTarg
 	
-importCode:clean
-	scp -r ../codesource pi@192.168.133.113:Documents
+importCode:
+	scp -r ../codesource pi@192.168.136.112:Documents
 	
 importTarg:
-	scp -r ../target_pi pi@192.168.133.113:Documents
+	scp -r ../target_pi pi@192.168.136.112:Documents
