@@ -51,8 +51,8 @@ clean:
 
 import:importCode importTarg
 	
-importCode:
-	scp -r ../codesource pi@192.168.136.112:Documents
+importCode:PI
+	scp -r ../codesource pi@192.168.166.112:Documents
 	
 importTarg:
-	scp -r ../target_pi pi@192.168.136.112:Documents
+	scp -r ../target_pi pi@192.168.166.112:Documents

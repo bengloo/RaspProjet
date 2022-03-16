@@ -11,7 +11,11 @@
 #else
 	extern int usleep (__useconds_t __useconds);
 	#include <wiringPi.h>
-	//#include "7seg_bp_ada.h"
+	#include <stdbool.h>
+	#include <wiringPiI2C.h>
+	#include <stdint.h>
+	#include <sys/time.h> 
+
 	#define XK_Left 6
 	#define XK_Right 24
 	#define XK_Up 25
@@ -20,8 +24,56 @@
 	#define APPUYE LOW
 	#define	BUZZER	1
 	#define VIBRER 	2
+	#define HT16K33_BLINK_CMD 0x80 
+	#define HT16K33_BLINK_DISPLAYON 0x01 
+	#define HT16K33_BLINK_OFF 0 
+	#define HT16K33_BLINK_2HZ  1 
+	#define HT16K33_BLINK_1HZ  2 
+	#define HT16K33_BLINK_HALFHZ  3 
 
+	#define HT16K33_CMD_BRIGHTNESS 0xE0 
+
+	#define SEVENSEG_DIGITS 5 
+
+	// déclaration globale 
+	uint16_t nombre[4]; 
+
+	static const uint8_t chiffre[] = { 
+		0x3F, /* 0 */ 
+		0x06, /* 1 */ 
+		0x5B, /* 2 */ 
+		0x4F, /* 3 */ 
+		0x66, /* 4 */ 
+		0x6D, /* 5 */ 
+		0x7D, /* 6 */ 
+		0x07, /* 7 */ 
+		0x7F, /* 8 */ 
+		0x6F, /* 9 */ 
+		0xBF, /* 0.*/ 
+		0x86, /* 1.*/ 
+		0xDB, /* 2.*/ 
+		0xCF, /* 3.*/ 
+		0xE6, /* 4.*/ 
+		0xED, /* 5.*/ 
+		0xFD, /* 6.*/ 
+		0x87, /* 7.*/ 
+		0xFF, /* 8.*/ 
+		0xEF, /* 9.*/ 
+		0x00, // rien du tout
+
+	};
 #endif 
+
+#define ANSI_RESET "\033[0m"
+#define ANSI_BLACK "\033[30m"
+#define ANSI_RED "\033[31m"
+#define ANSI_GREEN "\033[32m"
+#define ANSI_YELLOW "\033[33m"
+#define ANSI_BLUE "\033[34m"
+#define ANSI_PURPLE "\033[35m"
+#define ANSI_CYAN "\033[36m"
+#define ANSI_WHITE "\033[37m"
+#define ANSI_ORANGE "\e[0;33m"
 
 #ifdef DEBUG
 	#define DEBUG_I(i) printf("%d\n", i);
@@ -39,16 +91,34 @@
 	#define DEBUG_S4(s, p1, p2, p3, p4) (void)0;
 #endif
 
+#define WIDTH 1
+#define HEIGHT 0.7
+
 #ifdef PI
 	#define X_PIX 250
 	#define Y_PIX 100
+
+	void setBrightness(int fd, uint8_t b) { 
+		if (b > 15) b = 15; 
+		wiringPiI2CWrite(fd, HT16K33_CMD_BRIGHTNESS | b); 
+	} 
+
+	void blinkRate(int fd, uint8_t b) { 
+		if (b > 3) b = 0; // turn off if not sure 
+		wiringPiI2CWrite(fd, HT16K33_BLINK_CMD | HT16K33_BLINK_DISPLAYON | (b << 1)); 
+	} 
+
+	void begin(int fd) { 
+		wiringPiI2CWrite(fd, 0x21); 
+		blinkRate(fd, HT16K33_BLINK_OFF); 
+		setBrightness(fd, 15); // max brightness 
+	} 
 #else 
 	#define X_PIX 500
 	#define Y_PIX 200	
 #endif
 
-#define WIDTH 1
-#define HEIGHT 0.7
+
 
 
 typedef struct Vector{
@@ -204,11 +274,19 @@ void draw_ascii(char **picture) {
 	printf("\033[0;0H");	// jump to position 0 0 to overwrite current picture
 	for (int i = 0; i < Y_PIX; ++i) {
 		
-		/*for (int j = 0; j < X_PIX; ++j) {
+		for (int j = 0; j < X_PIX; ++j) {
+			if (picture[i][j] == 'o')
+			{
+				printf("%s", ANSI_BLUE);
+			}
+			if (picture[i][j] == 'x')
+			{
+				printf("%s", ANSI_ORANGE);
+			}
 			printf("%c", picture[i][j]);
 		}
-		printf("\n");*/
-		printf("%s\n",picture[i]);
+		printf("\n");
+		//printf("%s\n",picture[i]);
 	}
 	#else
 		//printf("\033[0;0H");
@@ -327,30 +405,13 @@ int main(void) {
 		pullUpDnControl (XK_Left,PUD_UP);
 		pullUpDnControl (XK_Right,PUD_UP);
 		pullUpDnControl (XK_Up,PUD_UP);
-		/*
-		//init 7segment
-		int chiffre[4];
-		int rc;
-		HT16K33 led_backpack1 = HT16K33_INIT(1, HT16K33_ADDR_01);
-		rc = HT16K33_OPEN(&led_backpack1);
-		if(rc != 0) {
-			//fprintf(stderr, "Error initializing HT16K33 led backpack (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
-			HT16K33_CLOSE(&led_backpack1);
-			return 1;
-		}	
-		rc = HT16K33_ON(&led_backpack1);
-		if(rc != 0) {
-			//fprintf(stderr, "Error putting the HT16K33 led backpack ON (%s). Check your i2c bus (es. i2cdetect)\n", strerror(led_backpack1.lasterr));
-			HT16K33_OFF(&led_backpack1);
-			HT16K33_CLOSE(&led_backpack1);
-			return 1;
-		}
-		// make it shining bright
-		HT16K33_BRIGHTNESS(&led_backpack1, 0x0F);	
-		// make it not blinking
-		HT16K33_BLINK(&led_backpack1, HT16K33_BLINK_OFF);
-		// power on the display
-		HT16K33_DISPLAY(&led_backpack1, HT16K33_DISPLAY_ON);*/
+		
+		int fda = wiringPiI2CSetup(0x70); 
+		//printf("fda : %d \n", fda); 
+
+		// begin 
+		begin(fda); 
+
 	#endif
 
 	int *obstacles = malloc(sizeof(int)*100);
@@ -423,7 +484,7 @@ int main(void) {
 		}
 		char **pic = empty_picture(' ');
 		for (float d = turn_dist; d > 0; d -= 1) {
-			draw_line(dir, (vect){d, -PATH_WIDTH-ypos, -(cam_height+zpos)}, (vect){d, PATH_WIDTH-ypos, -(cam_height+zpos)}, 'o', pic);
+			draw_line(dir, (vect){d, -PATH_WIDTH-ypos, -(cam_height+zpos)}, (vect){d, PATH_WIDTH-ypos, -(cam_height+zpos)}, 'x', pic);
 		}
 
 		// check for collision
@@ -554,19 +615,43 @@ int main(void) {
 		y_move_speed += SPEED_INCREASE*tstep*0.5;
 		duckspeed += SPEED_INCREASE*tstep*0.5;
 		#ifndef PI
-			printf("%d\n", i++);
+			if(i<10000)printf("%d\n", i++);
 		#else
-			i++;
-			/*chiffre[3] = i / 1000;
-			chiffre[2] = (i - chiffre[3] * 1000) / 100;
-			chiffre[1] = (i - chiffre[3] * 1000 - chiffre[2] * 100) / 10;
-			chiffre[0] = (i - chiffre[3] * 1000 - chiffre[2] * 100 - chiffre[1] * 10);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 0, 48+chiffre[3], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 1, 48+chiffre[2], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 2, 48+chiffre[1], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 3, 48+chiffre[0], 0);
-			HT16K33_UPDATE_DIGIT(&led_backpack1, 4, 48+chiffre[3], 0);
-			HT16K33_COMMIT(&led_backpack1);*/
+			//i++;
+			//printf("%d\n", i++);
+			if(i<10000)i++;
+			nombre[3] = i / 1000;
+			nombre[2] = (i - nombre[3] * 1000) / 100;
+			nombre[1] = (i - nombre[3] * 1000 - nombre[2] * 100) / 10;
+			nombre[0] = (i - nombre[3] * 1000 - nombre[2] * 100 - nombre[1] * 10);
+			//uint8_t addr = (uint8_t) 0x00;	 
+			wiringPiI2CWriteReg8(fda, 0x00, chiffre[nombre[3]] ); 
+			//wiringPiI2CWriteReg8(fda, addr++, chiffre[nombre[0]] >> 8); 
+			
+			wiringPiI2CWriteReg8(fda, 0x02, chiffre[nombre[2]] );
+			wiringPiI2CWriteReg8(fda, 0x06, chiffre[nombre[1]] );
+			wiringPiI2CWriteReg8(fda, 0x08, chiffre[nombre[0]] );
+			/*wiringPiI2CWriteReg8(fda, 0x00, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x01, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x02, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x03, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x04, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x05, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x06, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x07, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x08, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x09, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x0A, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x0B, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x0C, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x0D, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x0E, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x0F, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x10, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x11, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x12, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x13, 0x00 );*/
+
 		#endif
 		usleep(TEMPO_FRAME*tstep);
 	}
@@ -593,7 +678,4 @@ int main(void) {
 		usleep(10000);
 	}
 	draw_ascii(empty_picture(' '));
-	#ifdef PI
-		//HT16K33_CLOSE(&led_backpack1);
-	#endif
 }
