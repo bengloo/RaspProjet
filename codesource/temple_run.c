@@ -401,6 +401,7 @@ int main(void) {
 		//init  pin
 		wiringPiSetup () ;
 		pinMode (VIBRER, OUTPUT) ;
+		pinMode (BUZZER, OUTPUT) ;
 		pinMode (XK_Down, INPUT) ;
 		pinMode (XK_Up, INPUT) ;
 		pinMode (XK_Left, INPUT) ;
