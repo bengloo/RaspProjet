@@ -7,6 +7,8 @@ CFLAGS_PI=-I$(TARGET_PI)/include
 LDFLAGS_PI=-L$(TARGET_PI)/lib
 GCC_PI=../../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-gcc
 
+IP=192.168.166.112
+
 all:PC PI
 
 debug: op += -DDEBUG
@@ -52,7 +54,7 @@ clean:
 import:importCode importTarg
 	
 importCode:PI
-	scp -r ../codesource pi@192.168.166.112:Documents
+	scp -r ../codesource pi@$(IP):Documents
 	
 importTarg:
-	scp -r ../target_pi pi@192.168.166.112:Documents
+	scp -r ../target_pi pi@$(IP):Documents

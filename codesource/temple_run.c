@@ -283,6 +283,10 @@ void draw_ascii(char **picture) {
 			{
 				printf("%s", ANSI_ORANGE);
 			}
+			if (picture[i][j] == 'I')
+			{
+				printf("%s", ANSI_RED);
+			}
 			printf("%c", picture[i][j]);
 		}
 		printf("\n");
@@ -619,38 +623,25 @@ int main(void) {
 		#else
 			//i++;
 			//printf("%d\n", i++);
-			if(i<10000)i++;
+			if(i<10000){
+				i++;
+				if(i%100==0){
+					digitalWrite (BUZZER, HIGH) ;
+				}
+				if(i%100==1){
+					digitalWrite (BUZZER, LOW) ;
+				}
+			}
 			nombre[3] = i / 1000;
 			nombre[2] = (i - nombre[3] * 1000) / 100;
 			nombre[1] = (i - nombre[3] * 1000 - nombre[2] * 100) / 10;
-			nombre[0] = (i - nombre[3] * 1000 - nombre[2] * 100 - nombre[1] * 10);
-			//uint8_t addr = (uint8_t) 0x00;	 
-			wiringPiI2CWriteReg8(fda, 0x00, chiffre[nombre[3]] ); 
-			//wiringPiI2CWriteReg8(fda, addr++, chiffre[nombre[0]] >> 8); 
-			
+			nombre[0] = (i - nombre[3] * 1000 - nombre[2] * 100 - nombre[1] * 10);	 
+			wiringPiI2CWriteReg8(fda, 0x00, chiffre[nombre[3]] );  
 			wiringPiI2CWriteReg8(fda, 0x02, chiffre[nombre[2]] );
+			wiringPiI2CWriteReg8(fda, 0x04, chiffre[nombre[10]] );
 			wiringPiI2CWriteReg8(fda, 0x06, chiffre[nombre[1]] );
 			wiringPiI2CWriteReg8(fda, 0x08, chiffre[nombre[0]] );
-			/*wiringPiI2CWriteReg8(fda, 0x00, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x01, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x02, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x03, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x04, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x05, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x06, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x07, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x08, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x09, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x0A, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x0B, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x0C, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x0D, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x0E, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x0F, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x10, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x11, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x12, 0x00 );
-			wiringPiI2CWriteReg8(fda, 0x13, 0x00 );*/
+			
 
 		#endif
 		usleep(TEMPO_FRAME*tstep);
@@ -663,12 +654,18 @@ int main(void) {
 	for (int i = 0; i < 2; ++i) {
 		draw_ascii(empty_picture(' '));
 		usleep(TEMPO_END);
-		draw_ascii(empty_picture('X'));
+		draw_ascii(empty_picture('I'));
 		usleep(TEMPO_END);
 
 	}
 	#ifdef PI
 		digitalWrite (VIBRER, LOW) ;
+		wiringPiI2CWriteReg8(fda, 0x00, chiffre[nombre[10]] );  
+		wiringPiI2CWriteReg8(fda, 0x02, chiffre[nombre[10]] );
+		wiringPiI2CWriteReg8(fda, 0x04, chiffre[nombre[10]] );
+		wiringPiI2CWriteReg8(fda, 0x06, chiffre[nombre[10]] );
+		wiringPiI2CWriteReg8(fda, 0x08, chiffre[nombre[10]] );
+		digitalWrite (BUZZER, LOW) ;
 	#endif
 	//redemarage automatique si clé préssé
 	for (int i = 0; i < 200; ++i) {
