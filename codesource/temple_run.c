@@ -365,8 +365,7 @@ int min(int a, int b) {
 #endif
 
 int main(void) {
-	START:
-	srand(time(NULL));
+	
 	#ifndef PI
 		vect dir = (vect) {1, 0, 0};
 		float speed = 3;
@@ -418,6 +417,14 @@ int main(void) {
 		begin(fda); 
 
 	#endif
+	draw_ascii(empty_picture('X'));
+	printf("Veuiller ajuster la taille de l'écrant, pour commencer apuyer sur une touche de déplacement\n");
+	while(!(key_is_pressed(XK_Up) || key_is_pressed(XK_Down) || key_is_pressed(XK_Left) || key_is_pressed(XK_Right))){
+		usleep(10000);
+	}
+
+	START:
+	srand(time(NULL));
 
 	int *obstacles = malloc(sizeof(int)*100);
 	for (int i = 0; i < 100; ++i) {
@@ -639,7 +646,8 @@ int main(void) {
 			nombre[0] = (i - nombre[3] * 1000 - nombre[2] * 100 - nombre[1] * 10);	 
 			wiringPiI2CWriteReg8(fda, 0x00, chiffre[nombre[3]] );  
 			wiringPiI2CWriteReg8(fda, 0x02, chiffre[nombre[2]] );
-			wiringPiI2CWriteReg8(fda, 0x04, chiffre[nombre[10]] );
+			wiringPiI2CWriteReg8(fda, 0x04, 0x00 );
+			wiringPiI2CWriteReg8(fda, 0x05, 0x00 );
 			wiringPiI2CWriteReg8(fda, 0x06, chiffre[nombre[1]] );
 			wiringPiI2CWriteReg8(fda, 0x08, chiffre[nombre[0]] );
 			
@@ -661,11 +669,12 @@ int main(void) {
 	}
 	#ifdef PI
 		digitalWrite (VIBRER, LOW) ;
-		wiringPiI2CWriteReg8(fda, 0x00, chiffre[nombre[10]] );  
-		wiringPiI2CWriteReg8(fda, 0x02, chiffre[nombre[10]] );
-		wiringPiI2CWriteReg8(fda, 0x04, chiffre[nombre[10]] );
-		wiringPiI2CWriteReg8(fda, 0x06, chiffre[nombre[10]] );
-		wiringPiI2CWriteReg8(fda, 0x08, chiffre[nombre[10]] );
+		wiringPiI2CWriteReg8(fda, 0x00, 0x00 );  
+		wiringPiI2CWriteReg8(fda, 0x02, 0x00 );
+		wiringPiI2CWriteReg8(fda, 0x04, 0x00 );
+		wiringPiI2CWriteReg8(fda, 0x05, 0x00 );
+		wiringPiI2CWriteReg8(fda, 0x06, 0x00 );
+		wiringPiI2CWriteReg8(fda, 0x08, 0x00 );
 		digitalWrite (BUZZER, LOW) ;
 	#endif
 	//redemarage automatique si clé préssé
