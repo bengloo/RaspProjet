@@ -5,7 +5,7 @@ op=-Wall -Wextra #opertion et retoure de la compilation
 TARGET_PI=../target_pi
 CFLAGS_PI=-I$(TARGET_PI)/include
 LDFLAGS_PI=-L$(TARGET_PI)/lib
-GCC_PI=../../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-gcc
+GCC_PI=../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-gcc
 
 IP=172.24.1.1
 
