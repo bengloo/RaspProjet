@@ -360,7 +360,7 @@ int min(int a, int b) {
 	#define GRAVITY 30
 	#define JUMP_SPEED 8
 	#define SPEED_INCREASE 0.1
-	#define TEMPO_END 50000
+	#define TEMPO_END 100000
 	#define TEMPO_FRAME 1000000
 #endif
 

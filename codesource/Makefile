@@ -7,7 +7,7 @@ CFLAGS_PI=-I$(TARGET_PI)/include
 LDFLAGS_PI=-L$(TARGET_PI)/lib
 GCC_PI=../../tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-gcc
 
-IP=192.168.166.112
+IP=172.24.1.1
 
 all:PC PI
 
