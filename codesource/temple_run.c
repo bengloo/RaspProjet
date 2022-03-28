@@ -669,13 +669,17 @@ int main(void) {
 	}
 	#ifdef PI
 		digitalWrite (VIBRER, LOW) ;
+		digitalWrite (BUZZER, LOW) ;
+		usleep(TEMPO_END*4);
 		wiringPiI2CWriteReg8(fda, 0x00, 0x00 );  
 		wiringPiI2CWriteReg8(fda, 0x02, 0x00 );
 		wiringPiI2CWriteReg8(fda, 0x04, 0x00 );
 		wiringPiI2CWriteReg8(fda, 0x05, 0x00 );
 		wiringPiI2CWriteReg8(fda, 0x06, 0x00 );
 		wiringPiI2CWriteReg8(fda, 0x08, 0x00 );
-		digitalWrite (BUZZER, LOW) ;
+		
+
+		
 	#endif
 	//redemarage automatique si clé préssé
 	for (int i = 0; i < 200; ++i) {
